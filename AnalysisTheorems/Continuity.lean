@@ -3,40 +3,18 @@ import Mathlib
 def continuous (f : ℝ → ℝ) (c : ℝ) : Prop :=
   ∀ε > 0, ∃ δ > 0, ∀ x, |x - c| < δ → |f x - f c| < ε
 
+def continuous_on (f : ℝ → ℝ) (X : Set ℝ) : Prop :=
+  ∀ x, x ∈ X → continuous f x
+
 lemma abs_mid (a b c : ℝ) : |a - b| < c ↔ b - c < a ∧ a < b + c := by
   constructor <;> (rw [abs_lt]; intro h; (constructor <;> linarith))
 
-lemma abs_mid_abs (a b c : ℝ) : |a - b| < c ↔ |b| - c < |a| ∧ |a| < |b| + c := by
-  constructor
-  .
-    intro h
-    constructor
-    . 
-      rw [abs_sub_comm] at h
-      have :=
-        calc
-          |b| - |a| ≤ |a - b| := by rw [abs_sub_comm]; apply abs_sub_abs_le_abs_sub
-          _ < c := by rw [abs_sub_comm]; apply h
-      linarith
-    . 
-      have :=
-        calc
-          |a| - |b| ≤ |b - a| := by rw [abs_sub_comm]; apply abs_sub_abs_le_abs_sub
-          _ < c := by rw [abs_sub_comm]; apply h
-      linarith
-  .
-    intro h
-    obtain ⟨h1, h2⟩ := h
-    apply lt_add_of_sub_left_lt at h1
-    rw [←neg_neg |a|, ←sub_eq_add_neg] at h1
-    rw [lt_sub_iff_add_lt, ←sub_eq_add_neg] at h1
-    rw [abs_sub_comm]
-    apply lt_add_of_sub_left_lt at h1
-    
-        
-    
-    
-    sorry
+lemma abs_neg_lt (a b : ℝ) (ha : b < 0) : a < b → |b| < |a| := by
+  intro h
+  have : a < 0 := by linarith
+  repeat rw [abs_of_neg]
+  simp [h]
+  repeat linarith
 
 example (f : ℝ → ℝ) (c : ℝ) (a b : ℝ) (hc : a < c ∧ c < b) (hcn0 : f c ≠ 0) : continuous f c → ∃ δ > 0, ∀ x, (c - δ < x ∧ x < c + δ) → |f x| > |f c| / 2 := by
   intro hcont
@@ -51,49 +29,23 @@ example (f : ℝ → ℝ) (c : ℝ) (a b : ℝ) (hc : a < c ∧ c < b) (hcn0 : f
   specialize hcon x
   apply hcon at hx
   clear hcon
-  have h2f : |f x| - |f c| < |f c| / 2 :=
-      calc
-        |f x| - |f c| ≤ |f x - f c| := by apply abs_sub_abs_le_abs_sub
-        _ < |f c| / 2 := by linarith
-  
-  have h1 : 0 ≤ |f x - f c| ∧ |f x - f c| < |f c| / 2 := by
-    constructor
-    positivity
-    linarith
-  rw [abs_mid] at h1
-  obtain ⟨ha1, ha2, ha3⟩ := h1
-  by_cases hfc : (f c) < 0
-  
+  rw [abs_mid] at hx
+  obtain ⟨h1, h2⟩ := hx
+  by_cases hfcp : f c ≥ 0
   . 
-    conv_lhs at ha2 =>
-      rw [abs_of_neg hfc]
-      ring_nf
-    rw [abs_of_neg hfc]
-
-    rw [←lt_add_neg_iff_lt]
-    rw [←sub_eq_add_neg]
-    rw [sub_neg_eq_add (|f x|) (f c / 2)]
-    positivity
-
-    calc
-      f c / 2 < 0 := by
-        cancel_denoms
-        field_simp
-      _ < |f x| := by positivity
-    
-    have : 0 < f x := by
-      calc
-        0 = -f c + f c := by sorry
-        _ = f c - |f c| := by
-          rw [abs_of_neg]
-          simp
-          
-        _ < f x := by linarith
-    ring_nf at ha3
-
-  /-
-  rw [sub_lt_iff_lt_add] at h2f
-  ring_nf at h2f
-  rw [abs_mid_abs] at hx
-  linarith
-  -/
+    rw [abs_of_nonneg hfcp] at h1
+    ring_nf at h1
+    field_simp at h1
+    have h1p : 0 ≤ f x := by linarith
+    repeat rw [abs_of_nonneg]
+    apply h1
+    repeat linarith
+  . 
+    simp at hfcp
+    rw [abs_of_neg hfcp] at h2
+    ring_nf at h2
+    field_simp at h2
+    apply abs_neg_lt at h2 <;> try linarith
+    rw [abs_div] at h2
+    simp at h2
+    apply h2
