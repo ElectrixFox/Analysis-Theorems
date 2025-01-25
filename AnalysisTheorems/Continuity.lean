@@ -119,83 +119,62 @@ example (f : ℝ → ℝ) (c : ℝ) (hcn0 : f c ≠ 0) {a b : ℝ} (hc : c ∈ {
 example {a b : ℝ} (X : Set ℝ := generalInterval a b)(f : ℝ → ℝ) (c L : ℝ) : fun_point_limit X (fun x => 1 / x) 0 0 := by
   sorry
 
-lemma lim_imp_left_right_lim {a b c L : ℝ} (hX : X = generalInterval a b) (f : ℝ → ℝ) :
-  fun_point_limit X f c L →
-  fun_left_limit₀ (generalInterval a c) f c L ∧
-  fun_right_limit₀ (generalInterval c b) f c L := by
+lemma lim_imp_left_right_lim (hX : X = generalInterval (some a) (some b)) (f : ℝ → ℝ) (c L : ℝ) :
+  fun_point_limit (generalInterval (some a) (some b)) f c L ↔
+  fun_left_limit₀ (generalInterval (some a) (some c)) f c L ∧
+  fun_right_limit₀ (generalInterval (some c) (some b)) f c L := by
   sorry
 
-example (f : ℝ → ℝ) (X : Set ℝ) (Y : open_interval 0 a): fun_limit_bound_below X f L → fun_right_limit Y f 0 := by
-  intro h
-  let x (t : ℝ) := 1 / t
-  have : fun_right_limit Y x 0 := by
-    intro ε hε
-    use ε
-    constructor
-    simp
-    linarith
-    intro t h1 h2
-    have : 0 < t := by
-      obtain ⟨h1a, h2a⟩ := h1
-      apply h1a     
-    dsimp [x]
-    simp
-    field_simp
-    simp [abs_of_pos, one_div_lt] at h2
-    rw [abs_of_pos]
-    rw [abs_of_pos] at h2
-    calc
-      1 / t ≤ t := by trivial
-      _ < ε := by linarith
-    rw [abs_of_pos]
-    rw [one_div_lt]
-
-
-    
-  sorry
-
-example (f : ℝ → ℝ) (hX : X = generalInterval (some a) (some b)): fun_limit_bound_below (generalInterval a none) f L → fun_right_limit₀ X f a 0 := by
-  intro h
-  let g : ℝ → ℝ := fun t => 1 / t
-  have h1 : fun_point_limit X g a 0 := by
+example (hX : X = generalInterval (some a) (some b)) : fun_right_limit₀ X (fun x => 1 / x) a 0 := by
+  let f : ℝ → ℝ := fun x => 1 / x
+  have h1 : fun_point_limit X f a 0 := by
+    dsimp [f]
     sorry
   
-  exact (lim_imp_left_right_lim hX f h1 0).2
+  have h2 := (lim_imp_left_right_lim hX f a 0).mp
+  subst hX
+  simp_all [one_div, f]
 
-  have : fun_right_limit₀ X (fun t => 1 / t) a 0 := by
-    have h1 : fun_point_limit X (fun t => 1 / t) 0 0 := by
-      sorry
-    apply lim_imp_left_right_lim hX f h1 0
-    intro ε hε
-    use 1 / ε
-    constructor
-    simp
-    linarith
-    intro t h1 h2
-    simp
-    obtain ⟨ht1, ht2⟩ := h1
-    simp at ht1 ht2
-    clear ht2
-    rw [abs_mid] at h2
-    obtain ⟨hm1, hm2⟩ := h2
-    rw [←one_div]
-    rw [abs_div, abs_one, one_div_lt]
+example (f : ℝ → ℝ) (hX : X = generalInterval (some a) (some b)) : fun_limit_bound_below (generalInterval a none) f L → fun_right_limit₀ X f a 0 := by
+  intro h
+  let g : ℝ → ℝ := fun t => 1 / t
+  have h1 : fun_point_limit X g a 0 := by sorry
 
+  let h₁ : ℝ → ℝ := fun x => f (1 / x)
+  have h1a : fun_point_limit X h₁ a 0 := by sorry
+  have h2a := (lim_imp_left_right_lim hX h₁ a 0).mp
 
-    have hc (a b : ℝ) (hb : 0 < b) (hab : b ≤ a) : |1 / a| < b → |a| > 1 / b := by
-      intro h
-      rw [gt_iff_lt, one_div_lt hb, ←abs_one, ←abs_div]
-      apply h
+  have h2 := (lim_imp_left_right_lim hX g a 0).mp
+  dsimp [fun_limit_bound_below] at h
+  dsimp [fun_point_limit] at h2a
+  subst hX
+  apply h2a at h1a
+  obtain ⟨hl1, hl2⟩ := h1a
+  clear hl1 h2a
 
-      have :=
-        calc
-          0 < b := hb
-          _ ≤ a := hab
-      rw [abs_pos]
-      linarith
-    specialize hc t ε hε
-    
-    apply hc
+  dsimp [fun_right_limit₀] at hl2
+  intro ε hε
+  specialize hl2 ε hε
+  specialize h ε hε
+  obtain ⟨K, hK, h0⟩ := h
+  obtain ⟨δ, hδ, hl2⟩ := hl2
+  use δ
+  constructor <;> try linarith
+  intro x hx h
+  dsimp [h₁] at hl2
+  specialize hl2 x
+  apply hl2 at hx
+  apply hl2 at h
+  simp
+  simp [←one_div] at h
+  
+  
+
+  specialize h0 x
+  dsimp [generalInterval] at h0
+  simp at h0
+  
+
 
     
 
