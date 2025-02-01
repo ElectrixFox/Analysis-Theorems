@@ -71,7 +71,7 @@ example : ∀ (r : ℝ), r > 0 → lipschitz_cont r (fun x => 1 / x) := by
     
     . 
       rw [pow_two]
-      gcongr
+      rel [hx, hy]
     . apply abs_pos_of_pos
       simp_all
     . simp_all
