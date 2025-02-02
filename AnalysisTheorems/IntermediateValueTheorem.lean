@@ -8,19 +8,13 @@ def generalInterval [Preorder ℝ] (lower : Option ℝ) (upper : Option ℝ) : S
 def fun_point_limit (X : Set ℝ) (f : ℝ → ℝ) (c : ℝ) (L : ℝ) : Prop :=
   ∀ ε > 0, ∃ δ > 0, ∀ x ∈ X \ {c}, |x - c| < δ → |f x - L| < ε
 
-def fun_right_limit₀ (X : Set ℝ) (f : ℝ → ℝ) (a L : ℝ) : Prop :=
+def fun_right_limit (X : Set ℝ) (f : ℝ → ℝ) (a L : ℝ) : Prop :=
   ∀ ε > 0, ∃ δ > 0, ∀ x ∈ X, |x - a| < δ → |f x - L| < ε
 
-def fun_left_limit₀ (X : Set ℝ) (f : ℝ → ℝ) (b L : ℝ) : Prop :=
+def fun_left_limit (X : Set ℝ) (f : ℝ → ℝ) (b L : ℝ) : Prop :=
   ∀ ε > 0, ∃ δ > 0, ∀ x ∈ X, |x - b| < δ → |f x - L| < ε
 
 def open_interval (a b : ℝ) : Set ℝ := {x : ℝ | a < x ∧ b < x}
-
-def fun_right_limit (X : open_interval a b) (f : ℝ → ℝ) (L : ℝ) : Prop :=
-  ∀ ε > 0, ∃ δ > 0, ∀ x ∈ (open_interval a b), |x - a| < δ → |f x - L| < ε
-
-def fun_left_limit (X : open_interval a b) (f : ℝ → ℝ) (L : ℝ) : Prop :=
-  ∀ ε > 0, ∃ δ > 0, ∀ x ∈ (open_interval a b), |x - b| < δ → |f x - L| < ε
 
 def fun_limit_bound_below (X : Set ℝ) (f : ℝ → ℝ) (L : ℝ) : Prop :=
   ∀ ε > 0, ∃ K > 0, ∀ x ∈ X, x ≥ K → |f x - L| < ε
@@ -44,7 +38,7 @@ lemma abs_nonneg_iff (a b : ℝ) (hab : 0 < a ∧ 0 < b) : 0 < |a - b| ↔ a ≠
     intro h
     simp
     simp at h
-    linarith  
+    linarith
 
 theorem intermediate_value_theorem (f : ℝ → ℝ) (hX : X = generalInterval (some a) (some b)) (ha : a < b) (hf : continuous_on f X) : (f b < f a ∧ d ∈ (generalInterval (f b) (f a))) ∨ (f a < f b ∧ d ∈ (generalInterval (f a) (f b))) → ∃ c ∈ X, f c = d := by
   sorry
@@ -53,19 +47,6 @@ theorem intermediate_value_theorem' (f : ℝ → ℝ) (hX : X = generalInterval 
   sorry
 
 theorem intermediate_value_theorem'' {a b : ℝ} {ha : a < b} (hX : X = {x | a ≤ x ∧ x ≤ b}) (f : ℝ → ℝ) (hf : continuous_on f {x | a ≤ x ∧ x ≤ b}) (hfb : f b < f a ∧ d ∈ {x | f b ≤ x ∧ x ≤ f a} ∨ f a < f b ∧ d ∈ {x | f a ≤ x ∧ x ≤ f b}) : ∃ c ∈ X, f c = d := by
-  sorry
-
-example : ∃ ξ, -1 < ξ ∧ ξ < 0 → (fun (x : ℝ) => 17 * x ^ 7 - 19 * x ^ 5 - 1) ξ = 0 := by
-  let f x : ℝ := 17 * x ^ 7 - 19 * x ^ 5 - 1
-  have hf : f = fun (x : ℝ) => 17 * x ^ 7 - 19 * x ^ 5 - 1 := by dsimp [f]
-  rw [←hf]
-
-  have hfcont : continuous_on f {x | -1 ≤ x ∧ x ≤ 0} := by sorry
-  have ha : -1 < 0 := by norm_num
-
-  have hcond : (f 0 < f (-1) ∧ 0 ∈ (generalInterval (f 0) (f (-1)))) ∨ (f (-1) < f (0) ∧ 0 ∈ (generalInterval (f (-1)) (f (0)))) := by sorry
-
-  apply intermediate_value_theorem f {x | -1 ≤ x ∧ x ≤ 0} ha hfcont hcond
   sorry
 
 example : ∃ ξ ∈ {x | -1 ≤ x ∧ x ≤ 0}, (fun (x : ℝ) => 17 * x ^ 7 - 19 * x ^ 5 - 1) ξ = 0 := by
