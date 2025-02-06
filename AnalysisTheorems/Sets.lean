@@ -38,4 +38,12 @@ example (X : Set ℝ) (hX : X = {x : ℝ | x < 2}) : supremum X 2 := by
       _ < (B + 2) / 2 := by linarith
       _ < (2 + 2) / 2 := by linarith
       _ = 2 := by simp
+  subst X
+  dsimp [bound_above] at h5
+  obtain ⟨c, hc⟩ := h5
+  specialize hc B
+  simp at hc
+  simp_all only [imp_self, true_implies]
+  
+  
   
