@@ -64,10 +64,25 @@ theorem archimedes (a b : ℝ) (hb : b > 0) : ∃ (n : ℕ), n * b > a := by
   by_contra h
   simp at h
   let X : Set ℝ := {n * b | n : ℕ}
-  have hXb : bound_above X := by sorry
+  have hXb : bound_above_by X a := by sorry
   have hXsup : ∃ C, supremum X C := by sorry
   obtain ⟨C, hC⟩ := hXsup
 
-  have hnup : ¬bound_above_by X (C - b) := by sorry
+  have hnup : ¬(bound_above_by X (C - b)) := by sorry
   
+  dsimp [bound_above_by] at hnup
+  simp at hnup
+  
+  obtain ⟨x, hx, h2⟩ := hnup
+  apply lt_add_of_sub_left_lt at h2
+  have : b + x ∈ X := by
+    dsimp [X] at hx
+    obtain ⟨n, hn⟩ := hx
+    rw [←hn]
+    dsimp [X]
+    use n + 1
+    norm_num
+    rw [mul_comm, mul_add]
+    simp [add_comm]
+    rw [mul_comm]
   
