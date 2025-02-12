@@ -89,13 +89,20 @@ theorem archimedes (a b : ℝ) (hb : b > 0) : ∃ (n : ℕ), n * b > a := by
     simp [add_comm]
     rw [mul_comm]
 
-axiom completeness_axiom {X : Set ℝ} : bound_above X → ∃ C, supremum X C
+axiom completeness_axiom {X : Set ℝ} [Nonempty X] : bound_above X → ∃ C, supremum X C
 
 theorem archimedes' (a b : ℝ) (hb : b > 0) : ∃ (n : ℕ), n * b > a := by
   by_contra h
   simp at h
-  let X : Set ℝ := {n * b | n : ℕ}
-  have hXb : bound_above X := by
+  let X : Set ℝ := {n * b | n : ℕ}  -- define the set
+  have hXn : Nonempty X := by -- nonempty
+    simp  -- simplify to there is an a in X
+    use b -- b is naturally in X
+    dsimp [X]
+    use 1 -- 1 * b = b
+    simp  -- simplification
+
+  have hXb : bound_above X := by  -- it is obviously bounded above by a
     use a
     simp
     dsimp [X]
@@ -104,11 +111,12 @@ theorem archimedes' (a b : ℝ) (hb : b > 0) : ∃ (n : ℕ), n * b > a := by
     subst hn
     apply h
 
-  have hXsup : ∃ C, supremum X C := by exact completeness_axiom hXb
+  have hXsup : ∃ C, supremum X C := completeness_axiom hXb  -- by the completeness axiom it has a supremum
   obtain ⟨C, hC⟩ := hXsup
   clear hXb
-
   have hnup : ¬(bound_above_by X (C - b)) := by sorry
+
+
   
   have hnmp : ∃ (n : ℕ), n * b > C - b := by sorry
   obtain ⟨n, hn⟩ := hnmp
