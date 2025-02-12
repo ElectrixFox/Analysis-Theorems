@@ -116,12 +116,38 @@ example : func_bound_above {x : ℝ | x ≤ 2} (fun x => x - 1) := by
 
 def func_sup (X : Set ℝ) (f : ℝ → ℝ) (C : ℝ) : Prop := func_bound_above X f ∧ (∀ B, (∀ x ∈ X, f x ≤ B) → C ≤ B)
 
-example (X : Set ℝ) (hX : X = {x | x : ℝ}) (f : ℝ → ℝ) (hf : f = fun x => x / (1 + x ^ 2)): func_sup X f (1 / 2) := by
-  dsimp [func_sup]
-  have h1 : ∀ x ∈ X, f x ≤ (1 / 2) := by sorry
-  constructor
-  use 1 / 2
-  intro x hx
-  specialize h1 x
-  specialize hx x
+example (X : Set ℝ) (hX : X = {x | x : ℝ}) : func_sup X (fun x => x / (1 + x ^ 2)) (1 / 2) := by
+  dsimp [func_sup]  -- function supremum
+  let f : ℝ → ℝ := fun x => x / (1 + x ^ 2) -- setting up an alias
+  have hf : f = fun x => x / (1 + x ^ 2) := by trivial  -- setting up the subsitituion
+  rw [←hf]  -- rewriting the definition of f
+  clear hf  -- removing the bad hypothesis
+
+  have h1 : ∀ x ∈ X, f x ≤ (1 / 2) := by  -- showing the upper bound
+    -- doing a lot of stuff to show the upper bound
+    dsimp [f]
+    intro x hx
+    cancel_denoms
+    field_simp
+    rw [div_le_comm₀ (by positivity) (by positivity)]
+    simp
+    rw [←zero_add (2 * x)]
+    rw [←le_add_neg_iff_le]
+    ring_nf
+    calc
+      0 ≤ (x - 1) ^ 2 := by positivity
+      _ = x ^ 2 - 2 * x + 1 := by ring_nf
+      _ = 1 - x * 2 + x ^ 2 := by ring_nf
+
+  constructor -- breaking up the supremum
+  . use 1 / 2 -- showing 1 / 2 is the bound
+  . 
+    specialize h1 1 -- having the upper bound at x = 1
+    have : 1 ∈ X := by subst X; simp  -- showing 1 ∈ X
+    
+    intro B hB  -- introducing the upper bound
+    specialize hB 1 -- setting the upper bound as 1
+    apply hB at this  -- applying the expression for the bound
+    norm_num at this  -- shoing the bound
+    exact this  -- closing up the goal
   
