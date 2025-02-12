@@ -12,6 +12,9 @@ def bound_below_by (X : Set ℝ) (c : ℝ) : Prop := bound_below X → ∀ x, x 
 -- def supremum (X : Set ℝ) (C : ℝ) := bound_above_by X C → (∀ (B : ℝ), (bound_above_by X B) → (C ≤ B))
 def supremum (X : Set ℝ) (C : ℝ) := (∀ x ∈ X, x ≤ C) ∧ (∀ B, (∀ x ∈ X, x ≤ B) → C ≤ B)
 
+def supremum' (X : Set ℝ) (C : ℝ) := bound_above_by X C ∧ (∀ B, (bound_above_by X B) → C ≤ B)
+
+
 def infimum (X : Set ℝ) := bound_below X → ∃ (C : ℝ), ∀ (B : ℝ), (bound_below_by X C) ∧ (bound_below_by X B) ∧ (C ≤ B)
 
 example (X : Set ℝ) (hX : X = {x : ℝ | x < 2}) : bound_above_by X 2 := by
@@ -85,4 +88,49 @@ theorem archimedes (a b : ℝ) (hb : b > 0) : ∃ (n : ℕ), n * b > a := by
     rw [mul_comm, mul_add]
     simp [add_comm]
     rw [mul_comm]
+
+axiom completeness_axiom {X : Set ℝ} : bound_above X → ∃ C, supremum X C
+
+theorem archimedes' (a b : ℝ) (hb : b > 0) : ∃ (n : ℕ), n * b > a := by
+  by_contra h
+  simp at h
+  let X : Set ℝ := {n * b | n : ℕ}
+  have hXb : bound_above X := by
+    use a
+    simp
+    dsimp [X]
+    intro x hx
+    obtain ⟨n, hn⟩ := hx
+    subst hn
+    apply h
+
+  have hXsup : ∃ C, supremum X C := by exact completeness_axiom hXb
+  obtain ⟨C, hC⟩ := hXsup
+  clear hXb
+
+  have hnup : ¬(bound_above_by X (C - b)) := by sorry
   
+  have hnmp : ∃ (n : ℕ), n * b > C - b := by sorry
+  obtain ⟨n, hn⟩ := hnmp
+
+  have : (n + 1) * b > C := by sorry
+  dsimp [supremum] at hC
+  obtain ⟨h1, h2⟩ := hC
+  specialize h1 (b * (n + 1))
+  
+  
+  dsimp [bound_above_by] at hnup
+  simp at hnup
+  
+  obtain ⟨x, hx, h2⟩ := hnup
+  apply lt_add_of_sub_left_lt at h2
+  have : b + x ∈ X := by
+    dsimp [X] at hx
+    obtain ⟨n, hn⟩ := hx
+    rw [←hn]
+    dsimp [X]
+    use n + 1
+    norm_num
+    rw [mul_comm, mul_add]
+    simp [add_comm]
+    rw [mul_comm]
