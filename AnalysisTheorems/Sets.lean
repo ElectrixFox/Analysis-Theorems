@@ -116,7 +116,7 @@ example : func_bound_above {x : ℝ | x ≤ 2} (fun x => x - 1) := by
 
 def func_sup (X : Set ℝ) (f : ℝ → ℝ) (C : ℝ) : Prop := func_bound_above X f ∧ (∀ B, (∀ x ∈ X, f x ≤ B) → C ≤ B)
 
-example (X : Set ℝ) (hX : X = {x | x : ℝ}) : func_sup X (fun x => x / (1 + x ^ 2)) (1 / 2) := by
+example (X : Set ℝ) {hX : X = {x | x : ℝ}}: func_sup X (fun x => x / (1 + x ^ 2)) (1 / 2) := by
   dsimp [func_sup]  -- function supremum
   let f : ℝ → ℝ := fun x => x / (1 + x ^ 2) -- setting up an alias
   have hf : f = fun x => x / (1 + x ^ 2) := by trivial  -- setting up the subsitituion
