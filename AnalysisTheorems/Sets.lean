@@ -112,33 +112,29 @@ theorem archimedes' (a b : ℝ) (hb : b > 0) : ∃ (n : ℕ), n * b > a := by
     apply h
 
   have hXsup : ∃ C, supremum X C := completeness_axiom hXb  -- by the completeness axiom it has a supremum
-  obtain ⟨C, hC⟩ := hXsup
-  clear hXb
-  have hnup : ¬(bound_above_by X (C - b)) := by sorry
+  obtain ⟨C, hC⟩ := hXsup -- get the supremum
+  clear hXb hXn -- clean up some unnecessary hypothesis
+  have hBup : (bound_above_by X C) := hC.left
+  have hnup : ¬(bound_above_by X (C - b)) := by
+    by_contra h -- assume it is an upper bound
+    dsimp [supremum] at hC  -- break up the supremum
+    rw [←bound_above_by] at hC  -- the supremum says that X is bounded above by C
+    obtain ⟨h1, h2⟩ := hC
+    specialize h2 (C - b) -- the new supremum is C - b
+    rw [←bound_above_by] at h2  -- this means X is bounded above by C - b implies C ≤ C - b
+    apply h2 at h
+    linarith  -- obviously this is false
 
+  have : ∃ (n : ℕ), n * b > C - b := by
+    sorry
 
+  obtain ⟨n, hn⟩ := this
+  have hnxtinX : (n + 1) * b ∈ X := by
+    use (n + 1)
+    simp
   
-  have hnmp : ∃ (n : ℕ), n * b > C - b := by sorry
-  obtain ⟨n, hn⟩ := hnmp
+  specialize hBup ((n + 1) * b)
 
-  have : (n + 1) * b > C := by sorry
-  dsimp [supremum] at hC
-  obtain ⟨h1, h2⟩ := hC
-  specialize h1 (b * (n + 1))
-  
-  
-  dsimp [bound_above_by] at hnup
-  simp at hnup
-  
-  obtain ⟨x, hx, h2⟩ := hnup
-  apply lt_add_of_sub_left_lt at h2
-  have : b + x ∈ X := by
-    dsimp [X] at hx
-    obtain ⟨n, hn⟩ := hx
-    rw [←hn]
-    dsimp [X]
-    use n + 1
-    norm_num
-    rw [mul_comm, mul_add]
-    simp [add_comm]
-    rw [mul_comm]
+  apply hBup at hnxtinX
+
+  linarith
