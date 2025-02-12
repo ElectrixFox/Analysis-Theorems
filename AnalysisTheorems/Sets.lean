@@ -12,9 +12,6 @@ def bound_below_by (X : Set ℝ) (c : ℝ) : Prop := bound_below X → ∀ x, x 
 -- def supremum (X : Set ℝ) (C : ℝ) := bound_above_by X C → (∀ (B : ℝ), (bound_above_by X B) → (C ≤ B))
 def supremum (X : Set ℝ) (C : ℝ) := (∀ x ∈ X, x ≤ C) ∧ (∀ B, (∀ x ∈ X, x ≤ B) → C ≤ B)
 
-def supremum' (X : Set ℝ) (C : ℝ) := bound_above_by X C ∧ (∀ B, (bound_above_by X B) → C ≤ B)
-
-
 def infimum (X : Set ℝ) := bound_below X → ∃ (C : ℝ), ∀ (B : ℝ), (bound_below_by X C) ∧ (bound_below_by X B) ∧ (C ≤ B)
 
 example (X : Set ℝ) (hX : X = {x : ℝ | x < 2}) : bound_above_by X 2 := by
@@ -54,44 +51,9 @@ example (X : Set ℝ) (hX : X = {x : ℝ | x < 2}) : supremum X 2 := by
     simp [x]
     linarith
 
-  /-
-  have h4 : B < 2 := by
-    calc
-      B = (B + B) / 2 := by simp
-      _ < (B + 2) / 2 := by linarith
-      _ < (2 + 2) / 2 := by linarith
-      _ = 2 := by simp
-  -/
-  
-theorem archimedes (a b : ℝ) (hb : b > 0) : ∃ (n : ℕ), n * b > a := by
-  by_contra h
-  simp at h
-  let X : Set ℝ := {n * b | n : ℕ}
-  have hXb : bound_above_by X a := by sorry
-  have hXsup : ∃ C, supremum X C := by sorry
-  obtain ⟨C, hC⟩ := hXsup
-
-  have hnup : ¬(bound_above_by X (C - b)) := by sorry
-  
-  dsimp [bound_above_by] at hnup
-  simp at hnup
-  
-  obtain ⟨x, hx, h2⟩ := hnup
-  apply lt_add_of_sub_left_lt at h2
-  have : b + x ∈ X := by
-    dsimp [X] at hx
-    obtain ⟨n, hn⟩ := hx
-    rw [←hn]
-    dsimp [X]
-    use n + 1
-    norm_num
-    rw [mul_comm, mul_add]
-    simp [add_comm]
-    rw [mul_comm]
-
 axiom completeness_axiom {X : Set ℝ} [Nonempty X] : bound_above X → ∃ C, supremum X C
 
-theorem archimedes' (a b : ℝ) (hb : b > 0) : ∃ (n : ℕ), n * b > a := by
+theorem archimedes (a b : ℝ) (hb : b > 0) : ∃ (n : ℕ), n * b > a := by
   by_contra h
   simp at h
   let X : Set ℝ := {n * b | n : ℕ}  -- define the set
@@ -143,3 +105,23 @@ theorem archimedes' (a b : ℝ) (hb : b > 0) : ∃ (n : ℕ), n * b > a := by
   specialize hBup ((n + 1) * b) -- this (n + 1) * b is our needed element for the contradiction
   apply hBup at hnxtinX -- apply the contradition
   linarith  -- hence contradiction
+
+def func_bound_above (X : Set ℝ) (f : ℝ → ℝ) : Prop := (∃ (c : ℝ), ∀ x ∈ X, f x ≤ c)
+
+example : func_bound_above {x : ℝ | x ≤ 2} (fun x => x - 1) := by
+  use 1 -- 1 is obviously the upper
+  intro x hx  -- introduce variables
+  norm_num  -- simplify the expression
+  tauto -- naturally true
+
+def func_sup (X : Set ℝ) (f : ℝ → ℝ) (C : ℝ) : Prop := func_bound_above X f ∧ (∀ B, (∀ x ∈ X, f x ≤ B) → C ≤ B)
+
+example (X : Set ℝ) (hX : X = {x | x : ℝ}) (f : ℝ → ℝ) (hf : f = fun x => x / (1 + x ^ 2)): func_sup X f (1 / 2) := by
+  dsimp [func_sup]
+  have h1 : ∀ x ∈ X, f x ≤ (1 / 2) := by sorry
+  constructor
+  use 1 / 2
+  intro x hx
+  specialize h1 x
+  specialize hx x
+  
