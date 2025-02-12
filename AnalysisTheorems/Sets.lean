@@ -126,15 +126,20 @@ theorem archimedes' (a b : ℝ) (hb : b > 0) : ∃ (n : ℕ), n * b > a := by
     linarith  -- obviously this is false
 
   have : ∃ (n : ℕ), n * b > C - b := by
-    sorry
+    dsimp [bound_above_by] at hnup
+    simp at hnup -- sort out the not 
+    obtain ⟨x, hx1, hx2⟩ := hnup  -- get the hypothesis for being bounded above
+    dsimp [X] at hx1
+    obtain ⟨n, hn⟩ := hx1 -- get our needed n
+    rw [←hn] at hx2 -- rewrite the definition of x
+    use n -- with this n we have the goal
+    
 
-  obtain ⟨n, hn⟩ := this
-  have hnxtinX : (n + 1) * b ∈ X := by
+  obtain ⟨n, hn⟩ := this  -- get our n
+  have hnxtinX : (n + 1) * b ∈ X := by  -- show that (n + 1) * b is in X
     use (n + 1)
     simp
   
-  specialize hBup ((n + 1) * b)
-
-  apply hBup at hnxtinX
-
-  linarith
+  specialize hBup ((n + 1) * b) -- this (n + 1) * b is our needed element for the contradiction
+  apply hBup at hnxtinX -- apply the contradition
+  linarith  -- hence contradiction
