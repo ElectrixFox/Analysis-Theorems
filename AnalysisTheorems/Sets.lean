@@ -150,4 +150,31 @@ example (X : Set ℝ) {hX : X = {x | x : ℝ}}: func_sup X (fun x => x / (1 + x 
     apply hB at this  -- applying the expression for the bound
     norm_num at this  -- shoing the bound
     exact this  -- closing up the goal
+
+def seq_is_limit (x : ℕ → ℝ) (l : ℝ) : Prop :=
+  ∀ ε > 0, ∃ N, ∀ n ≥ N, |x n - l| < ε
+
+example : seq_is_limit (fun n => 6) 6 := by
+  intro ε hε
+  use 6
+  simp [hε]
+
+example (a : ℕ → ℝ) (ha : a = ((fun n => 1 / n) : ℕ → ℝ)) : seq_is_limit a 0 := by
+  intro ε hε
+  have h1 : ∃ (N : ℕ), N * ε > 1 := by exact archimedes _ _ hε
+
+  have : ∃ (N : ℕ), N > 1 / ε := by
+    obtain ⟨N, hN⟩ := h1
+    use N
+    simp
+    simp at hN
+    rw [←Nat.div_one N, Nat.cast_div (by simp), Nat.cast_one, ←one_div]
+    rw [div_lt_div_iff₀ (by positivity) (by positivity)] <;> linarith
+    norm_num
+    
+  use 0
+  intro n hn
+  subst a
+  
+  simp [←one_div]
   
