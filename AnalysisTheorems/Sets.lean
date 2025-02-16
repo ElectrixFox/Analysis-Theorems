@@ -161,14 +161,14 @@ example : seq_is_limit (fun n => 6) 6 := by
 
 example (a : ℕ → ℝ) (ha : a = ((fun n => 1 / n) : ℕ → ℝ)) : seq_is_limit a 0 := by
   intro ε hε
-  have h1 : ∃ (N : ℕ), N * ε > 1 := by exact archimedes _ _ hε
+  have h1 : ∃ (N : ℕ), N * ε > 1 := by exact archimedes _ _ hε  -- use archimedes to show there is a natural
 
-  have h2 : ∃ (N : ℕ), N > 1 / ε := by
+  have h2 : ∃ (N : ℕ), N > 1 / ε := by  -- show that this natural is manipulable
     obtain ⟨N, hN⟩ := h1
     use N
     simp
     simp at hN
-    rw [←Nat.div_one N, Nat.cast_div (by simp), Nat.cast_one, ←one_div]
+    rw [←Nat.div_one N, Nat.cast_div (by simp), Nat.cast_one, ←one_div] -- a bunch of rewriting to get the desired form
     rw [div_lt_div_iff₀ (by positivity) (by positivity)]; linarith
     norm_num
   
@@ -192,3 +192,72 @@ example (a : ℕ → ℝ) (ha : a = ((fun n => 1 / n) : ℕ → ℝ)) : seq_is_l
   calc
     1 / ε < N := hN
     _ ≤ n := by simp_all
+
+theorem seq_uniquelim (h1 : seq_is_limit x l) (h2 : seq_is_limit x m) : l = m := by
+  by_contra h3
+  have : |l - m| > 0 := by
+    apply lt_of_le_of_ne
+    . apply abs_nonneg
+    intro ha
+    symm at ha
+    rw [abs_eq_zero, sub_eq_zero] at ha
+    tauto
+  let ε := |l - m| / 2
+  have hε : ε > 0 := by dsimp [ε]; linarith
+
+  rcases h1 ε hε with ⟨N₁, hN₁⟩
+  rcases h2 ε hε with ⟨N₂, hN₂⟩
+  let N := max N₁ N₂
+  have h4 : |x N - l| < ε := by
+    apply hN₁
+    apply le_max_left
+
+  have h5 : |x N - m| < ε := by
+    apply hN₂
+    apply le_max_right
+
+  have : |l - m| < 2 * ε := by
+    calc
+      |l - m| = |(l - x N) + (x N - m)| := by simp
+      _ ≤ |l - x N| + |x N - m| := by apply abs_add_le
+      _ < ε + ε := by rw [abs_sub_comm] at h4; gcongr
+      _ = 2 * ε := by ring_nf
+
+  dsimp [ε] at this
+  ring_nf at this
+  linarith
+
+def seq_bound_above (a : ℕ → ℝ) : Prop :=
+  bound_above {a n | n : ℕ}
+
+def seq_bound_below (a : ℕ → ℝ) : Prop :=
+  bound_below {a n | n : ℕ}
+
+theorem conv_seq_is_bounded (xn : ℕ → ℝ) (hx : seq_is_limit xn x) : seq_bound_above xn := by
+  specialize hx 1
+  simp at hx
+  obtain ⟨N, hN⟩ := hx
+  have h1 : ∀ n ≥ N, |xn n| ≤ |xn n - x| := by
+    intro n hn
+    specialize hN n hn
+    sorry
+    
+  have h2 : ∀ n ≥ N, |xn n - x| + |x| ≤ |x| + 1 := by
+    intro n hn
+    specialize hN n hn
+    linarith
+  
+  let C := |x| + 1
+  let B := max (|xn 1|) (|x| + 1)
+  have h3 : ∀ n : ℕ, |xn n| ≤ B := by sorry
+    
+  use B
+  intro m hm
+  simp at hm
+  simp
+  obtain ⟨n, hn⟩ := hm
+  specialize h3 n
+  rw [←hn]
+  rw [abs_le] at h3
+  apply h3.right
+  
