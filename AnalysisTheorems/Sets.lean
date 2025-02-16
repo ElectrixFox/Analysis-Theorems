@@ -163,18 +163,32 @@ example (a : ℕ → ℝ) (ha : a = ((fun n => 1 / n) : ℕ → ℝ)) : seq_is_l
   intro ε hε
   have h1 : ∃ (N : ℕ), N * ε > 1 := by exact archimedes _ _ hε
 
-  have : ∃ (N : ℕ), N > 1 / ε := by
+  have h2 : ∃ (N : ℕ), N > 1 / ε := by
     obtain ⟨N, hN⟩ := h1
     use N
     simp
     simp at hN
     rw [←Nat.div_one N, Nat.cast_div (by simp), Nat.cast_one, ←one_div]
-    rw [div_lt_div_iff₀ (by positivity) (by positivity)] <;> linarith
+    rw [div_lt_div_iff₀ (by positivity) (by positivity)]; linarith
     norm_num
-    
-  use 0
+  
+  obtain ⟨N, hN⟩ := h2
+  use N
   intro n hn
   subst a
   
   simp [←one_div]
+  have : 0 < n := by
+    have h0 : (0 : ℝ) < N := by
+      calc
+        0 < 1 / ε := by positivity
+        _ < N := by linarith
+    suffices h : (0 < N) from by linarith
+    field_simp at h0
+    linarith
   
+  rw [abs_of_nonneg (by simp)]
+  rw [one_div_lt (by positivity) (by positivity)]
+  calc
+    1 / ε < N := hN
+    _ ≤ n := by simp_all
