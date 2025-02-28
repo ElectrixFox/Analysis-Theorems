@@ -260,4 +260,18 @@ theorem conv_seq_is_bounded (xn : ℕ → ℝ) (hx : seq_is_limit xn x) : seq_bo
   rw [←hn]
   rw [abs_le] at h3
   apply h3.right
-  
+
+theorem seq_squeeze_zero (x : ℕ → ℝ) (y : ℕ → ℝ) (hy : seq_is_limit y 0) : ∀ (n : ℕ), |x n| ≤ y n → seq_is_limit x 0 := by
+  sorry
+
+example : seq_is_limit (fun (n : ℕ) => (-1) ^ n / (√(n ^ 2 + n))) 0 := by
+  have h : ∀ (n : ℕ), |(fun (n : ℕ) => (-1) ^ n / (√(n ^ 2 + n))) n| ≤ (fun (n : ℕ) => 1 / √(n)) n := by
+    intro n
+    simp [←one_div]
+    calc
+      |(-1) ^ n / (√(n ^ 2 + n))| = 1 / (√(n ^ 2 + n)) := by admit
+      _ ≤ 1 / √(n + n) := by admit
+      _ ≤ 1 / √(n) := by admit
+  have h1 : seq_is_limit (fun (n : ℕ) => 1 / √(n)) 0 := by sorry
+  apply seq_squeeze_zero _ _ h1
+  tauto
