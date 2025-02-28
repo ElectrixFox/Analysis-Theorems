@@ -286,3 +286,13 @@ lemma seq_COLT_mult (xn : ℕ → ℝ) (yn : ℕ → ℝ) (hx : seq_is_limit xn 
 
 lemma seq_COLT_ratio (xn : ℕ → ℝ) (yn : ℕ → ℝ) (hx : seq_is_limit xn x) (hy : seq_is_limit yn y) (hy1 : y ≠ 0) (hy2 : ∀ (n : ℕ), yn n ≠ 0): seq_is_limit (fun (n : ℕ) => (xn n) / (yn n)) (x / y) := by
   sorry
+
+theorem seq_limininterval (xn : ℕ → ℝ) (a b : ℝ) (X : Set ℝ) (hX : X = {x : ℝ | a ≤ x ∧ x ≤ b}) (xnI : ∀ (n : ℕ), (xn n) ∈ X) : seq_is_limit xn x → x ∈ X := by
+  sorry
+
+lemma seq_limineq (xn yn : ℕ → ℝ) (hx : seq_is_limit xn x) (hy : seq_is_limit yn y) (hxy : ∀ (n : ℕ), xn n ≤ yn n) : x ≤ y := by
+  sorry
+
+theorem seq_sqrtcont (xn : ℕ → ℝ) (hx : seq_is_limit xn x) (hx1 : ∀ (n : ℕ), xn n ≥ 0) : seq_is_limit (fun (n : ℕ) => √(xn n)) (√(x)) := by
+sorry
+
