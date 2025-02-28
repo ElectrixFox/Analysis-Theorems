@@ -277,3 +277,12 @@ example : seq_is_limit (fun (n : ℕ) => (-1) ^ n / (√(n ^ 2 + n))) 0 := by
     -/
   have h1 : seq_is_limit (fun (n : ℕ) => 1 / √(n)) 0 := by sorry
   exact seq_squeeze_zero (fun (n : ℕ) => (-1) ^ n / (√(n ^ 2 + n))) (fun (n : ℕ) => 1 / √(n)) h1 h
+
+lemma seq_COLT_linearity (xn : ℕ → ℝ) (yn : ℕ → ℝ) (hx : seq_is_limit xn x) (hy : seq_is_limit yn y) (a b : ℝ) : seq_is_limit (fun (n : ℕ) => a * (xn n) + b * (yn n)) (a * x + b * y) := by
+  sorry
+
+lemma seq_COLT_mult (xn : ℕ → ℝ) (yn : ℕ → ℝ) (hx : seq_is_limit xn x) (hy : seq_is_limit yn y) : seq_is_limit (fun (n : ℕ) => (xn n) * (yn n)) (x * y) := by
+  sorry
+
+lemma seq_COLT_ratio (xn : ℕ → ℝ) (yn : ℕ → ℝ) (hx : seq_is_limit xn x) (hy : seq_is_limit yn y) (hy1 : y ≠ 0) (hy2 : ∀ (n : ℕ), yn n ≠ 0): seq_is_limit (fun (n : ℕ) => (xn n) / (yn n)) (x / y) := by
+  sorry
