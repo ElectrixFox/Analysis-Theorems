@@ -298,7 +298,7 @@ sorry
 
 def seq_monotonically_inc (x : ℕ → ℝ) : Prop := ∀ (m n : ℕ), m ≤ n → x m ≤ x n
 def seq_monotonically_dec (x : ℕ → ℝ) : Prop := ∀ (m n : ℕ), m ≥ n → x m ≥ x n
-
+    
 theorem seq_boundmonoinc_conv (x : ℕ → ℝ) (hx : seq_monotonically_inc x) : seq_is_limit x l := by
   sorry
 
@@ -307,19 +307,22 @@ lemma e_def : (∃ l, seq_is_limit (fun (n : ℕ) => (1 + 1 / n) ^ n) l) := by s
 noncomputable def exp : ℝ := e_def.choose -- gets the value of the limit
 
 theorem seq_ex_def (x : ℕ) (hx : x > 0) : seq_is_limit (fun (n : ℕ) => (1 + x / n) ^ n) (exp ^ x) := by
-  have hn (n : ℕ) (h1 : n > 0) : (1 + x / n) ^ n = (((n + x) / (n + x - 1))) ^ n * ((n + x - 1) / (n)) ^ n := by
+  have hn (n : ℕ) (h1 : n > 0) : (1 + x / n) ^ n = (((n + x) / (n + x - 1)) : ℝ) ^ n * ((n + x - 1) / (n)) ^ n := by
+    have hpos : ((n + x - 1) : ℝ) ≠ 0 := by admit
+  
     calc
       (1 + x / n) ^ n = ((n + x) / n) ^ n := by
-        have : ((n + x - 1) : ℝ) ≠ 0 := by
-          rw [ne_zero]
-          apply Nat.zero_lt_of_ne_zero
-        nth_rw 1 [←div_self ]
-      _ = (((n + x) / n) * ((n + x - 1) / (n + x - 1))) ^ n := by simp
-      _ = (((n + x) / (n + x - 1)) * ((n + x - 1) / n)) ^ n := by simp
-      _ = (((n + x) / (n + x - 1))) ^ n * ((n + x - 1) / (n)) ^ n := by simp
+        admit
+      _ = (((n + x) / n) * ((n + x - 1) / (n + x - 1))) ^ n := by admit
+      _ = (((n + x) / (n + x - 1) : ℝ) * ((n + x - 1) / n)) ^ n := by
+        conv_lhs =>
+          lhs
+          rw [div_mul_div_comm]
+
+        ring_nf
+      _ = (((n + x) / (n + x - 1))) ^ n * ((n + x - 1) / (n)) ^ n := by ring_nf
   conv =>
     lhs
     ext n
     
   sorry
-
