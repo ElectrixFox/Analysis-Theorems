@@ -24,10 +24,10 @@ example (X : Set ℝ) (hX : X = {x : ℝ | x < 2}) : bound_above_by X 2 := by
 example (X : Set ℝ) (hX : X = {x : ℝ | x < 2}) : supremum X 2 := by
   rw [hX]
   constructor
-  . 
+  .
     intro x hx
     exact le_of_lt hx
-  . 
+  .
     intro B hB
     apply le_of_not_lt
     intro hbl
@@ -89,19 +89,19 @@ theorem archimedes (a b : ℝ) (hb : b > 0) : ∃ (n : ℕ), n * b > a := by
 
   have : ∃ (n : ℕ), n * b > C - b := by
     dsimp [bound_above_by] at hnup
-    simp at hnup -- sort out the not 
+    simp at hnup -- sort out the not
     obtain ⟨x, hx1, hx2⟩ := hnup  -- get the hypothesis for being bounded above
     dsimp [X] at hx1
     obtain ⟨n, hn⟩ := hx1 -- get our needed n
     rw [←hn] at hx2 -- rewrite the definition of x
     use n -- with this n we have the goal
-    
+
 
   obtain ⟨n, hn⟩ := this  -- get our n
   have hnxtinX : (n + 1) * b ∈ X := by  -- show that (n + 1) * b is in X
     use (n + 1)
     simp
-  
+
   specialize hBup ((n + 1) * b) -- this (n + 1) * b is our needed element for the contradiction
   apply hBup at hnxtinX -- apply the contradition
   linarith  -- hence contradiction
@@ -141,10 +141,10 @@ example (X : Set ℝ) {hX : X = {x | x : ℝ}}: func_sup X (fun x => x / (1 + x 
 
   constructor -- breaking up the supremum
   . use 1 / 2 -- showing 1 / 2 is the bound
-  . 
+  .
     specialize h1 1 -- having the upper bound at x = 1
     have : 1 ∈ X := by subst X; simp  -- showing 1 ∈ X
-    
+
     intro B hB  -- introducing the upper bound
     specialize hB 1 -- setting the upper bound as 1
     apply hB at this  -- applying the expression for the bound
@@ -171,12 +171,12 @@ example (a : ℕ → ℝ) (ha : a = ((fun n => 1 / n) : ℕ → ℝ)) : seq_is_l
     rw [←Nat.div_one N, Nat.cast_div (by simp), Nat.cast_one, ←one_div] -- a bunch of rewriting to get the desired form
     rw [div_lt_div_iff₀ (by positivity) (by positivity)]; linarith
     norm_num
-  
+
   obtain ⟨N, hN⟩ := h2
   use N
   intro n hn
   subst a
-  
+
   simp [←one_div]
   have : 0 < n := by
     have h0 : (0 : ℝ) < N := by
@@ -186,14 +186,14 @@ example (a : ℕ → ℝ) (ha : a = ((fun n => 1 / n) : ℕ → ℝ)) : seq_is_l
     suffices h : (0 < N) from by linarith
     field_simp at h0
     linarith
-  
+
   rw [abs_of_nonneg (by simp)]
   rw [one_div_lt (by positivity) (by positivity)]
   calc
     1 / ε < N := hN
     _ ≤ n := by simp_all
 
-theorem seq_uniquelim (h1 : seq_is_limit x l) (h2 : seq_is_limit x m) : l = m := by
+theorem seq_uniquelim (x : ℕ → ℝ) (l m : ℝ) (h1 : seq_is_limit x l) (h2 : seq_is_limit x m) : l = m := by
   by_contra h3
   have : |l - m| > 0 := by
     apply lt_of_le_of_ne
@@ -233,7 +233,7 @@ def seq_bound_above (a : ℕ → ℝ) : Prop :=
 def seq_bound_below (a : ℕ → ℝ) : Prop :=
   bound_below {a n | n : ℕ}
 
-theorem conv_seq_is_bounded (xn : ℕ → ℝ) (hx : seq_is_limit xn x) : seq_bound_above xn := by
+theorem conv_seq_is_bounded (xn : ℕ → ℝ) (x : ℝ) (hx : seq_is_limit xn x) : seq_bound_above xn := by
   specialize hx 1
   simp at hx
   obtain ⟨N, hN⟩ := hx
@@ -241,16 +241,16 @@ theorem conv_seq_is_bounded (xn : ℕ → ℝ) (hx : seq_is_limit xn x) : seq_bo
     intro n hn
     specialize hN n hn
     sorry
-    
+
   have h2 : ∀ n ≥ N, |xn n - x| + |x| ≤ |x| + 1 := by
     intro n hn
     specialize hN n hn
     linarith
-  
+
   let C := |x| + 1
   let B := max (|xn 1|) (|x| + 1)
   have h3 : ∀ n : ℕ, |xn n| ≤ B := by sorry
-    
+
   use B
   intro m hm
   simp at hm
@@ -278,28 +278,28 @@ example : seq_is_limit (fun (n : ℕ) => (-1) ^ n / (√(n ^ 2 + n))) 0 := by
   have h1 : seq_is_limit (fun (n : ℕ) => 1 / √(n)) 0 := by sorry
   exact seq_squeeze_zero (fun (n : ℕ) => (-1) ^ n / (√(n ^ 2 + n))) (fun (n : ℕ) => 1 / √(n)) h1 h
 
-lemma seq_COLT_linearity (xn : ℕ → ℝ) (yn : ℕ → ℝ) (hx : seq_is_limit xn x) (hy : seq_is_limit yn y) (a b : ℝ) : seq_is_limit (fun (n : ℕ) => a * (xn n) + b * (yn n)) (a * x + b * y) := by
+lemma seq_COLT_linearity (xn : ℕ → ℝ) (yn : ℕ → ℝ) (x y : ℝ) (hx : seq_is_limit xn x) (hy : seq_is_limit yn y) (a b : ℝ) : seq_is_limit (fun (n : ℕ) => a * (xn n) + b * (yn n)) (a * x + b * y) := by
   sorry
 
-lemma seq_COLT_mult (xn : ℕ → ℝ) (yn : ℕ → ℝ) (hx : seq_is_limit xn x) (hy : seq_is_limit yn y) : seq_is_limit (fun (n : ℕ) => (xn n) * (yn n)) (x * y) := by
+lemma seq_COLT_mult (xn : ℕ → ℝ) (yn : ℕ → ℝ) (x y : ℝ) (hx : seq_is_limit xn x) (hy : seq_is_limit yn y) : seq_is_limit (fun (n : ℕ) => (xn n) * (yn n)) (x * y) := by
   sorry
 
-lemma seq_COLT_ratio (xn : ℕ → ℝ) (yn : ℕ → ℝ) (hx : seq_is_limit xn x) (hy : seq_is_limit yn y) (hy1 : y ≠ 0) (hy2 : ∀ (n : ℕ), yn n ≠ 0): seq_is_limit (fun (n : ℕ) => (xn n) / (yn n)) (x / y) := by
+lemma seq_COLT_ratio (xn : ℕ → ℝ) (yn : ℕ → ℝ) (x y : ℝ) (hx : seq_is_limit xn x) (hy : seq_is_limit yn y) (hy1 : y ≠ 0) (hy2 : ∀ (n : ℕ), yn n ≠ 0): seq_is_limit (fun (n : ℕ) => (xn n) / (yn n)) (x / y) := by
   sorry
 
-theorem seq_limininterval (xn : ℕ → ℝ) (a b : ℝ) (X : Set ℝ) (hX : X = {x : ℝ | a ≤ x ∧ x ≤ b}) (xnI : ∀ (n : ℕ), (xn n) ∈ X) : seq_is_limit xn x → x ∈ X := by
+theorem seq_limininterval (xn : ℕ → ℝ) (x : ℝ) (a b : ℝ) (X : Set ℝ) (hX : X = {x : ℝ | a ≤ x ∧ x ≤ b}) (xnI : ∀ (n : ℕ), (xn n) ∈ X) : seq_is_limit xn x → x ∈ X := by
   sorry
 
-lemma seq_limineq (xn yn : ℕ → ℝ) (hx : seq_is_limit xn x) (hy : seq_is_limit yn y) (hxy : ∀ (n : ℕ), xn n ≤ yn n) : x ≤ y := by
+lemma seq_limineq (xn yn : ℕ → ℝ) (x : ℝ) (hx : seq_is_limit xn x) (hy : seq_is_limit yn y) (hxy : ∀ (n : ℕ), xn n ≤ yn n) : x ≤ y := by
   sorry
 
-theorem seq_sqrtcont (xn : ℕ → ℝ) (hx : seq_is_limit xn x) (hx1 : ∀ (n : ℕ), xn n ≥ 0) : seq_is_limit (fun (n : ℕ) => √(xn n)) (√(x)) := by
+theorem seq_sqrtcont (xn : ℕ → ℝ) (x : ℝ) (hx : seq_is_limit xn x) (hx1 : ∀ (n : ℕ), xn n ≥ 0) : seq_is_limit (fun (n : ℕ) => √(xn n)) (√(x)) := by
 sorry
 
 def seq_monotonically_inc (x : ℕ → ℝ) : Prop := ∀ (m n : ℕ), m ≤ n → x m ≤ x n
 def seq_monotonically_dec (x : ℕ → ℝ) : Prop := ∀ (m n : ℕ), m ≥ n → x m ≥ x n
-    
-theorem seq_boundmonoinc_conv (x : ℕ → ℝ) (hx : seq_monotonically_inc x) : seq_is_limit x l := by
+
+theorem seq_boundmonoinc_conv (x : ℕ → ℝ) (l : ℝ) (hx : seq_monotonically_inc x) : seq_is_limit x l := by
   sorry
 
 lemma e_def : (∃ l, seq_is_limit (fun (n : ℕ) => (1 + 1 / n) ^ n) l) := by sorry
@@ -309,7 +309,7 @@ noncomputable def exp : ℝ := e_def.choose -- gets the value of the limit
 theorem seq_ex_def (x : ℕ) (hx : x > 0) : seq_is_limit (fun (n : ℕ) => (1 + x / n) ^ n) (exp ^ x) := by
   have hn (n : ℕ) (h1 : n > 0) : (1 + x / n) ^ n = (((n + x) / (n + x - 1)) : ℝ) ^ n * ((n + x - 1) / (n)) ^ n := by
     have hpos : ((n + x - 1) : ℝ) ≠ 0 := by admit
-  
+
     calc
       (1 + x / n) ^ n = ((n + x) / n) ^ n := by
         admit
@@ -324,5 +324,5 @@ theorem seq_ex_def (x : ℕ) (hx : x > 0) : seq_is_limit (fun (n : ℕ) => (1 + 
   conv =>
     lhs
     ext n
-    
+
   sorry
