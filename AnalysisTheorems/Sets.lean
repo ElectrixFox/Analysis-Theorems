@@ -323,6 +323,8 @@ theorem seq_ex_def (x : ℕ) (hx : x > 0) : seq_is_limit (fun (n : ℕ) => (1 + 
 
 def subseq (a : ℕ → ℕ) : Prop := ∀ (n m : ℕ), n < m → a n < a m
 
+def subseq_bijection (x : ℕ → ℝ) (a : ℕ → ℕ) {ha : subseq a} : ℕ → ℝ := x ∘ a
+
 def even_subs (a : ℕ → ℝ) : ℕ → ℝ := a ∘ (fun n ↦ 2 * n)
 
 def even_subs' (a : ℕ → ℝ) : ℕ → ℝ := a ∘ eseq where
@@ -334,3 +336,17 @@ example : even_subs' (fun n ↦ (-1) ^ n * (1 - 1 / n)) = fun (n : ℕ) ↦ (1 -
   dsimp [even_subs', even_subs'.eseq]
   norm_num
 
+lemma subseq_geq_index (a : ℕ → ℕ) (ha : subseq a) : ∀ j, a j ≥ j := by
+  sorry
+
+lemma subseq_conv_to_seq_limit (l : ℝ) (x : ℕ → ℝ) (a : ℕ → ℕ) (hx : seq_is_limit x l) (ha : subseq a) (hb : b = subseq_bijection x a _) : seq_is_limit (b) l := by
+  intro ε hε
+  specialize hx ε hε
+  obtain ⟨N, hN⟩ := hx
+  use N -- use the N from the main sequence
+  intro n hn
+  specialize hN (a n)
+  
+
+  dsimp [subseq_bijection] at hb
+  apply hN
