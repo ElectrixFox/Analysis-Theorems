@@ -311,18 +311,26 @@ theorem seq_ex_def (x : ℕ) (hx : x > 0) : seq_is_limit (fun (n : ℕ) => (1 + 
     have hpos : ((n + x - 1) : ℝ) ≠ 0 := by admit
 
     calc
-      (1 + x / n) ^ n = ((n + x) / n) ^ n := by
-        admit
-      _ = (((n + x) / n) * ((n + x - 1) / (n + x - 1))) ^ n := by admit
-      _ = (((n + x) / (n + x - 1) : ℝ) * ((n + x - 1) / n)) ^ n := by
-        conv_lhs =>
-          lhs
-          rw [div_mul_div_comm]
-
-        ring_nf
-      _ = (((n + x) / (n + x - 1))) ^ n * ((n + x - 1) / (n)) ^ n := by ring_nf
+      ((1 + x / n) ^ n : ℝ) = ((n + x) / n) ^ n := by field_simp
+      _ = (((n + x) / n) * ((n + x - 1) / (n + x - 1))) ^ n := by simp_all
+      _ = (((n + x) / (n + x - 1) : ℝ) * ((n + x - 1) / n)) ^ n := by ring_nf
+      _ = (((n + x) / (n + x - 1))) ^ n * ((n + x - 1) / (n)) ^ n := by field_simp
   conv =>
     lhs
     ext n
 
   sorry
+
+def subseq (a : ℕ → ℕ) : Prop := ∀ (n m : ℕ), n < m → a n < a m
+
+def even_subs (a : ℕ → ℝ) : ℕ → ℝ := a ∘ (fun n ↦ 2 * n)
+
+def even_subs' (a : ℕ → ℝ) : ℕ → ℝ := a ∘ eseq where
+  eseq := (fun n ↦ 2 * n)
+  h := subseq eseq
+
+example : even_subs' (fun n ↦ (-1) ^ n * (1 - 1 / n)) = fun (n : ℕ) ↦ (1 - 1 / (2 * n) : ℝ) := by
+  ext x
+  dsimp [even_subs', even_subs'.eseq]
+  norm_num
+
