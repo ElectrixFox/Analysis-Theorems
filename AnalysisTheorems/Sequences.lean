@@ -43,6 +43,9 @@ def seq_bound_above (a : ℕ → ℝ) : Prop :=
 def seq_bound_below (a : ℕ → ℝ) : Prop :=
   bound_below {a n | n : ℕ}
 
+def seq_bounded (a : ℕ → ℝ) : Prop :=
+  bound_above {|a n| | n : ℕ}
+
 theorem conv_seq_is_bounded (xn : ℕ → ℝ) (x : ℝ) (hx : seq_is_limit xn x) : seq_bound_above xn := by
   specialize hx 1
   simp at hx
@@ -92,10 +95,17 @@ lemma seq_limineq (xn yn : ℕ → ℝ) (x y : ℝ) (hx : seq_is_limit xn x) (hy
 theorem seq_sqrtcont (xn : ℕ → ℝ) (x : ℝ) (hx : seq_is_limit xn x) (hx1 : ∀ (n : ℕ), xn n ≥ 0) : seq_is_limit (fun (n : ℕ) => √(xn n)) (√(x)) := by
 sorry
 
-def seq_monotonically_inc (x : ℕ → ℝ) : Prop := ∀ (m n : ℕ), m ≤ n → x m ≤ x n
-def seq_monotonically_dec (x : ℕ → ℝ) : Prop := ∀ (m n : ℕ), m ≥ n → x m ≥ x n
+/- Monotone increasing sequence for type ℕ → α -/
+def seq_mono_inc {α : Type} [LE α] (x : ℕ → α) : Prop := ∀ (m n : ℕ), m ≤ n → x m ≤ x n
 
-theorem seq_boundmonoinc_conv (x : ℕ → ℝ) (l : ℝ) (hx : seq_monotonically_inc x) : seq_is_limit x l := by
+/- Monotone decreasing sequence for type ℕ → α -/
+def seq_mono_dec {α : Type} [LE α] (x : ℕ → α) : Prop := ∀ (m n : ℕ), m ≥ n → x m ≥ x n
+
+theorem seq_boundmonoinc_conv (x : ℕ → ℝ) (l : ℝ) (hx : seq_mono_inc x) : seq_is_limit x l := by
+  sorry
+
+/- If x is bounded and monotonically increasing or decreasing then it converges -/
+theorem seq_mono_bound_conv (x : ℕ → ℝ) (hx : seq_bounded x) : seq_mono_inc x ∨ seq_mono_dec x → ∃ l, seq_is_limit x l := by
   sorry
 
 lemma e_def : (∃ l, seq_is_limit (fun (n : ℕ) => (1 + 1 / n) ^ n) l) := by sorry
@@ -117,6 +127,8 @@ theorem seq_ex_def (x : ℕ) (hx : x > 0) : seq_is_limit (fun (n : ℕ) => (1 + 
 
   sorry
 
+def seq_dec (x : ℕ → ℝ) : Prop := ∀ n, x (n + 1) ≤ x n
+
 def subseq (a : ℕ → ℕ) : Prop := ∀ (n m : ℕ), n < m → a n < a m
 
 def subseq_bijection (x : ℕ → ℝ) (a : ℕ → ℕ) (ha : subseq a) : ℕ → ℝ := x ∘ a
@@ -126,6 +138,15 @@ def even_subs (a : ℕ → ℝ) : ℕ → ℝ := a ∘ (fun n ↦ 2 * n)
 def even_subs' (a : ℕ → ℝ) : ℕ → ℝ := a ∘ eseq where
   eseq := (fun n ↦ 2 * n)
   h := subseq eseq
+
+lemma seq_bound_imp_subseq_bound (x : ℕ → ℝ) (a : ℕ → ℕ) (ha : subseq a) : seq_bounded x → seq_bounded (x ∘ a) := by
+  intro h
+  dsimp [seq_bounded, bound_above] at * -- simplify the definitions
+  simp_all  -- simplify further
+  obtain ⟨c, h⟩ := h  -- get our upper bound from the hypothesis
+  use c -- use this upper bound
+  intro j -- get the new variable
+  apply h -- apply the hypothesis
 
 lemma subseq_ge_index (a : ℕ → ℕ) (ha : subseq a) : ∀ j, a j ≥ j := by
   sorry
@@ -148,3 +169,35 @@ lemma subseq_conv_to_seq_limit {b : ℕ → ℝ} (l : ℝ) (x : ℕ → ℝ) (a 
   dsimp [subseq_bijection] at hb
   simp [hb]
   exact hN h1
+
+lemma seq_contsub_inc_or_dec (x : ℕ → ℝ) : ∃ a : ℕ → ℕ, subseq a ∧ (seq_mono_inc (x ∘ a) ∨ seq_mono_dec (x ∘ a)) := by
+  sorry
+
+theorem subseq_BolzanoWeierstrass (x : ℕ → ℝ) (hx : seq_bounded x) : ∃ a, subseq a → ∃ l, seq_is_limit (x ∘ a) l := by
+  have := seq_contsub_inc_or_dec x
+  obtain ⟨a, ha⟩ := this
+  use a
+  intro h1
+  simp [h1] at ha
+  obtain ha1 | ha2 := ha
+  .
+    apply seq_mono_bound_conv (x ∘ a)
+    .
+      dsimp [seq_bounded, bound_above] at * -- simplify definitions
+      simp_all  -- simplify everything down further
+      use hx.choose -- get the c from the bounded
+      intro a1  -- get our x
+      apply hx.choose_spec  -- show that since the sequence is bounded so is the subseq
+    .
+      tauto -- show that it is true by True ∨ something is always true
+      /-
+      dsimp [seq_bounded, bound_above]
+      dsimp [seq_bounded, bound_above] at hx
+      simp_all
+      obtain ⟨c, h⟩ := hx
+      use c
+      intro a1
+      apply h
+      -/
+
+  sorry
