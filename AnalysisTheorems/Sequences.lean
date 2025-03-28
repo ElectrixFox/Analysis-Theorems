@@ -180,17 +180,7 @@ theorem subseq_BolzanoWeierstrass (x : ℕ → ℝ) (hx : seq_bounded x) : ∃ a
   intro h1
   simp [h1] at ha
   obtain ha1 | ha2 := ha
-  .
-    apply seq_mono_bound_conv (x ∘ a)
-    .
-      dsimp [seq_bounded, bound_above] at * -- simplify definitions
-      simp_all  -- simplify everything down further
-      use hx.choose -- get the c from the bounded
-      intro a1  -- get our x
-      apply hx.choose_spec  -- show that since the sequence is bounded so is the subseq
-    .
-      tauto -- show that it is true by True ∨ something is always true
-  .
-    apply seq_mono_bound_conv (x ∘ a)
-    apply seq_bound_imp_subseq_bound x a h1 hx
-    tauto
+  repeat' -- repeatedly apply the following logic
+  . apply seq_mono_bound_conv (x ∘ a) -- if the sequence is monotone and bounded then it converges
+    apply seq_bound_imp_subseq_bound x a h1 hx -- the sequence is bounded so the subsequence is bounded
+    tauto -- show that it is true by True ∨ something is always true
