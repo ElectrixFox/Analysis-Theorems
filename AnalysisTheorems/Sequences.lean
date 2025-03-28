@@ -171,7 +171,43 @@ lemma subseq_conv_to_seq_limit {b : ℕ → ℝ} (l : ℝ) (x : ℕ → ℝ) (a 
   exact hN h1
 
 lemma seq_contsub_inc_or_dec (x : ℕ → ℝ) : ∃ a : ℕ → ℕ, subseq a ∧ (seq_mono_inc (x ∘ a) ∨ seq_mono_dec (x ∘ a)) := by
-  sorry
+  let P := {n0 : ℕ | ∀ n > n0, x n0 ≥ x n}  -- the set of "peak" indices
+
+  by_cases h : P.Finite
+  .
+    dsimp [Set.Finite] at h
+    aesop
+    have h1 : ∃ (n1 : ℕ), ∀ n ∈ P, n < n1 := by
+      sorry
+
+    let n0 := h1.choose
+    have h2 (n1 : ℕ) : ∃ (n2 : ℕ), n2 > n1 ∧ x n1 < x n2 := by
+      sorry
+
+    let an : ℕ → ℕ
+      | 0 => n0
+      | .succ n => (h2 n).choose
+
+    have han1 : subseq an := by
+      sorry
+
+    use an
+    constructor
+    . apply han1
+    .
+      constructor
+      dsimp [seq_mono_inc]
+      intro m n hn
+      dsimp [an]
+      sorry
+
+
+
+  .
+    dsimp [Set.Finite] at h
+    aesop
+
+    sorry
 
 theorem subseq_BolzanoWeierstrass (x : ℕ → ℝ) (hx : seq_bounded x) : ∃ a, subseq a → ∃ l, seq_is_limit (x ∘ a) l := by
   have := seq_contsub_inc_or_dec x
