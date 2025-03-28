@@ -190,14 +190,7 @@ theorem subseq_BolzanoWeierstrass (x : ℕ → ℝ) (hx : seq_bounded x) : ∃ a
       apply hx.choose_spec  -- show that since the sequence is bounded so is the subseq
     .
       tauto -- show that it is true by True ∨ something is always true
-      /-
-      dsimp [seq_bounded, bound_above]
-      dsimp [seq_bounded, bound_above] at hx
-      simp_all
-      obtain ⟨c, h⟩ := hx
-      use c
-      intro a1
-      apply h
-      -/
-
-  sorry
+  .
+    apply seq_mono_bound_conv (x ∘ a)
+    apply seq_bound_imp_subseq_bound x a h1 hx
+    tauto
