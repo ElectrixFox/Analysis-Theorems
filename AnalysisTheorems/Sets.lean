@@ -51,7 +51,7 @@ example (X : Set ℝ) (hX : X = {x : ℝ | x < 2}) : supremum X 2 := by
     simp [x]
     linarith
 
-axiom completeness_axiom {X : Set ℝ} [Nonempty X] : bound_above X → ∃ C, supremum X C
+axiom completeness_axiom (X : Set ℝ) [Nonempty X] : bound_above X → ∃ C, supremum X C
 
 theorem archimedes (a b : ℝ) (hb : b > 0) : ∃ (n : ℕ), n * b > a := by
   by_contra h
@@ -73,7 +73,7 @@ theorem archimedes (a b : ℝ) (hb : b > 0) : ∃ (n : ℕ), n * b > a := by
     subst hn
     apply h
 
-  have hXsup : ∃ C, supremum X C := completeness_axiom hXb  -- by the completeness axiom it has a supremum
+  have hXsup : ∃ C, supremum X C := completeness_axiom X hXb  -- by the completeness axiom it has a supremum
   obtain ⟨C, hC⟩ := hXsup -- get the supremum
   clear hXb hXn -- clean up some unnecessary hypothesis
   have hBup : (bound_above_by X C) := hC.left

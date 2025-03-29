@@ -220,3 +220,28 @@ theorem subseq_BolzanoWeierstrass (x : ℕ → ℝ) (hx : seq_bounded x) : ∃ a
   . apply seq_mono_bound_conv (x ∘ a) -- if the sequence is monotone and bounded then it converges
     apply seq_bound_imp_subseq_bound x a h1 hx -- the sequence is bounded so the subsequence is bounded
     tauto -- show that it is true by True ∨ something is always true
+
+lemma abs_le_imp_le (a b : ℝ) : |a| ≤ b → a ≤ b := by
+  intro h
+  by_cases h1 : a ≤ 0
+  .
+    rw [abs_of_nonpos h1] at h
+    linarith
+  .
+    push_neg at h1
+    rw [abs_of_pos h1] at h
+    exact h
+
+noncomputable
+def seq_sup (x : ℕ → ℝ) (hx : seq_bound_above x) : ℕ → ℝ := fun n =>
+  let S := {xm | ∃ m : ℕ, m ≥ n ∧ xm = x m}
+
+  have hS1 : bound_above S := by
+    obtain ⟨c, hc⟩ := hx
+    use c
+    intro y hy
+    obtain ⟨m, hm, hy_eq⟩ := hy
+    simp_all
+  have hS2 : Nonempty S := by simp [Set.Nonempty.of_subtype, S]; tauto  -- obviously if is bounded above then it will be nonempty
+
+  (completeness_axiom S hS1).choose
