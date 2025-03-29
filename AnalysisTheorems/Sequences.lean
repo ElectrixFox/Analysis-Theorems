@@ -232,6 +232,17 @@ lemma abs_le_imp_le (a b : ℝ) : |a| ≤ b → a ≤ b := by
     rw [abs_of_pos h1] at h
     exact h
 
+lemma set_bound_above_neg_bound_below (X : Set ℝ) : bound_above X ↔ bound_below (-X) := by
+  constructor
+  repeat' -- repeat this as the following works in both ways
+  . intro h
+    obtain ⟨c, hc⟩ := h -- get the upper (lower) bound
+    use (-c)  -- the lower (upper) bound is -c since c is positive
+    intro x
+    specialize hc (-x)  -- the x in X will be -x since x is -ve
+    simp_all [neg_le, le_neg] -- cleaning up the inequalities
+
+
 noncomputable
 def seq_sup (x : ℕ → ℝ) (hx : seq_bound_above x) : ℕ → ℝ := fun n =>
   let S := {xm | ∃ m : ℕ, m ≥ n ∧ xm = x m}
@@ -245,3 +256,20 @@ def seq_sup (x : ℕ → ℝ) (hx : seq_bound_above x) : ℕ → ℝ := fun n =>
   have hS2 : Nonempty S := by simp [Set.Nonempty.of_subtype, S]; tauto  -- obviously if is bounded above then it will be nonempty
 
   (completeness_axiom S hS1).choose
+
+noncomputable
+def seq_inf (x : ℕ → ℝ) (hx : seq_bound_below x) : ℕ → ℝ := fun n =>
+  let S := {xm | ∃ m : ℕ, m ≥ n ∧ xm = x m}
+
+  have hS1 : bound_below S := by
+    obtain ⟨c, hc⟩ := hx
+    use c
+    intro y hy
+    obtain ⟨m, hm, hy_eq⟩ := hy
+    simp_all
+
+
+  have hS3 : bound_above (-S) := by rw [set_bound_above_neg_bound_below (-S)]; simp [hS1]
+  have hS2 : Nonempty (-S) := by simp [Set.Nonempty.of_subtype, S]; tauto  -- obviously if is bounded above then it will be nonempty
+  let neg_inf := (completeness_axiom { -xm | xm ∈ S } hS3).choose
+  -neg_inf
