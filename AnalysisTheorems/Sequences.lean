@@ -268,8 +268,22 @@ def seq_inf (x : ℕ → ℝ) (hx : seq_bound_below x) : ℕ → ℝ := fun n =>
     obtain ⟨m, hm, hy_eq⟩ := hy
     simp_all
 
+  have : (-S) = { -xm | xm ∈ S } := by
+    ext a
+    constructor
+    . intro h
+      use (-a)
+      simp
+      tauto
+    . intro h
+      simp at h
+      obtain ⟨b, h⟩ := h
+      simp [←h.right, h.left]
 
-  have hS3 : bound_above (-S) := by rw [set_bound_above_neg_bound_below (-S)]; simp [hS1]
-  have hS2 : Nonempty (-S) := by simp [Set.Nonempty.of_subtype, S]; tauto  -- obviously if is bounded above then it will be nonempty
-  let neg_inf := (completeness_axiom { -xm | xm ∈ S } hS3).choose
+  have hS3 : bound_above { -xm | xm ∈ S } := by rw [←this, set_bound_above_neg_bound_below (-S)]; simp [hS1]
+  have hS2 : Nonempty { -xm | xm ∈ S } := by simp [Set.Nonempty.of_subtype]; tauto  -- obviously if is bounded above then it will be nonempty
+  let neg_inf := (completeness_axiom { -xm | xm ∈ S } hS3).choose;
   -neg_inf
+
+lemma seq_infseeq_le_supseq (x : ℕ → ℝ) (hx : seq_bounded x) : seq_mono_dec (seq_sup x) ∧ seq_bounded (seq_sup x) := by
+  sorry
