@@ -243,6 +243,46 @@ lemma set_bound_above_neg_bound_below (X : Set ℝ) : bound_above X ↔ bound_be
     simp_all [neg_le, le_neg] -- cleaning up the inequalities
 
 
+/-- Given a bounded sequence `x : ℕ → ℝ`, define `seq_sup` as the sequence of supremums of the tail sets. -/
+noncomputable
+def seq_sup (x : ℕ → ℝ) (hx : seq_bounded x) : ℕ → ℝ := fun n =>
+  let S := {xm | ∃ m : ℕ, m ≥ n ∧ xm = |x m|}
+  have hS1 : bound_above S := by
+    obtain ⟨c, hc⟩ := hx
+    use c
+    intro y hy
+    obtain ⟨m, hm, hy_eq⟩ := hy
+    simp_all
+  have hS2 : Nonempty S := by simp [Set.Nonempty.of_subtype, S]; tauto
+  (completeness_axiom S hS1).choose
+
+/-- Given a bounded sequence `x : ℕ → ℝ`, define `seq_inf` as the sequence of infimums of the tail sets. -/
+noncomputable
+def seq_inf (x : ℕ → ℝ) (hx : seq_bounded x) : ℕ → ℝ := fun n =>
+  let S := {xm | ∃ m : ℕ, m ≥ n ∧ xm = |x m|}
+  have hS1 : bound_below S := by
+    obtain ⟨c, hc⟩ := hx
+    use 0
+    intro y hy
+    obtain ⟨m, hm, hy_eq⟩ := hy
+    simp_all
+  have : (-S) = { -xm | xm ∈ S } := by
+    ext a
+    constructor
+    . intro h
+      use (-a)
+      simp
+      tauto
+    . intro h
+      simp at h
+      obtain ⟨b, h⟩ := h
+      simp [←h.right, h.left]
+  have hS3 : bound_above { -xm | xm ∈ S } := by rw [←this, set_bound_above_neg_bound_below (-S)]; simp [hS1]
+  have hS2 : Nonempty { -xm | xm ∈ S } := by simp [Set.Nonempty.of_subtype]; tauto
+  let neg_inf := (completeness_axiom { -xm | xm ∈ S } hS3).choose;
+  -neg_inf
+
+/-
 noncomputable
 def seq_sup (x : ℕ → ℝ) (hx : seq_bound_above x) : ℕ → ℝ := fun n =>
   let S := {xm | ∃ m : ℕ, m ≥ n ∧ xm = x m}
@@ -284,6 +324,43 @@ def seq_inf (x : ℕ → ℝ) (hx : seq_bound_below x) : ℕ → ℝ := fun n =>
   have hS2 : Nonempty { -xm | xm ∈ S } := by simp [Set.Nonempty.of_subtype]; tauto  -- obviously if is bounded above then it will be nonempty
   let neg_inf := (completeness_axiom { -xm | xm ∈ S } hS3).choose;
   -neg_inf
+-/
 
-lemma seq_infseeq_le_supseq (x : ℕ → ℝ) (hx : seq_bounded x) : seq_mono_dec (seq_sup x) ∧ seq_bounded (seq_sup x) := by
+lemma seq_infseeq_le_supseq (x : ℕ → ℝ) (hx : seq_bounded x) :
+  (seq_mono_dec (seq_sup x hx) ∧ seq_bounded (seq_sup x hx)) ∧
+  (seq_mono_inc (seq_inf x hx) ∧ seq_bounded (seq_inf x hx)) ∧
+  (∃ ls, seq_is_limit (seq_sup x hx) ls ∧
+  ∃ li, seq_is_limit (seq_inf x hx) li → li ≤ ls) := by
+  let xSup := seq_sup x hx
+  let xInf := seq_inf x hx
+  have hSup : xSup = seq_sup x hx := rfl
+  have hInf : xInf = seq_inf x hx := rfl
+  rw [←hSup, ←hInf]
+
+  obtain ⟨C, hC⟩ := hx
+  have h1 : ∃ c < C, ∀ (n : ℕ), x n ∈ {x : ℝ | c < x ∧ x < C}
+  let Xn := {xm : ℝ | ∀ (n : ℕ), ∃ (m : ℕ), m ≥ n ∧ xm = x m}
+  have hXb : bounded Xn := by sorry
+
+
+  constructor
+  .
+    constructor
+    .
+      dsimp [seq_bounded] at hx
+      obtain ⟨c, hc⟩ := hx
+      dsimp [seq_mono_dec]
+      intro m n hn
+      simp at hc
+      specialize hc n
+      sorry
+
+    .
+      sorry
+  constructor
+  .
+    constructor
+    . sorry
+    . sorry
+
   sorry
