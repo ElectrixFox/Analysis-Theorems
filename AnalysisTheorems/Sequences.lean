@@ -326,7 +326,105 @@ def seq_inf (x : ℕ → ℝ) (hx : seq_bound_below x) : ℕ → ℝ := fun n =>
   -neg_inf
 -/
 
-lemma seq_infseeq_le_supseq (x : ℕ → ℝ) (hx : seq_bounded x) :
+lemma seq_infseq_le_supseq (x : ℕ → ℝ) (hx : seq_bounded x) :
+  (seq_mono_dec (seq_sup x hx) ∧ seq_bounded (seq_sup x hx)) ∧
+  (seq_mono_inc (seq_inf x hx) ∧ seq_bounded (seq_inf x hx)) := by
+  constructor
+  .
+    constructor
+    .
+      -- Prove that seq_sup is monotonically decreasing
+      dsimp [seq_sup]
+      intro n m hnm
+      let Sn := {xm | ∃ k : ℕ, k ≥ n ∧ xm = |x k|}
+      let Sm := {xm | ∃ k : ℕ, k ≥ m ∧ xm = |x k|}
+      have hsub : Sm ⊆ Sn := by
+        intro y hy
+        obtain ⟨k, hk1, hk2⟩ := hy
+        use k
+        constructor
+        . sorry
+        . exact hk2
+      have hSn : bound_above Sn := by
+        obtain ⟨c, hc⟩ := hx
+        use c
+        intro y hy
+        obtain ⟨k, hk1, hk2⟩ := hy
+        simp_all
+      have hSm : bound_above Sm := by
+        obtain ⟨c, hc⟩ := hx
+        use c
+        intro y hy
+        obtain ⟨k, hk1, hk2⟩ := hy
+        simp_all
+      have hle := completeness_axiom_subset Sm Sn hSm hSn hsub
+      exact hle
+    .
+      -- Prove that seq_sup is bounded
+      dsimp [seq_sup, seq_bounded]
+      obtain ⟨c, hc⟩ := hx
+      use c
+      intro n
+      let Sn := {xm | ∃ k : ℕ, k ≥ n ∧ xm = |x k|}
+      have hSn : bound_above Sn := by
+        use c
+        intro y hy
+        obtain ⟨k, hk1, hk2⟩ := hy
+        simp_all
+      exact (completeness_axiom Sn hSn).choose_spec.left
+  .
+    constructor
+    .
+      -- Prove that seq_inf is monotonically increasing
+      dsimp [seq_inf]
+      intro n m hnm
+      let Sn := {xm | ∃ k : ℕ, k ≥ n ∧ xm = |x k|}
+      let Sm := {xm | ∃ k : ℕ, k ≥ m ∧ xm = |x k|}
+      have hsub : Sn ⊆ Sm := by
+        intro y hy
+        obtain ⟨k, hk1, hk2⟩ := hy
+        use k
+        constructor
+        . linarith
+        . exact hk2
+      have hSn : bound_below Sn := by
+        use 0
+        intro y hy
+        obtain ⟨k, hk1, hk2⟩ := hy
+        simp_all
+      have hSm : bound_below Sm := by
+        use 0
+        intro y hy
+        obtain ⟨k, hk1, hk2⟩ := hy
+        simp_all
+      have hle := completeness_axiom_subset (-Sn) (-Sm) (set_bound_above_neg_bound_below Sn hSn) (set_bound_above_neg_bound_below Sm hSm) (fun x hx => hsub (-x) hx)
+      simp at hle
+      exact hle
+    .
+      -- Prove that seq_inf is bounded
+      dsimp [seq_inf, seq_bounded]
+      obtain ⟨c, hc⟩ := hx
+      use c
+      intro n
+      let Sn := {xm | ∃ k : ℕ, k ≥ n ∧ xm = |x k|}
+      have hSn : bound_below Sn := by
+        use 0
+        intro y hy
+        obtain ⟨k, hk1, hk2⟩ := hy
+        simp_all
+      exact (completeness_axiom (-Sn) (set_bound_above_neg_bound_below Sn hSn)).choose_spec.left.neg
+  constructor
+  .
+    constructor
+    . sorry
+    . sorry
+  .
+    constructor
+    . sorry
+    . sorry
+
+
+lemma seq_infseq_le_supseq' (x : ℕ → ℝ) (hx : seq_bounded x) :
   (seq_mono_dec (seq_sup x hx) ∧ seq_bounded (seq_sup x hx)) ∧
   (seq_mono_inc (seq_inf x hx) ∧ seq_bounded (seq_inf x hx)) ∧
   (∃ ls, seq_is_limit (seq_sup x hx) ls ∧
@@ -339,28 +437,44 @@ lemma seq_infseeq_le_supseq (x : ℕ → ℝ) (hx : seq_bounded x) :
 
   obtain ⟨C, hC⟩ := hx
   have h1 : ∃ c < C, ∀ (n : ℕ), x n ∈ {x : ℝ | c < x ∧ x < C}
-  let Xn := {xm : ℝ | ∀ (n : ℕ), ∃ (m : ℕ), m ≥ n ∧ xm = x m}
-  have hXb : bounded Xn := by sorry
+  let Xn := {xm : ℝ | ∃ (n : ℕ), ∃ (m : ℕ), m ≥ n ∧ xm = x m}
+  have hXb : bounded Xn := by
+    suffices h : seq_bounded x from by
+      -- there exists an x ∈ xₙ such that for all x ∈ Xn, x ≤ x₀
+      have h1 : ∀ xn ∈ Xn, ∃ (n : ℕ), xn ≤ x n := by
+        intro xn hxn
+        dsimp [Xn] at hxn
+        obtain ⟨n, m, hnm1, hnm2⟩ := hxn
+        subst hnm2
+        simp_all
+        apply Exists.intro
+        rfl
 
+      clear h1
+      -- there exists an x ∈ xₙ such that for all x ∈ Xn, x ≤ x₀
+      have h2 : ∃ (n : ℕ), ∀ xn ∈ Xn, |xn| ≤ x n := by
 
+        use 2
+        intro xn hxn
+        dsimp [Xn] at hxn
+        obtain ⟨n, m, hnm1, hnm2⟩ := hxn
+        subst hnm2
+        simp_all
+        sorry
+      dsimp [bounded]
+      obtain ⟨n, hn⟩ := h2
+      use (x n)
+    tauto
   constructor
   .
     constructor
     .
-      dsimp [seq_bounded] at hx
-      obtain ⟨c, hc⟩ := hx
-      dsimp [seq_mono_dec]
-      intro m n hn
-      simp at hc
-      specialize hc n
       sorry
 
     .
       sorry
   constructor
   .
-    constructor
-    . sorry
-    . sorry
+    sorry
 
   sorry
