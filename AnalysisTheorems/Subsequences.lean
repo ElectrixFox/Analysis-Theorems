@@ -4,10 +4,6 @@ def extraction (φ : ℕ → ℕ) := ∀ n m, n < m → φ n < φ m
 
 def seq_dec (x : ℕ → ℝ) : Prop := ∀ n, x (n + 1) ≤ x n
 
-def subseq (a : ℕ → ℕ) : Prop := ∀ (n m : ℕ), n < m → a n < a m
-
-def subseq_bijection (x : ℕ → ℝ) (a : ℕ → ℕ) (ha : subseq a) : ℕ → ℝ := x ∘ a
-
 lemma seq_bound_imp_subseq_bound (x : ℕ → ℝ) (a : ℕ → ℕ) (ha : extraction a) : seq_bounded x → seq_bounded (x ∘ a) := by
   intro h
   dsimp [seq_bounded, bound_above] at * -- simplify the definitions
@@ -33,10 +29,9 @@ lemma subseq_ge_index (a : ℕ → ℕ) (ha : extraction a) : ∀ j, a j ≥ j :
         simp at ha  -- showing it says a k < a (k + 1)
         linarith  -- linearity does the rest
 
-lemma subseq_conv_to_seq_limit {b : ℕ → ℝ} (l : ℝ) (x : ℕ → ℝ) (a : ℕ → ℕ) (hx : seq_is_limit x l) (ha : extraction a) : seq_is_limit (x ∘ a) l := by
+lemma subseq_conv_to_seq_limit (x : ℕ → ℝ) (a : ℕ → ℕ) (l : ℝ) (hx : seq_is_limit x l) (ha : extraction a) : seq_is_limit (x ∘ a) l := by
   intro ε hε
-  specialize hx ε hε
-  obtain ⟨N, hN⟩ := hx
+  rcases hx ε hε with ⟨N, hN⟩ -- gets all the stuff we need
   use N -- use the N from the main sequence
   intro n hn
 
@@ -48,36 +43,14 @@ lemma subseq_conv_to_seq_limit {b : ℕ → ℝ} (l : ℝ) (x : ℕ → ℝ) (a 
 lemma seq_contsub_inc_or_dec (x : ℕ → ℝ) : ∃ a : ℕ → ℕ, extraction a ∧ (seq_mono_inc (x ∘ a) ∨ seq_mono_dec (x ∘ a)) := by
   let P := {n0 : ℕ | ∀ n > n0, x n0 ≥ x n}  -- the set of "peak" indices
 
-  by_cases h : P.Finite
-  .
-    dsimp [Set.Finite] at h
-
-    have h1 : ∃ (n1 : ℕ), ∀ n ∈ P, n < n1 := by
-      sorry
-
-    let n0 := h1.choose
-    have h2 (n1 : ℕ) : ∃ (n2 : ℕ), n2 > n1 ∧ x n1 < x n2 := by
-      sorry
-
-    let an : ℕ → ℕ
-      | 0 => n0
-      | .succ n => (h2 n).choose
-
-    have han1 : extraction an := by
-      sorry
-
-    use an
-    simp [han1]
-    left
-    dsimp [seq_mono_inc]
-    intro n m hnm
+  by_cases h : P.Infinite -- there can either be an infinite or finite number of peak indices
+  . -- infinitely many peak indices
     sorry
-  .
-    simp [P] at h
+  . -- finitely many peak indices
     sorry
 
 
-theorem subseq_BolzanoWeierstrass (x : ℕ → ℝ) (hx : seq_bounded x) : ∃ a, subseq a → ∃ l, seq_is_limit (x ∘ a) l := by
+theorem subseq_BolzanoWeierstrass (x : ℕ → ℝ) (hx : seq_bounded x) : ∃ a, extraction a → ∃ l, seq_is_limit (x ∘ a) l := by
   have := seq_contsub_inc_or_dec x
   obtain ⟨a, ha⟩ := this
   use a
@@ -211,7 +184,15 @@ lemma seq_infseq_le_supseq (x : ℕ → ℝ) (hx : seq_bounded x) :
         obtain ⟨k, hk1, hk2⟩ := hy
         use k
         constructor
-        . sorry
+        .
+          rw [ge_iff_le] at *
+          subst hk2
+          rw [le_iff_lt_or_eq] at hnm
+          obtain h1 | h2 := hnm
+          . sorry
+          . simp_all only [h2]
+
+          sorry
         . exact hk2
       have hSn : bound_above Sn := by
         obtain ⟨c, hc⟩ := hx
