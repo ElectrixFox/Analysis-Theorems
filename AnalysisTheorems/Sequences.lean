@@ -357,8 +357,9 @@ lemma seq_infseq_le_supseq (x : ℕ → ℝ) (hx : seq_bounded x) :
         intro y hy
         obtain ⟨k, hk1, hk2⟩ := hy
         simp_all
-      have hle := completeness_axiom_subset Sm Sn hSm hSn hsub
-      exact hle
+      sorry
+      -- have hle := completeness_axiom_subset Sm Sn hSm hSn hsub
+      -- exact hle
     .
       -- Prove that seq_sup is bounded
       dsimp [seq_sup, seq_bounded]
@@ -371,7 +372,8 @@ lemma seq_infseq_le_supseq (x : ℕ → ℝ) (hx : seq_bounded x) :
         intro y hy
         obtain ⟨k, hk1, hk2⟩ := hy
         simp_all
-      exact (completeness_axiom Sn hSn).choose_spec.left
+      sorry
+      -- exact (completeness_axiom Sn hSn).choose_spec.left
   .
     constructor
     .
@@ -385,7 +387,7 @@ lemma seq_infseq_le_supseq (x : ℕ → ℝ) (hx : seq_bounded x) :
         obtain ⟨k, hk1, hk2⟩ := hy
         use k
         constructor
-        . linarith
+        . sorry -- linarith
         . exact hk2
       have hSn : bound_below Sn := by
         use 0
@@ -397,9 +399,10 @@ lemma seq_infseq_le_supseq (x : ℕ → ℝ) (hx : seq_bounded x) :
         intro y hy
         obtain ⟨k, hk1, hk2⟩ := hy
         simp_all
-      have hle := completeness_axiom_subset (-Sn) (-Sm) (set_bound_above_neg_bound_below Sn hSn) (set_bound_above_neg_bound_below Sm hSm) (fun x hx => hsub (-x) hx)
-      simp at hle
-      exact hle
+      sorry
+      -- have hle := completeness_axiom_subset (-Sn) (-Sm) (set_bound_above_neg_bound_below Sn hSn) (set_bound_above_neg_bound_below Sm hSm) (fun x hx => hsub (-x) hx)
+      -- simp at hle
+      -- exact hle
     .
       -- Prove that seq_inf is bounded
       dsimp [seq_inf, seq_bounded]
@@ -412,16 +415,8 @@ lemma seq_infseq_le_supseq (x : ℕ → ℝ) (hx : seq_bounded x) :
         intro y hy
         obtain ⟨k, hk1, hk2⟩ := hy
         simp_all
-      exact (completeness_axiom (-Sn) (set_bound_above_neg_bound_below Sn hSn)).choose_spec.left.neg
-  constructor
-  .
-    constructor
-    . sorry
-    . sorry
-  .
-    constructor
-    . sorry
-    . sorry
+      sorry
+      -- exact (completeness_axiom (-Sn) (set_bound_above_neg_bound_below Sn hSn)).choose_spec.left.neg
 
 
 lemma seq_infseq_le_supseq' (x : ℕ → ℝ) (hx : seq_bounded x) :

@@ -5,19 +5,13 @@ example : seq_is_limit (fun n => 6) 6 := by
   use 6
   simp [hε]
 
-
 example (a : ℕ → ℝ) (ha : a = ((fun n => 1 / n) : ℕ → ℝ)) : seq_is_limit a 0 := by
   intro ε hε
   have h1 : ∃ (N : ℕ), N * ε > 1 := by exact archimedes _ _ hε  -- use archimedes to show there is a natural
 
   have h2 : ∃ (N : ℕ), N > 1 / ε := by  -- show that this natural is manipulable
-    obtain ⟨N, hN⟩ := h1
-    use N
-    simp
-    simp at hN
-    rw [←Nat.div_one N, Nat.cast_div (by simp), Nat.cast_one, ←one_div] -- a bunch of rewriting to get the desired form
-    rw [div_lt_div_iff₀ (by positivity) (by positivity)]; linarith
-    norm_num
+    conv_rhs at h1 => ext N; rw [gt_iff_lt, ←div_lt_iff₀ hε, ←gt_iff_lt]
+    exact h1
 
   obtain ⟨N, hN⟩ := h2
   use N
@@ -39,7 +33,6 @@ example (a : ℕ → ℝ) (ha : a = ((fun n => 1 / n) : ℕ → ℝ)) : seq_is_l
   calc
     1 / ε < N := hN
     _ ≤ n := by simp_all
-
 
 example : seq_is_limit (fun (n : ℕ) => (-1) ^ n / (√(n ^ 2 + n))) 0 := by
   have h : ∀ (n : ℕ), |(fun (n : ℕ) => (-1) ^ n / (√(n ^ 2 + n))) n| ≤ (fun (n : ℕ) => 1 / √(n)) n := by
