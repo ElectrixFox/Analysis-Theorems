@@ -33,24 +33,17 @@ lemma subseq_ge_index (a : ℕ → ℕ) (ha : extraction a) : ∀ j, a j ≥ j :
         simp at ha  -- showing it says a k < a (k + 1)
         linarith  -- linearity does the rest
 
-lemma subseq_conv_to_seq_limit {b : ℕ → ℝ} (l : ℝ) (x : ℕ → ℝ) (a : ℕ → ℕ) (hx : seq_is_limit x l)
-  (ha : subseq a) (hb : b = subseq_bijection x a ha) : seq_is_limit b l := by
+lemma subseq_conv_to_seq_limit {b : ℕ → ℝ} (l : ℝ) (x : ℕ → ℝ) (a : ℕ → ℕ) (hx : seq_is_limit x l) (ha : extraction a) : seq_is_limit (x ∘ a) l := by
   intro ε hε
   specialize hx ε hε
   obtain ⟨N, hN⟩ := hx
   use N -- use the N from the main sequence
   intro n hn
-  specialize hN (a n)
 
-  have h1 : a n ≥ N := by
-    have := subseq_ge_index a -- get the general fact
-    apply this at ha  -- apply the a j ≥ j
-    specialize ha n -- specialize this to n so a n ≥ n
-    linarith  -- linearity does the rest
+  have h1 : a n ≥ N := by linarith [subseq_ge_index a ha n]  -- a n ≥ N then linearity of N ≥ n
 
-  dsimp [subseq_bijection] at hb
-  simp [hb]
-  exact hN h1
+  specialize hN (a n) h1  -- use the specialisation
+  simp [hN] -- complete the goal
 
 lemma seq_contsub_inc_or_dec (x : ℕ → ℝ) : ∃ a : ℕ → ℕ, subseq a ∧ (seq_mono_inc (x ∘ a) ∨ seq_mono_dec (x ∘ a)) := by
   let P := {n0 : ℕ | ∀ n > n0, x n0 ≥ x n}  -- the set of "peak" indices
