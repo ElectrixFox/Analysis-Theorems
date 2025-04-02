@@ -45,13 +45,13 @@ lemma subseq_conv_to_seq_limit {b : ℕ → ℝ} (l : ℝ) (x : ℕ → ℝ) (a 
   specialize hN (a n) h1  -- use the specialisation
   simp [hN] -- complete the goal
 
-lemma seq_contsub_inc_or_dec (x : ℕ → ℝ) : ∃ a : ℕ → ℕ, subseq a ∧ (seq_mono_inc (x ∘ a) ∨ seq_mono_dec (x ∘ a)) := by
+lemma seq_contsub_inc_or_dec (x : ℕ → ℝ) : ∃ a : ℕ → ℕ, extraction a ∧ (seq_mono_inc (x ∘ a) ∨ seq_mono_dec (x ∘ a)) := by
   let P := {n0 : ℕ | ∀ n > n0, x n0 ≥ x n}  -- the set of "peak" indices
 
   by_cases h : P.Finite
   .
     dsimp [Set.Finite] at h
-    aesop
+
     have h1 : ∃ (n1 : ℕ), ∀ n ∈ P, n < n1 := by
       sorry
 
@@ -63,26 +63,19 @@ lemma seq_contsub_inc_or_dec (x : ℕ → ℝ) : ∃ a : ℕ → ℕ, subseq a �
       | 0 => n0
       | .succ n => (h2 n).choose
 
-    have han1 : subseq an := by
+    have han1 : extraction an := by
       sorry
 
     use an
-    constructor
-    . apply han1
-    .
-      constructor
-      dsimp [seq_mono_inc]
-      intro m n hn
-      dsimp [an]
-      sorry
-
-
-
-  .
-    dsimp [Set.Finite] at h
-    aesop
-
+    simp [han1]
+    left
+    dsimp [seq_mono_inc]
+    intro n m hnm
     sorry
+  .
+    simp [P] at h
+    sorry
+
 
 theorem subseq_BolzanoWeierstrass (x : ℕ → ℝ) (hx : seq_bounded x) : ∃ a, subseq a → ∃ l, seq_is_limit (x ∘ a) l := by
   have := seq_contsub_inc_or_dec x
