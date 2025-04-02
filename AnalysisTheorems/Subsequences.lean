@@ -26,9 +26,8 @@ lemma subseq_ge_index (a : ℕ → ℕ) (ha : extraction a) : ∀ j, a j ≥ j :
     calc
       k + 1 = k + 1 := rfl
       _ ≤ a k + 1 := by
-        rw [←add_le_add_iff_left 1, add_comm, add_comm 1] at hk -- adding the one to the induction hypothesis
-        exact hk
-      _ ≤ a (k + 1) := by
+        linear_combination hk -- this closes it in one since it shows how this is just a combination of hk
+      _ ≤ a (k + 1) := by --  tauto also closes this goal in one step
         dsimp [extraction] at ha
         specialize ha k (k + 1) -- specializing the extraction to k and k + 1
         simp at ha  -- showing it says a k < a (k + 1)
