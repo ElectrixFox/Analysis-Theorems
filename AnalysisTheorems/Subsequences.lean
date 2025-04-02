@@ -2,29 +2,13 @@ import AnalysisTheorems.Sequences
 
 def extraction (φ : ℕ → ℕ) := ∀ n m, n < m → φ n < φ m
 
-lemma seq_bound_imp_subseq_bound' (x : ℕ → ℝ) (a : ℕ → ℕ) (ha : extraction a) : seq_bounded x → seq_bounded (x ∘ a) := by
-  intro h
-  dsimp [seq_bounded, bound_above] at * -- simplify the definitions
-  simp_all  -- simplify further
-  obtain ⟨c, h⟩ := h  -- get our upper bound from the hypothesis
-  use c -- use this upper bound
-  intro j -- get the new variable
-  apply h -- apply the hypothesis
-
-
 def seq_dec (x : ℕ → ℝ) : Prop := ∀ n, x (n + 1) ≤ x n
 
 def subseq (a : ℕ → ℕ) : Prop := ∀ (n m : ℕ), n < m → a n < a m
 
 def subseq_bijection (x : ℕ → ℝ) (a : ℕ → ℕ) (ha : subseq a) : ℕ → ℝ := x ∘ a
 
-def even_subs (a : ℕ → ℝ) : ℕ → ℝ := a ∘ (fun n ↦ 2 * n)
-
-def even_subs' (a : ℕ → ℝ) : ℕ → ℝ := a ∘ eseq where
-  eseq := (fun n ↦ 2 * n)
-  h := subseq eseq
-
-lemma seq_bound_imp_subseq_bound (x : ℕ → ℝ) (a : ℕ → ℕ) (ha : subseq a) : seq_bounded x → seq_bounded (x ∘ a) := by
+lemma seq_bound_imp_subseq_bound (x : ℕ → ℝ) (a : ℕ → ℕ) (ha : extraction a) : seq_bounded x → seq_bounded (x ∘ a) := by
   intro h
   dsimp [seq_bounded, bound_above] at * -- simplify the definitions
   simp_all  -- simplify further
@@ -33,8 +17,22 @@ lemma seq_bound_imp_subseq_bound (x : ℕ → ℝ) (a : ℕ → ℕ) (ha : subse
   intro j -- get the new variable
   apply h -- apply the hypothesis
 
-lemma subseq_ge_index (a : ℕ → ℕ) (ha : subseq a) : ∀ j, a j ≥ j := by
-  sorry
+lemma subseq_ge_index (a : ℕ → ℕ) (ha : extraction a) : ∀ j, a j ≥ j := by
+  intro j
+  induction' j with k hk
+  . norm_num
+  .
+    rw [ge_iff_le] at *
+    calc
+      k + 1 = k + 1 := rfl
+      _ ≤ a k + 1 := by
+        rw [←add_le_add_iff_left 1, add_comm, add_comm 1] at hk -- adding the one to the induction hypothesis
+        exact hk
+      _ ≤ a (k + 1) := by
+        dsimp [extraction] at ha
+        specialize ha k (k + 1) -- specializing the extraction to k and k + 1
+        simp at ha  -- showing it says a k < a (k + 1)
+        linarith  -- linearity does the rest
 
 lemma subseq_conv_to_seq_limit {b : ℕ → ℝ} (l : ℝ) (x : ℕ → ℝ) (a : ℕ → ℕ) (hx : seq_is_limit x l)
   (ha : subseq a) (hb : b = subseq_bijection x a ha) : seq_is_limit b l := by
@@ -358,4 +356,3 @@ lemma seq_infseq_le_supseq' (x : ℕ → ℝ) (hx : seq_bounded x) :
     sorry
 
   sorry
-
