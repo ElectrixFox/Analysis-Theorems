@@ -11,9 +11,7 @@ def bounded (X : Set ℝ) : Prop := bound_above X ∧ bound_below X
 
 def supremum (X : Set ℝ) (C : ℝ) := (∀ x ∈ X, x ≤ C) ∧ (∀ B, (∀ x ∈ X, x ≤ B) → C ≤ B)
 
-def infimum' (X : Set ℝ) (C : ℝ) := (∀ x ∈ X, C ≤ x) → (∀ B, (∀ x ∈ X, B ≤ x) → C ≤ B)
-
-def infimum (X : Set ℝ) := bound_below X → ∃ (C : ℝ), ∀ (B : ℝ), (bound_below_by X C) ∧ (bound_below_by X B) ∧ (C ≤ B)
+def infimum (X : Set ℝ) (C : ℝ) := (∀ x ∈ X, C ≤ x) → (∀ B, (∀ x ∈ X, B ≤ x) → C ≤ B)
 
 axiom completeness_axiom (X : Set ℝ) [Nonempty X] : bound_above X → ∃ C, supremum X C
 
