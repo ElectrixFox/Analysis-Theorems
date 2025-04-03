@@ -10,21 +10,23 @@ lemma seq_bound_min_max_limit (x : ℕ → ℝ) (hx : seq_bounded x) :
     use l, a  -- use the necessary extraction and limit
 
   have hL : bounded L := by
-    obtain ⟨l, hL⟩ := hneL
+    -- obtain ⟨l, hL⟩ := hneL
     constructor
     .
-      dsimp [L] at hL
-      obtain ⟨a, ha, hll⟩ := hL
-      obtain ⟨C, hC⟩ := hx.left
-      simp at hC
 
-      suffices h : seq_bound_above (x ∘ a) from by
-        dsimp [L]
-        obtain ⟨B, hB⟩ := h
-        use B
-        intro m hm
-        simp at hm
-        obtain ⟨b, hb, hbm⟩ := hm
+      suffices h : ∀ (a : ℕ → ℕ), extraction a ∧ seq_bound_above (x ∘ a) from by
+        /-
+
+        -/
+        have := seq_bound_imp_subseq_bound x
+        simp_all only [true_and, Set.coe_setOf, nonempty_subtype, forall_const, L]
+        obtain ⟨w, h_1⟩ := hneL
+        obtain ⟨w_1, h_1⟩ := h_1
+        use w
+        simp
+        intro l a ha
+        sorry
+
 
 
 
