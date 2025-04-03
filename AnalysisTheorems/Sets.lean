@@ -7,7 +7,7 @@ def bound_above_by (X : Set ℝ) (c : ℝ) : Prop := ∀ x, x ∈ X → c ≥ x
 
 def bound_below_by (X : Set ℝ) (c : ℝ) : Prop := bound_below X → ∀ x, x ∈ X → c ≤ x
 
-def bounded (X : Set ℝ) : Prop := ∃ (C : ℝ), ∀ x ∈ X, |x| ≤ C
+def bounded (X : Set ℝ) : Prop := bound_above X ∧ bound_below X
 
 def supremum (X : Set ℝ) (C : ℝ) := (∀ x ∈ X, x ≤ C) ∧ (∀ B, (∀ x ∈ X, x ≤ B) → C ≤ B)
 
