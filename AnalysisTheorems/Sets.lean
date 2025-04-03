@@ -9,6 +9,12 @@ def bound_below_by (X : Set ℝ) (c : ℝ) : Prop := bound_below X → ∀ x, x 
 
 def bounded (X : Set ℝ) : Prop := bound_above X ∧ bound_below X
 
+/- For X ⊆ ℝ the maximum is an element in X such that ∀ x ∈ X, x ≤ M -/
+def maximum (X : Set ℝ) (M : ℝ) : Prop := M ∈ X ∧ ∀ x ∈ X, x ≤ M
+
+/- For X ⊆ ℝ the minimum is an element in X such that ∀ x ∈ X, m ≤ x -/
+def minimum (X : Set ℝ) (m : ℝ) : Prop := m ∈ X ∧ ∀ x ∈ X, m ≤ x
+
 def supremum (X : Set ℝ) (C : ℝ) := (∀ x ∈ X, x ≤ C) ∧ (∀ B, (∀ x ∈ X, x ≤ B) → C ≤ B)
 
 def infimum (X : Set ℝ) (C : ℝ) := (∀ x ∈ X, C ≤ x) → (∀ B, (∀ x ∈ X, B ≤ x) → C ≤ B)

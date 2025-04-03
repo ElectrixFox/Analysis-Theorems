@@ -75,6 +75,17 @@ theorem subseq_BolzanoWeierstrass (x : ℕ → ℝ) (hx : seq_bounded x) : ∃ a
     apply seq_bound_imp_subseq_bound x a h1 hx -- the sequence is bounded so the subsequence is bounded
     tauto -- show that it is true by True ∨ something is always true
 
+theorem subseq_BolzanoWeierstrass' (x : ℕ → ℝ) (hx : seq_bounded x) : ∃ a, extraction a ∧ ∃ l, seq_is_limit (x ∘ a) l := by
+  have := seq_contsub_inc_or_dec x
+  obtain ⟨a, ha⟩ := this
+  use a -- use our newly found extraction
+  simp [ha.left]  -- as we know it is an extraction we can get rid of that
+  obtain ⟨ha, ha1 | ha2⟩ := ha
+  repeat' -- repeatedly apply the following logic
+  . apply seq_mono_bound_conv (x ∘ a) -- if the sequence is monotone and bounded then it converges
+    apply seq_bound_imp_subseq_bound x a ha hx -- the sequence is bounded so the subsequence is bounded
+    tauto -- show that it is true by True ∨ something is always true
+
 lemma abs_le_imp_le (a b : ℝ) : |a| ≤ b → a ≤ b := by
   intro h
   by_cases h1 : a ≤ 0

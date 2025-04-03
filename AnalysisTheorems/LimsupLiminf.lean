@@ -1,5 +1,52 @@
 import AnalysisTheorems.Subsequences
 
+lemma seq_bound_min_max_limit (x : ℕ → ℝ) (hx : seq_bounded x) :
+  ∃ m, minimum {l | ∃ (a : ℕ → ℕ), extraction a ∧ seq_is_limit (x ∘ a) l} m
+  ∧ ∃ M, maximum {l | ∃ (a : ℕ → ℕ), extraction a ∧ seq_is_limit (x ∘ a) l} M := by
+  set L := {l | ∃ (a : ℕ → ℕ), extraction a ∧ seq_is_limit (x ∘ a) l} -- getting our alias
+  have hneL : Nonempty L := by
+    simp  -- simplify the goal
+    obtain ⟨a, ha, l, hl⟩ := subseq_BolzanoWeierstrass' x hx  -- get the limit and subsequence
+    use l, a  -- use the necessary extraction and limit
+
+  have hL : bounded L := by
+    obtain ⟨l, hL⟩ := hneL
+    constructor
+    .
+      dsimp [L] at hL
+      obtain ⟨a, ha, hll⟩ := hL
+      obtain ⟨C, hC⟩ := hx.left
+      simp at hC
+
+      suffices h : seq_bound_above (x ∘ a) from by
+        dsimp [L]
+        obtain ⟨B, hB⟩ := h
+        use B
+        intro m hm
+        simp at hm
+        obtain ⟨b, hb, hbm⟩ := hm
+
+
+
+      stop
+      use C
+      simp only [Set.mem_setOf_eq, ge_iff_le, forall_exists_index, and_imp]
+      intro x₀ hx₀
+
+      apply seq_bound_imp_subseq_bound x a ha
+
+      specialize hC x₀
+      simp at hC
+      specialize hC (a 1)
+      generalize 1 = n at *
+
+      sorry
+    .
+      obtain ⟨c, hc⟩ := hx.right
+      sorry
+
+  sorry
+
 lemma sup_eq_neg_inf (X : Set ℝ) [Nonempty X] (hx : bound_above X) : ∃ C, infimum (-X) (-C) ∧ supremum X C := by
   let S := {-x | x ∈ X}
   have := completeness_axiom X hx
