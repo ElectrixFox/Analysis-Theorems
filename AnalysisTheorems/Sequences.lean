@@ -47,11 +47,16 @@ theorem conv_seq_is_bounded (xn : ℕ → ℝ) (x : ℝ) (hx : seq_is_limit xn x
   specialize hx 1
   simp at hx
   obtain ⟨N, hN⟩ := hx
-  have h1 : ∀ n ≥ N, |xn n| ≤ |xn n - x| := by
+  have h1 : ∀ n ≥ N, |xn n| ≤ |xn n - x| + |x| ∧ |xn n - x| + |x| ≤ |x| + 1 := by
     intro n hn
     specialize hN n hn
-    sorry
-
+    constructor
+    . 
+      calc
+        |xn n| = |xn n - x + x| := by ring_nf
+        _ ≤ |xn n - x| + |x| := by apply abs_add_le
+    . linarith [hN]
+    
   have h2 : ∀ n ≥ N, |xn n - x| + |x| ≤ |x| + 1 := by
     intro n hn
     specialize hN n hn
@@ -59,7 +64,11 @@ theorem conv_seq_is_bounded (xn : ℕ → ℝ) (x : ℝ) (hx : seq_is_limit xn x
 
   let C := |x| + 1
   let B := max (|xn 1|) (|x| + 1)
-  have h3 : ∀ n : ℕ, |xn n| ≤ B := by sorry
+  have h3 : ∀ n : ℕ, |xn n| ≤ B := by
+    intro n
+    dsimp [B]
+    simp
+    sorry
 
   use B
   intro m hm
@@ -70,7 +79,6 @@ theorem conv_seq_is_bounded (xn : ℕ → ℝ) (x : ℝ) (hx : seq_is_limit xn x
   rw [←hn]
   rw [abs_le] at h3
   apply h3.right
-
 theorem seq_squeeze_zero (x : ℕ → ℝ) (y : ℕ → ℝ) (hy : seq_is_limit y 0) (hxy : ∀ (n : ℕ), |x n| ≤ y n) : seq_is_limit x 0 := by
   sorry
 
