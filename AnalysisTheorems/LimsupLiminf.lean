@@ -1,5 +1,43 @@
 import AnalysisTheorems.Subsequences
 
+lemma thm_1 (x : ℕ → ℝ) (l : ℝ) (hx : seq_is_limit x l) (a : ℝ) : ∀ n, x n ≥ a → l ≥ a := by
+  dsimp [seq_is_limit] at hx
+  intro n hn
+
+  conv at hx =>
+    intro ε hε
+    rhs
+    ext N
+    intro n hn
+    rw [abs_lt]
+    rw [lt_sub_iff_add_lt, add_comm, ←sub_eq_add_neg]
+    rhs
+    rw [sub_eq_add_neg, ←lt_sub_iff_add_lt, sub_neg_eq_add, add_comm]
+
+
+
+  specialize hx 1
+  simp at hx
+  generalize (1 : ℝ) = ε at hx
+  obtain ⟨N, hN⟩ := hx
+  specialize hN n
+  norm_num
+  have h1 : x n < l + ε := by
+    simp_all
+
+
+
+
+
+lemma prop_1 (x : ℕ → ℝ) (hx : seq_bounded x)
+  (L : Set ℝ := {l | ∃ (a : ℕ → ℕ), extraction a ∧ seq_is_limit (x ∘ a) l}) :
+  ∃ c, minimum L c ∧ ∃ C, maximum L C
+  := by
+  have Lbound : bounded L := by
+    sorry
+  sorry
+
+/-
 lemma seq_bound_min_max_limit (x : ℕ → ℝ) (hx : seq_bounded x) :
   ∃ m, minimum {l | ∃ (a : ℕ → ℕ), extraction a ∧ seq_is_limit (x ∘ a) l} m
   ∧ ∃ M, maximum {l | ∃ (a : ℕ → ℕ), extraction a ∧ seq_is_limit (x ∘ a) l} M := by
@@ -430,3 +468,4 @@ lemma seq_infseq_le_supseq' (x : ℕ → ℝ) (hx : seq_bounded x) :
     sorry
 
   sorry
+-/
