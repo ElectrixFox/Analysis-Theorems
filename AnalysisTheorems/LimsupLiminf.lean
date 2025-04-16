@@ -1,5 +1,15 @@
 import AnalysisTheorems.Subsequences
 
+lemma lem_1 (a b : ℝ) : (∀ ε > 0, a < b + ε) → a ≤ b := by
+  intro h
+  by_contra h1  -- assume a > b
+  push_neg at h1
+  rw [show b < a ↔ b - a < 0 by simp] at h1 -- show b - a < 0
+  specialize h (a - b)  -- so use ε = a - b
+  simp at h -- then this says b < a and a ≤ b which is clearly a contradiction
+  linarith
+
+
 lemma thm_1 (x : ℕ → ℝ) (l : ℝ) (hx : seq_is_limit x l) (a : ℝ) : ∀ n, x n ≥ a → l ≥ a := by
   dsimp [seq_is_limit] at hx
   intro n hn
@@ -14,16 +24,31 @@ lemma thm_1 (x : ℕ → ℝ) (l : ℝ) (hx : seq_is_limit x l) (a : ℝ) : ∀ 
     rhs
     rw [sub_eq_add_neg, ←lt_sub_iff_add_lt, sub_neg_eq_add, add_comm]
 
+  have h1 (a b : ℝ) : ∀ ε > 0, a < b + ε → a ≤ b := by
+    intro ε hε
+    by_contra h
+    simp at h
+    aesop
+    rw [lt_add_of_le_of_pos]
+    aesop?
+    rw [le_iff_lt_or_eq]
+    apply le_add_of_le_left
+    obtain ⟨ε, hε, h1, h2⟩ := h
+
+    by_contra h
+    simp at h
 
 
-  specialize hx 1
-  simp at hx
-  generalize (1 : ℝ) = ε at hx
-  obtain ⟨N, hN⟩ := hx
-  specialize hN n
-  norm_num
-  have h1 : x n < l + ε := by
-    simp_all
+  rw [ge_iff_le]
+  calc
+    a ≤ x n := by exact hn
+    _ ≤ l := by
+      conv at hx =>
+        intro ε hε
+        rhs
+        ext N
+        intro n hn
+        right
 
 
 
