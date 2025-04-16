@@ -86,17 +86,6 @@ theorem subseq_BolzanoWeierstrass' (x : ℕ → ℝ) (hx : seq_bounded x) : ∃ 
     apply seq_bound_imp_subseq_bound x a ha hx -- the sequence is bounded so the subsequence is bounded
     tauto -- show that it is true by True ∨ something is always true
 
-lemma abs_le_imp_le (a b : ℝ) : |a| ≤ b → a ≤ b := by
-  intro h
-  by_cases h1 : a ≤ 0
-  .
-    rw [abs_of_nonpos h1] at h
-    linarith
-  .
-    push_neg at h1
-    rw [abs_of_pos h1] at h
-    exact h
-
 lemma set_bound_above_neg_bound_below (X : Set ℝ) : bound_above X ↔ bound_below (-X) := by
   constructor
   repeat' -- repeat this as the following works in both ways
