@@ -176,21 +176,52 @@ theorem seq_squeeze_zero (x : ℕ → ℝ) (y : ℕ → ℝ) (hy : seq_is_limit 
     _ = |y n - 0| := by simp
     _ < ε := hy
 
+theorem seq_COLT_scalarmult (x : ℕ → ℝ) (l : ℝ) (hx : seq_is_limit x l) (a : ℝ) : seq_is_limit (fun n => a * x n) (a * l) := by
+  by_cases ha : a = 0
+  . -- nothing needs to happen for a = 0
+    simp [ha]
+    intro ε hε
+    use 0
+    intro n hn
+    simp [hε]
+
+  -- for a ≠ 0
+  intro ε hε
+  specialize hx (ε / |a|) (by positivity)
+  obtain ⟨N, hN⟩ := hx
+  use N
+  intro n hn
+  simp
+  specialize hN n hn
+  calc
+    |a * x n - a * l| = |a| * |x n - l| := by rw [←mul_sub, abs_mul]
+    _ < |a| * (ε / |a|) := by rel [hN]
+    _ = ε := by field_simp
 
 lemma seq_COLT_linearity (xn : ℕ → ℝ) (yn : ℕ → ℝ) (x y : ℝ) (hx : seq_is_limit xn x) (hy : seq_is_limit yn y) (a b : ℝ) : seq_is_limit (fun (n : ℕ) => a * (xn n) + b * (yn n)) (a * x + b * y) := by
-  sorry
+  intro ε hε
+  specialize hx (ε / (2 * |a|)) (by simp_all)
+  specialize hy ε hε
+  obtain ⟨N₁, hN₁⟩ := hx
+  obtain ⟨N₂, hN₂⟩ := hy
+  let N := max N₁ N₂
+  use N
+  intro n hn
+  simp
+  specialize hN₁ n
+  calc
+    |a * xn n + b * yn n - (a * x + b * y)| = |(a * xn n - a * x) + (b * yn n - b * y)| := by ring_nf
+    _ ≤ |a * xn n - a * x| + |b * yn n - b * y| := by apply abs_add
+    _ = |a| * |xn n - x| + |b| * |yn n - y| := by simp
+    _ < |a| * ε / (2 * |a|) + |b| * ε / (2 * |b|) := by linarith
+    _ = ε := by
+      sorry
 
 lemma seq_COLT_mult (xn : ℕ → ℝ) (yn : ℕ → ℝ) (x y : ℝ) (hx : seq_is_limit xn x) (hy : seq_is_limit yn y) : seq_is_limit (fun (n : ℕ) => (xn n) * (yn n)) (x * y) := by
   sorry
 
 lemma seq_COLT_ratio (xn : ℕ → ℝ) (yn : ℕ → ℝ) (x y : ℝ) (hx : seq_is_limit xn x) (hy : seq_is_limit yn y) (hy1 : y ≠ 0) (hy2 : ∀ (n : ℕ), yn n ≠ 0): seq_is_limit (fun (n : ℕ) => (xn n) / (yn n)) (x / y) := by
   sorry
-
-
-theorem seq_COLT_scalarmult (x : ℕ → ℝ) (l : ℝ) (hx : seq_is_limit x l) (a : ℝ) : seq_is_limit (fun n => a * x n) (a * l) := by
-  have := seq_COLT_linearity x (fun n => 0) l 0 hx (by simp_all [seq_is_limit]) a 0
-  simp at this
-  exact this
 
 lemma conv_seq_bound_above_imp_lim_bound_above (x : ℕ → ℝ) (l : ℝ) (hx : seq_is_limit x l) (b : ℝ) : (∀ n, x n ≤ b) → l ≤ b := by
   intro h
