@@ -15,8 +15,6 @@ theorem seq_cauchy_is_bounded (x : ℕ → ℝ) (hx : seq_cauchy x) : seq_bounde
     specialize hN n hn
     sorry
 
-  /-
-  let C := |x| + 1
   let S : Finset ℝ := (Finset.range (N + 1)).image (fun n => |x n|)  -- getting the set x_1, ..., x_(N - 1)
   let P : ℝ := S.max' (by simp [S])
   let M := max P (|x N| + 1)
@@ -57,12 +55,11 @@ theorem seq_cauchy_is_bounded (x : ℕ → ℝ) (hx : seq_cauchy x) : seq_bounde
       apply h2.right
   .
     simp at hN1
-    sorry
-  -/
-
-
-
-
+    left
+    have : n < N + 1 := by linarith
+    have : n ∈ Finset.range (N + 1) := Finset.mem_range.mpr this
+    have : |x n| ∈ S := Finset.mem_image.mpr ⟨n, this, rfl⟩
+    apply Finset.le_max' S (|x n|) this
 
 
 theorem seq_conv_is_cauchy (x : ℕ → ℝ) (hx : ∃ l, seq_is_limit x l) : seq_cauchy x := by

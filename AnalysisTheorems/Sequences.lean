@@ -158,6 +158,46 @@ theorem conv_seq_is_bounded' (xn : ℕ → ℝ) (x : ℝ) (hx : seq_is_limit xn 
   let s : Finset ℝ := (Finset.range (N + 1)).image (fun n => |xn n|)  -- getting the set x_1, ..., x_(N - 1)
   let P : ℝ := s.max' (by simp [s])
   let B := max P (|x| + 1)
+  suffices (∀ n, |xn n| ≤ B) by
+    constructor
+    . -- M is the upper bound
+      use B
+      intro l hl
+      simp at hl
+      obtain ⟨n, hl⟩ := hl
+      specialize this n
+      simp_all
+      apply abs_le_imp_le
+      exact this
+    . -- -M is the lower bound
+      use -B
+      intro l hl
+      simp at hl
+      obtain ⟨n, hl⟩ := hl
+      specialize this n
+      rw [←hl]
+      rw [abs_le] at this
+      apply this.left
+
+  intro n
+  dsimp [B]
+  simp
+  by_cases hN1 : n ≥ N
+  . right
+    calc
+    |xn n| = |xn n - x + x| := by ring_nf
+    _ ≤ |xn n - x| + |x| := by apply abs_add
+    _ ≤ |x| + 1 := by
+      specialize h1 n hN1
+      apply h1.right
+  .
+    simp at hN1
+    left
+    have : n < N + 1 := by linarith
+    have : n ∈ Finset.range (N + 1) := Finset.mem_range.mpr this
+    have : |x n| ∈ S := Finset.mem_image.mpr ⟨n, this, rfl⟩
+    apply Finset.le_max' S (|x n|) this
+
   have : ∀ n, |xn n| ≤ B := by
     intro n
     by_cases hn : n < N
