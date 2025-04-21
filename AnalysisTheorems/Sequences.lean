@@ -162,7 +162,20 @@ theorem conv_seq_is_bounded (xn : ℕ → ℝ) (x : ℝ) (hx : seq_is_limit xn x
     apply Finset.le_max' S (|xn n|) this
 
 theorem seq_squeeze_zero (x : ℕ → ℝ) (y : ℕ → ℝ) (hy : seq_is_limit y 0) (hxy : ∀ (n : ℕ), |x n| ≤ y n) : seq_is_limit x 0 := by
-  sorry
+  intro ε hε
+  specialize hy ε hε
+  obtain ⟨N, hy⟩ := hy
+  use N
+  intro n hn
+  specialize hy n hn
+  specialize hxy n
+  simp
+  calc
+    |x n| ≤ y n := hxy
+    _ ≤ |y n| := by apply abs_le_imp_le; simp
+    _ = |y n - 0| := by simp
+    _ < ε := hy
+
 
 lemma seq_COLT_linearity (xn : ℕ → ℝ) (yn : ℕ → ℝ) (x y : ℝ) (hx : seq_is_limit xn x) (hy : seq_is_limit yn y) (a b : ℝ) : seq_is_limit (fun (n : ℕ) => a * (xn n) + b * (yn n)) (a * x + b * y) := by
   sorry
