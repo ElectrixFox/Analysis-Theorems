@@ -97,44 +97,7 @@ lemma conv_seq_bound_below_imp_lim_bound_below (x : ℕ → ℝ) (l : ℝ) (hx :
   apply lt_add_imp_le
   exact h1
 
-theorem conv_seq_is_bounded (xn : ℕ → ℝ) (x : ℝ) (hx : seq_is_limit xn x) : seq_bound_above xn := by
-  specialize hx 1
-  simp at hx
-  obtain ⟨N, hN⟩ := hx
-  have h1 : ∀ n ≥ N, |xn n| ≤ |xn n - x| + |x| ∧ |xn n - x| + |x| ≤ |x| + 1 := by
-    intro n hn
-    specialize hN n hn
-    constructor
-    .
-      calc
-        |xn n| = |xn n - x + x| := by ring_nf
-        _ ≤ |xn n - x| + |x| := by apply abs_add_le
-    . linarith [hN]
-
-  have h2 : ∀ n ≥ N, |xn n - x| + |x| ≤ |x| + 1 := by
-    intro n hn
-    specialize hN n hn
-    linarith
-
-  let C := |x| + 1
-  let B := max (|xn 1|) (|x| + 1)
-  have h3 : ∀ n : ℕ, |xn n| ≤ B := by
-    intro n
-    dsimp [B]
-    simp
-    sorry
-
-  use B
-  intro m hm
-  simp at hm
-  simp
-  obtain ⟨n, hn⟩ := hm
-  specialize h3 n
-  rw [←hn]
-  rw [abs_le] at h3
-  apply h3.right
-
-theorem conv_seq_is_bounded' (xn : ℕ → ℝ) (x : ℝ) (hx : seq_is_limit xn x) : seq_bounded xn := by
+theorem conv_seq_is_bounded (xn : ℕ → ℝ) (x : ℝ) (hx : seq_is_limit xn x) : seq_bounded xn := by
   have h0 := hx
   specialize hx 1
   simp at hx
@@ -155,8 +118,8 @@ theorem conv_seq_is_bounded' (xn : ℕ → ℝ) (x : ℝ) (hx : seq_is_limit xn 
     linarith
 
   let C := |x| + 1
-  let s : Finset ℝ := (Finset.range (N + 1)).image (fun n => |xn n|)  -- getting the set x_1, ..., x_(N - 1)
-  let P : ℝ := s.max' (by simp [s])
+  let S : Finset ℝ := (Finset.range (N + 1)).image (fun n => |xn n|)  -- getting the set x_1, ..., x_(N - 1)
+  let P : ℝ := S.max' (by simp [S])
   let B := max P (|x| + 1)
   suffices (∀ n, |xn n| ≤ B) by
     constructor
@@ -195,36 +158,8 @@ theorem conv_seq_is_bounded' (xn : ℕ → ℝ) (x : ℝ) (hx : seq_is_limit xn 
     left
     have : n < N + 1 := by linarith
     have : n ∈ Finset.range (N + 1) := Finset.mem_range.mpr this
-    have : |x n| ∈ S := Finset.mem_image.mpr ⟨n, this, rfl⟩
-    apply Finset.le_max' S (|x n|) this
-
-  have : ∀ n, |xn n| ≤ B := by
-    intro n
-    by_cases hn : n < N
-    .
-
-      sorry
-    . sorry
-
-  constructor
-  . use B
-    intro lx hln
-    simp at hln
-    obtain ⟨n, hn⟩ := hln
-    rw [←hn]
-    simp
-    specialize this n
-    apply abs_le_imp_le
-    exact this
-  .
-    use -B
-    intro lx hln
-    simp at hln
-    obtain ⟨n, hn⟩ := hln
-    rw [←hn]
-    specialize this n
-    rw [abs_le] at this
-    apply this.left
+    have : |xn n| ∈ S := Finset.mem_image.mpr ⟨n, this, rfl⟩
+    apply Finset.le_max' S (|xn n|) this
 
 theorem seq_squeeze_zero (x : ℕ → ℝ) (y : ℕ → ℝ) (hy : seq_is_limit y 0) (hxy : ∀ (n : ℕ), |x n| ≤ y n) : seq_is_limit x 0 := by
   sorry
