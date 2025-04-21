@@ -161,6 +161,50 @@ theorem conv_seq_is_bounded (xn : ℕ → ℝ) (x : ℝ) (hx : seq_is_limit xn x
     have : |xn n| ∈ S := Finset.mem_image.mpr ⟨n, this, rfl⟩
     apply Finset.le_max' S (|xn n|) this
 
+lemma conv_seq_is_bounded_abs (xn : ℕ → ℝ) (x : ℝ) (hx : seq_is_limit xn x) : ∃ B, ∀ n, |xn n| ≤ B := by
+  have h0 := hx
+  specialize hx 1
+  simp at hx
+  obtain ⟨N, hN⟩ := hx
+  have h1 : ∀ n ≥ N, |xn n| ≤ |xn n - x| + |x| ∧ |xn n - x| + |x| ≤ |x| + 1 := by
+    intro n hn
+    specialize hN n hn
+    constructor
+    .
+      calc
+        |xn n| = |xn n - x + x| := by ring_nf
+        _ ≤ |xn n - x| + |x| := by apply abs_add_le
+    . linarith [hN]
+
+  have h2 : ∀ n ≥ N, |xn n - x| + |x| ≤ |x| + 1 := by
+    intro n hn
+    specialize hN n hn
+    linarith
+
+  let C := |x| + 1
+  let S : Finset ℝ := (Finset.range (N + 1)).image (fun n => |xn n|)  -- getting the set x_1, ..., x_(N - 1)
+  let P : ℝ := S.max' (by simp [S])
+  let B := max P (|x| + 1)
+  use B
+  intro n
+  dsimp [B]
+  simp
+  by_cases hN1 : n ≥ N
+  . right
+    calc
+    |xn n| = |xn n - x + x| := by ring_nf
+    _ ≤ |xn n - x| + |x| := by apply abs_add
+    _ ≤ |x| + 1 := by
+      specialize h1 n hN1
+      apply h1.right
+  .
+    simp at hN1
+    left
+    have : n < N + 1 := by linarith
+    have : n ∈ Finset.range (N + 1) := Finset.mem_range.mpr this
+    have : |xn n| ∈ S := Finset.mem_image.mpr ⟨n, this, rfl⟩
+    apply Finset.le_max' S (|xn n|) this
+
 theorem seq_squeeze_zero (x : ℕ → ℝ) (y : ℕ → ℝ) (hy : seq_is_limit y 0) (hxy : ∀ (n : ℕ), |x n| ≤ y n) : seq_is_limit x 0 := by
   intro ε hε
   specialize hy ε hε
@@ -200,7 +244,7 @@ theorem seq_COLT_scalarmult (x : ℕ → ℝ) (l : ℝ) (hx : seq_is_limit x l) 
     _ = ε := by field_simp
 
 -- COLT theorem for xₙ + yₙ → x + y as n → ∞
-theorem seq_COLT_addition (x : ℕ → ℝ) (y : ℕ → ℝ) (l m : ℝ) (hx : seq_is_limit x l) (hy : seq_is_limit y m) (a b : ℝ) : seq_is_limit (fun (n : ℕ) => (x n) + (y n)) (l + m) := by
+theorem seq_COLT_addition (x : ℕ → ℝ) (y : ℕ → ℝ) (l m : ℝ) (hx : seq_is_limit x l) (hy : seq_is_limit y m) : seq_is_limit (fun (n : ℕ) => (x n) + (y n)) (l + m) := by
   intro ε hε
   specialize hx (ε / 2) (by positivity)
   specialize hy (ε / 2) (by positivity)
@@ -210,39 +254,44 @@ theorem seq_COLT_addition (x : ℕ → ℝ) (y : ℕ → ℝ) (l m : ℝ) (hx : 
   use N
   intro n hn
   simp
-  specialize hx n
-  specialize hy n
-  have : n ≥ N → n ≥ N₁ := by simp [N]; tauto
-  have : n ≥ N → n ≥ N₂ := by simp [N]
+
+  specialize hx n (by simp; simp [N] at hn; linarith) -- show |x n - l| < ε / 2
+  specialize hy n (by simp; simp [N] at hn; linarith) -- show |y n - m| < ε / 2
+
   calc
     |x n + y n - (l + m)| = |(x n - l) + (y n - m)| := by ring_nf
     _ ≤ |x n - l| + |y n - m| := by apply abs_add
     _ < ε / 2 + ε / 2 := by rel [hx, hy]
     _ = ε := by simp
-  sorry
+
 
 lemma seq_COLT_linearity (xn : ℕ → ℝ) (yn : ℕ → ℝ) (x y : ℝ) (hx : seq_is_limit xn x) (hy : seq_is_limit yn y) (a b : ℝ) : seq_is_limit (fun (n : ℕ) => a * (xn n) + b * (yn n)) (a * x + b * y) := by
+  exact seq_COLT_addition (fun n => a * xn n) (fun n => b * yn n) (a * x) (b * y) (seq_COLT_scalarmult xn x hx a) (seq_COLT_scalarmult yn y hy b) -- the full thing
+
+lemma seq_COLT_mult (x : ℕ → ℝ) (y : ℕ → ℝ) (l m : ℝ) (hx : seq_is_limit x l) (hy : seq_is_limit y m) : seq_is_limit (fun (n : ℕ) => (x n) * (y n)) (l * m) := by
   intro ε hε
-  have h1 := seq_COLT_scalarmult xn x hx a
-  have h2 := seq_COLT_scalarmult yn y hy b
-  specialize hx (ε / (2 * |a|)) (by simp_all)
+  have h := conv_seq_is_bounded_abs x l hx
+  specialize hx ε hε
   specialize hy ε hε
-  obtain ⟨N₁, hN₁⟩ := hx
-  obtain ⟨N₂, hN₂⟩ := hy
+  obtain ⟨N₁, hx⟩ := hx
+  obtain ⟨N₂, hy⟩ := hy
   let N := max N₁ N₂
   use N
   intro n hn
+  specialize hy n (by simp; simp [N] at hn; linarith) -- show |x n - l| < ε / 2
+  specialize hx n (by simp; simp [N] at hn; linarith) -- show |y n - m| < ε / 2
   simp
-  specialize hN₁ n
-  calc
-    |a * xn n + b * yn n - (a * x + b * y)| = |(a * xn n - a * x) + (b * yn n - b * y)| := by ring_nf
-    _ ≤ |a * xn n - a * x| + |b * yn n - b * y| := by apply abs_add
-    _ = |a| * |xn n - x| + |b| * |yn n - y| := by simp
-    _ < |a| * ε / (2 * |a|) + |b| * ε / (2 * |b|) := by linarith
-    _ = ε := by
-      sorry
+  have h1 := calc
+    |(x n) * (y n) - l * m| ≤ |(x n) * (y n) - (x n) * m| + |(x n) * m - l * m| := by
+      rw [show |(x n) * (y n) - l * m| = |((x n) * (y n) - (x n) * m) + ((x n) * m - l * m)| by ring_nf]
+      apply abs_add
+    _ ≤ |x n| * |y n - m| + |m| * |x n - l| := by
+      simp [←mul_sub, abs_mul]
+      rw [mul_comm, mul_comm l, ←mul_sub, abs_mul]
 
-lemma seq_COLT_mult (xn : ℕ → ℝ) (yn : ℕ → ℝ) (x y : ℝ) (hx : seq_is_limit xn x) (hy : seq_is_limit yn y) : seq_is_limit (fun (n : ℕ) => (xn n) * (yn n)) (x * y) := by
+  obtain ⟨C, hC⟩ := h
+  specialize hC n
+  
   sorry
 
 lemma seq_COLT_ratio (xn : ℕ → ℝ) (yn : ℕ → ℝ) (x y : ℝ) (hx : seq_is_limit xn x) (hy : seq_is_limit yn y) (hy1 : y ≠ 0) (hy2 : ∀ (n : ℕ), yn n ≠ 0): seq_is_limit (fun (n : ℕ) => (xn n) / (yn n)) (x / y) := by
