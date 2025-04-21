@@ -176,6 +176,7 @@ theorem seq_squeeze_zero (x : ℕ → ℝ) (y : ℕ → ℝ) (hy : seq_is_limit 
     _ = |y n - 0| := by simp
     _ < ε := hy
 
+-- COLT theorem for axₙ → ax as n → ∞
 theorem seq_COLT_scalarmult (x : ℕ → ℝ) (l : ℝ) (hx : seq_is_limit x l) (a : ℝ) : seq_is_limit (fun n => a * x n) (a * l) := by
   by_cases ha : a = 0
   . -- nothing needs to happen for a = 0
@@ -198,8 +199,32 @@ theorem seq_COLT_scalarmult (x : ℕ → ℝ) (l : ℝ) (hx : seq_is_limit x l) 
     _ < |a| * (ε / |a|) := by rel [hN]
     _ = ε := by field_simp
 
+-- COLT theorem for xₙ + yₙ → x + y as n → ∞
+theorem seq_COLT_addition (x : ℕ → ℝ) (y : ℕ → ℝ) (l m : ℝ) (hx : seq_is_limit x l) (hy : seq_is_limit y m) (a b : ℝ) : seq_is_limit (fun (n : ℕ) => (x n) + (y n)) (l + m) := by
+  intro ε hε
+  specialize hx (ε / 2) (by positivity)
+  specialize hy (ε / 2) (by positivity)
+  obtain ⟨N₁, hx⟩ := hx
+  obtain ⟨N₂, hy⟩ := hy
+  let N := max N₁ N₂
+  use N
+  intro n hn
+  simp
+  specialize hx n
+  specialize hy n
+  have : n ≥ N → n ≥ N₁ := by simp [N]; tauto
+  have : n ≥ N → n ≥ N₂ := by simp [N]
+  calc
+    |x n + y n - (l + m)| = |(x n - l) + (y n - m)| := by ring_nf
+    _ ≤ |x n - l| + |y n - m| := by apply abs_add
+    _ < ε / 2 + ε / 2 := by rel [hx, hy]
+    _ = ε := by simp
+  sorry
+
 lemma seq_COLT_linearity (xn : ℕ → ℝ) (yn : ℕ → ℝ) (x y : ℝ) (hx : seq_is_limit xn x) (hy : seq_is_limit yn y) (a b : ℝ) : seq_is_limit (fun (n : ℕ) => a * (xn n) + b * (yn n)) (a * x + b * y) := by
   intro ε hε
+  have h1 := seq_COLT_scalarmult xn x hx a
+  have h2 := seq_COLT_scalarmult yn y hy b
   specialize hx (ε / (2 * |a|)) (by simp_all)
   specialize hy ε hε
   obtain ⟨N₁, hN₁⟩ := hx
