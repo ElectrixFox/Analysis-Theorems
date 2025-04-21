@@ -8,12 +8,22 @@ theorem seq_cauchy_is_bounded (x : ℕ → ℝ) (hx : seq_cauchy x) : seq_bounde
   obtain ⟨N, hN⟩ := hx
 
   have h1 : ∀ n ≥ N, |x n - x N| < 1 := by
-    sorry
+    intro n hn
+    specialize hN n hn (N) (by simp)
+    rw [abs_sub_comm]
+    apply hN
 
   have h2 : ∀ n ≥ N, |x n| ≤ |x n - x N| + |x N| ∧ |x n - x N| + |x N| < |x N| + 1 := by
     intro n hn
     specialize hN n hn
-    sorry
+    constructor
+    .
+      calc
+        |x n| = |x n - x N + x N| := by ring_nf
+        _ ≤ |x n - x N| + |x N| := by apply abs_add
+    .
+      specialize h1 n hn
+      linear_combination h1 -- h1 + |x N| on both sides
 
   let S : Finset ℝ := (Finset.range (N + 1)).image (fun n => |x n|)  -- getting the set x_1, ..., x_(N - 1)
   let P : ℝ := S.max' (by simp [S])
