@@ -97,6 +97,30 @@ lemma conv_seq_bound_below_imp_lim_bound_below (x : ℕ → ℝ) (l : ℝ) (hx :
   apply lt_add_imp_le
   exact h1
 
+lemma conv_seq_bound_above_imp_lim_bound_above (x : ℕ → ℝ) (l : ℝ) (hx : seq_is_limit x l) (b : ℝ) : (∀ n, x n ≤ b) → l ≤ b := by
+  dsimp [seq_is_limit] at hx
+  intro h
+
+  conv at hx =>
+    intro ε hε  -- let ε > 0
+    rhs
+    ext N -- exists an N
+    intro n hn  -- for any n ≥ N
+    rw [abs_lt]
+    rw [lt_sub_iff_add_lt, add_comm, ←sub_eq_add_neg] -- l - ε < x n < l + ε
+
+  have h1 : ∀ ε > 0, l < b + ε := by
+    intro ε hε
+    specialize hx ε hε  -- apply this to the limit definition
+    obtain ⟨N, hN⟩ := hx  -- get our N
+    specialize hN N -- use our N as the starting point
+    simp at hN  -- get the inequality on its own
+    specialize h N  -- now use x n ≥ a for all n
+    linarith
+
+  apply lt_add_imp_le
+  exact h1
+
 theorem conv_seq_is_bounded (xn : ℕ → ℝ) (x : ℝ) (hx : seq_is_limit xn x) : seq_bounded xn := by
   have h0 := hx
   specialize hx 1
@@ -161,7 +185,7 @@ theorem conv_seq_is_bounded (xn : ℕ → ℝ) (x : ℝ) (hx : seq_is_limit xn x
     have : |xn n| ∈ S := Finset.mem_image.mpr ⟨n, this, rfl⟩
     apply Finset.le_max' S (|xn n|) this
 
-lemma conv_seq_is_bounded_abs (xn : ℕ → ℝ) (x : ℝ) (hx : seq_is_limit xn x) : ∃ B, ∀ n, |xn n| ≤ B := by
+lemma conv_seq_is_bounded_abs (xn : ℕ → ℝ) (x : ℝ) (hx : seq_is_limit xn x) : ∃ C > 0, ∀ n, |xn n| ≤ C := by
   have h0 := hx
   specialize hx 1
   simp at hx
@@ -186,6 +210,8 @@ lemma conv_seq_is_bounded_abs (xn : ℕ → ℝ) (x : ℝ) (hx : seq_is_limit xn
   let P : ℝ := S.max' (by simp [S])
   let B := max P (|x| + 1)
   use B
+  constructor
+  . positivity
   intro n
   dsimp [B]
   simp
@@ -270,9 +296,26 @@ lemma seq_COLT_linearity (xn : ℕ → ℝ) (yn : ℕ → ℝ) (x y : ℝ) (hx :
 
 lemma seq_COLT_mult (x : ℕ → ℝ) (y : ℕ → ℝ) (l m : ℝ) (hx : seq_is_limit x l) (hy : seq_is_limit y m) : seq_is_limit (fun (n : ℕ) => (x n) * (y n)) (l * m) := by
   intro ε hε
-  have h := conv_seq_is_bounded_abs x l hx
-  specialize hx ε hε
-  specialize hy ε hε
+  have hx1 := conv_seq_is_bounded_abs x l hx
+  have hy1 := conv_seq_is_bounded_abs y m hy
+  obtain ⟨C1, hC1, h1⟩ := hx1
+  obtain ⟨C2, hC2, h2⟩ := hy1
+  let C := max C1 C2
+
+  have hmC : m ≤ C := by
+    apply conv_seq_bound_above_imp_lim_bound_above y m hy
+    intro n
+    dsimp [C]
+    specialize h2 n
+    rw [abs_le] at h2
+    simp [h2.right]
+
+  have h1 : ∀ (n : ℕ), |x n| ≤ C1 → |x n| ≤ C := by simp [C, h1]
+  have h2 : ∀ (n : ℕ), |y n| ≤ C2 → |y n| ≤ C := by simp [C, h2]
+  simp_all
+
+  specialize hx (ε / (2 * C)) (by positivity)
+  specialize hy (ε / (2 * C)) (by positivity)
   obtain ⟨N₁, hx⟩ := hx
   obtain ⟨N₂, hy⟩ := hy
   let N := max N₁ N₂
@@ -280,8 +323,7 @@ lemma seq_COLT_mult (x : ℕ → ℝ) (y : ℕ → ℝ) (l m : ℝ) (hx : seq_is
   intro n hn
   specialize hy n (by simp; simp [N] at hn; linarith) -- show |x n - l| < ε / 2
   specialize hx n (by simp; simp [N] at hn; linarith) -- show |y n - m| < ε / 2
-  simp
-  have h1 := calc
+  have h3 := calc
     |(x n) * (y n) - l * m| ≤ |(x n) * (y n) - (x n) * m| + |(x n) * m - l * m| := by
       rw [show |(x n) * (y n) - l * m| = |((x n) * (y n) - (x n) * m) + ((x n) * m - l * m)| by ring_nf]
       apply abs_add
@@ -289,15 +331,33 @@ lemma seq_COLT_mult (x : ℕ → ℝ) (y : ℕ → ℝ) (l m : ℝ) (hx : seq_is
       simp [←mul_sub, abs_mul]
       rw [mul_comm, mul_comm l, ←mul_sub, abs_mul]
 
-  obtain ⟨C, hC⟩ := h
-  specialize hC n
-  
-  sorry
+
+  -- for some C > 0 we can assume that |y| ≤ C
+  have : |m| ≤ C := by
+    sorry
+
+  have h2 : |(x n) * (y n) - l * m| ≤ C * (|y n - m| + |x n - l|) := by
+    calc
+      |x n * y n - l * m| ≤ |x n| * |y n - m| + |m| * |x n - l| := h3
+      _ ≤ C * |y n - m| + C * |x n - l| := by
+        gcongr
+        rel [h1 n]
+      _ = C * (|y n - m| + |x n - l|) := by rw [mul_add]
+  -- have ε / 2C
+
+  calc
+    |(x n) * (y n) - l * m| ≤ C * (|y n - m| + |x n - l|) := h2
+    _ < C * (ε / (2 * C) + ε / (2 * C)) := by rel [hx, hy]
+    _ = ε := by
+      simp [mul_add]
+      field_simp
+      cancel_denoms
+      rw [show C * ε + C * ε = ε * 2 * C by ring_nf]
 
 lemma seq_COLT_ratio (xn : ℕ → ℝ) (yn : ℕ → ℝ) (x y : ℝ) (hx : seq_is_limit xn x) (hy : seq_is_limit yn y) (hy1 : y ≠ 0) (hy2 : ∀ (n : ℕ), yn n ≠ 0): seq_is_limit (fun (n : ℕ) => (xn n) / (yn n)) (x / y) := by
   sorry
 
-lemma conv_seq_bound_above_imp_lim_bound_above (x : ℕ → ℝ) (l : ℝ) (hx : seq_is_limit x l) (b : ℝ) : (∀ n, x n ≤ b) → l ≤ b := by
+lemma conv_seq_bound_above_imp_lim_bound_above_alt (x : ℕ → ℝ) (l : ℝ) (hx : seq_is_limit x l) (b : ℝ) : (∀ n, x n ≤ b) → l ≤ b := by
   intro h
   have h1 := seq_COLT_scalarmult x l hx (-1)
   simp at h1
@@ -310,8 +370,19 @@ lemma conv_seq_bound_above_imp_lim_bound_above (x : ℕ → ℝ) (l : ℝ) (hx :
   apply conv_seq_bound_below_imp_lim_bound_below (fun n => -x n) _ (by simp_all)
   simp_all
 
-theorem seq_limininterval (xn : ℕ → ℝ) (x : ℝ) (a b : ℝ) (X : Set ℝ) (hX : X = {x : ℝ | a ≤ x ∧ x ≤ b}) (xnI : ∀ (n : ℕ), (xn n) ∈ X) : seq_is_limit xn x → x ∈ X := by
-  sorry
+theorem seq_limininterval (xn : ℕ → ℝ) (x : ℝ) (a b : ℝ) (hxnI : ∀ (n : ℕ), (xn n) ∈ Set.Icc a b) : seq_is_limit xn x → x ∈ Set.Icc a b := by
+  intro hx
+  simp
+  simp at hxnI
+  constructor
+  . -- since the sequence is bounded below there the limit is greater than the lower bound
+    apply conv_seq_bound_below_imp_lim_bound_below xn x hx
+    intro n
+    apply (hxnI n).left
+  . -- since the sequence is bounded above there the limit is less than the upper bound
+    apply conv_seq_bound_above_imp_lim_bound_above xn x hx
+    intro n
+    apply (hxnI n).right
 
 lemma seq_limineq (xn yn : ℕ → ℝ) (x y : ℝ) (hx : seq_is_limit xn x) (hy : seq_is_limit yn y) (hxy : ∀ (n : ℕ), xn n ≤ yn n) : x ≤ y := by
   sorry
