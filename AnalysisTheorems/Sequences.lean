@@ -121,6 +121,34 @@ lemma conv_seq_bound_above_imp_lim_bound_above (x : ℕ → ℝ) (l : ℝ) (hx :
   apply lt_add_imp_le
   exact h1
 
+lemma one_div_lt_mul (a b : ℝ) (ha : 0 < a) (hb : 0 < b) : 1 / a < b ↔ 1 < a * b := by
+  sorry
+
+theorem harmonic_seq_conv : seq_is_limit (fun (n : ℕ) => 1 / n) 0 := by
+  intro ε hε
+  simp
+  have h2 : ∃ (N : ℕ), N > (1 / ε)  := by
+    have := archimedes 1 ε (by positivity)
+    conv_rhs at this => ext N; rw [gt_iff_lt, ←div_lt_iff₀ hε, ←gt_iff_lt]
+    exact this
+
+  obtain ⟨N, hN⟩ := h2
+  use N
+  intro n hn
+  have : 0 < (n : ℝ) := by
+    calc
+      0 < 1 / ε := by positivity
+      _ < N := by linarith
+      _ ≤ n := by simp [hn]
+
+  rw [←one_div, abs_of_nonneg (by positivity)]
+  rw [one_div_lt (by positivity) (by positivity)]
+  rw [gt_iff_lt] at hN
+  calc
+    1 / ε < (N : ℝ) := by apply hN
+    _ ≤ (n : ℝ) := by simp [hn]
+
+
 theorem conv_seq_is_bounded (xn : ℕ → ℝ) (x : ℝ) (hx : seq_is_limit xn x) : seq_bounded xn := by
   have h0 := hx
   specialize hx 1
@@ -245,6 +273,16 @@ theorem seq_squeeze_zero (x : ℕ → ℝ) (y : ℕ → ℝ) (hy : seq_is_limit 
     _ ≤ |y n| := by apply abs_le_imp_le; simp
     _ = |y n - 0| := by simp
     _ < ε := hy
+
+theorem inv_seq_conv : ∀ a ≥ 1, seq_is_limit (fun (n : ℕ) => 1 / (n ^ a)) 0 := by
+  intro a ha
+  let f : ℕ → ℝ := (fun (n : ℕ) => 1 / ((n : ℝ) ^ a))
+  show seq_is_limit f 0
+  apply seq_squeeze_zero f (fun (n : ℕ) => 1 / (n : ℝ)) harmonic_seq_conv
+  intro n
+  simp [f]
+  rw [le_inv']
+  sorry
 
 -- COLT theorem for axₙ → ax as n → ∞
 theorem seq_COLT_scalarmult (x : ℕ → ℝ) (l : ℝ) (hx : seq_is_limit x l) (a : ℝ) : seq_is_limit (fun n => a * x n) (a * l) := by

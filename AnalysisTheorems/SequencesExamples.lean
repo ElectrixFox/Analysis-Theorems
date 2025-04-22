@@ -48,7 +48,17 @@ example : seq_is_limit (fun (n : ℕ) => (-1) ^ n / (√(n ^ 2 + n))) 0 := by
   have h1 : seq_is_limit (fun (n : ℕ) => 1 / √(n)) 0 := by sorry
   exact seq_squeeze_zero (fun (n : ℕ) => (-1) ^ n / (√(n ^ 2 + n))) (fun (n : ℕ) => 1 / √(n)) h1 h
 
+example : seq_is_limit (fun (n : ℕ) => 5 / n) 0 := by
+  have : seq_is_limit (fun (n : ℕ) => 1 / n) 0 := by
+    sorry
+  conv =>
+    lhs
+    ext n
+    rw [show (5 / (n : ℝ) = 5 * (1 / n)) by ring_nf]
+  rw [←mul_zero 5]
+  exact seq_COLT_scalarmult _ 0 this 5
 
+/-
 example : even_subs' (fun n ↦ (-1) ^ n * (1 - 1 / n)) = fun (n : ℕ) ↦ (1 - 1 / (2 * n) : ℝ) := by
   ext x
   dsimp [even_subs', even_subs'.eseq]
@@ -63,3 +73,4 @@ example (x : ℕ → ℝ) (a : ℕ → ℕ)
   dsimp [subseq_bijection]
   rw [hx, ha]
   norm_num
+-/
