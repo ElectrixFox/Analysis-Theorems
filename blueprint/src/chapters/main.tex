@@ -1,0 +1,5712 @@
+\documentclass[10pt, a4paper]{article}
+\usepackage{preamble}
+
+\newcommand{\limas}[3][n]{#2 \to #3 \text{ as } #1 \to \infty}
+\newcommand{\seq}[1][x]{(#1_n)_{n \in \N}}
+\newcommand{\dseq}[2][n]{(#2_#1)_{#1 \in \N}}
+
+\title{Analysis I}
+\author{Luke Phillips}
+\date{October 2024}
+
+\begin{document}
+
+\maketitle
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+\section{Basic logic and sets}
+
+\subsection{Logic}
+\begin{definition}
+    A statement is a sentence which is either true or false.
+\end{definition}
+\begin{example}
+    \phantom{}
+    \begin{itemize}
+        \item There exist infinitely many prime numbers.
+        \item There exists a rational number $x$ with $x ^ 2 = 2$.
+    \end{itemize}
+\end{example}
+
+\begin{definition}
+    Let $A$ and $B$ be statements.
+    \begin{enumerate}[label = (\alph*)]
+        \item "$A$ and $B$" is the statement that is true when exactly both $A$ and $B$ are true, otherwise false.
+        \item "$A$ or $B$" is the statement which is false exactly when both $A$ and $B$ are false, otherwise true.
+        \item "Not $A$"\footnote{Called the negation.} is the statement which is true when $A$ is false, and false when $A$ is true.
+    \end{enumerate}
+
+    The truth tables are as follows 
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{|c|c|c|c|c|}
+            \hline
+            $A$ & $B$ & $A \text{ and } B$ & $A \text{ or } B$ & $\text{not } A$ \\
+            \hline
+            T & T & T & T & F \\
+            T & F & F & T & F \\
+            F & T & F & T & T \\
+            F & F & F & F & T \\
+            \hline
+        \end{tabular}
+        \label{tab:Gr6}
+    \end{table}
+\end{definition}
+
+\begin{definition}
+    Let $A$ and $B$ be statements. The statement "if $A$ then $B$" is defined to be false when $A$ is true and $B$ is false, and true in all other cases.
+
+    The truth table for this is as follows
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{|c|c|c|}
+            \hline
+            $A$ & $B$ & $\text{if } A \text{ then } B$ \\
+            \hline
+            T & T & T \\
+            T & F & F \\
+            F & T & T \\
+            F & F & T \\
+            \hline
+        \end{tabular}
+        \label{tab:Gr7}
+    \end{table}
+\end{definition}
+\begin{example}
+    If $p$ is a prime number, then $p$ is an odd number. (this is false)
+
+    If $p \geq 3$ is a prime number, then $p$ is an odd number. (this is true)
+\end{example}
+
+\begin{definition}
+    Let $A$ and $B$ be statements. The statement $A$ is equivalent to $B$ for the statement $A \implies B$ and $B \implies A$, or $A \iff B$.
+    
+    The truth table for this is as follows
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{|c|c|c|c|c|}
+            \hline
+            $A$ & $B$ & $\text{if } A \text{ then } B$ & $\text{if } B \text{ then } A$ & $A \iff B$ \\
+            \hline
+            T & T & T & T & T \\
+            T & F & F & T & F \\
+            F & T & T & F & F \\
+            F & F & T & T & T \\
+            \hline
+        \end{tabular}
+        \label{tab:Gr8}
+    \end{table}
+\end{definition}
+
+Often statements depend on a variable $x$. This is called a conditional statement $A(x)$.
+
+We can turn a conditional statement $A(x)$ into an unconditional statement using the quantifiers "for all" and "there is"
+
+\begin{example}
+    \phantom{}
+    
+    $\forall x$, we have $A(x)$
+    
+    $\exists x$ such that $A(x)$
+\end{example}
+
+
+\subsection{Sets}
+A set $X$ is a collection of objects. We write $x \in X$ if the object $x$ is contained in the set $X$\footnote{$x \notin X$ for $x$ not in $X$}.
+
+\[
+X = \{x\,|\,A(x)\}
+\]
+is a set of all objects $x$ for which the conditional statement $A(x)$ is true.
+
+\begin{definition}
+    Let $X, Y$ be sets.
+    \begin{enumerate}[label = (\alph*)]
+        \item We say $X$ is a subset of $Y$, write $X \subset Y$, if $x \in X$ implies $x \in Y$
+        \item We say that $X$ is equal to $Y$, write $X = Y$, if $X \subset Y$ and $Y \subset X$.
+    \end{enumerate}
+\end{definition}
+
+\begin{remark}
+    \begin{enumerate}[label = (\alph*)]
+        \item The order of elements in a set is irrelevant.
+        \item There is a set $\emptyset$ which doesn't contain any elements. In particular $\emptyset \subset X$ for every $X$ a set.
+        \item There is no biggest set $U$, such that $X \subset U$ for every $X$.
+    \end{enumerate}
+\end{remark}
+
+\begin{definition}
+    Let $X, Y$ be sets.
+    \begin{enumerate}[label = (\alph*)]
+        \item The union of $X$ and $Y$ is given by
+        \[
+        X \cup Y = \{x\, |\, x \in X\text{ or } x \in Y\}.
+        \]
+        \item The intersection of $X$ and $Y$ is given by
+        \[
+        X \cap Y = \{x\, |\, x \in X\text{ and } x \in Y\}.
+        \]
+        \item The complement of $Y$ in $X$ is given by
+        \[
+        X \setminus Y = \{x\, |\, x \in X \text{ and } x \notin Y\}.
+        \]
+    \end{enumerate}
+\end{definition}
+
+Given two objects $a, b$ there is an object $(a, b)$ called the ordered pair of $a$ and $b$.
+
+We require $(a_1, b_1) = (a_2, b_2) \iff a_1 = a_2 \text{ and } b_1 = b_2$
+
+\begin{definition}[Cartesian product]
+    The Cartesian product of two sets $X, Y$ is given by
+    \[
+    X \times Y = \{(x, y)\, |\, x \in X, y \in Y\}.
+    \]
+\end{definition}
+
+\begin{definition}[Function]
+    Let $X, Y$ be sets.
+    A function $f$ from $X$ to $Y$ is a subset $f \subset X \times Y$ such that
+    for every $x \in X$ there exists exactly one $y \in Y$ with $(x, y) \in f$.
+    
+    We write $f : X \to Y$ for a function and
+    write $f(x)$ for the unique element of $y$ with $(x, f(x)) \in f$
+
+    $X$ is called the domain,
+    $Y$ is called the co-domain of $f$.
+\end{definition}
+We write function often with a formula
+\[
+f(x) = x ^ 2 + 3.
+\]
+Need a domain $X$ e.g. $X = \R$ or $X = (0, \infty)$.
+
+\begin{example}
+    $\sqrt{\phantom{1}} : [0, \infty) \to \R$
+
+    $\sqrt{4} = +2$ not $\pm2$
+\end{example}
+\begin{example}
+    \[
+    g(x) = \frac{1}{x}
+    \]
+    only works for domains not containing $0$, $g: \R \to \R$ not defined by formula.
+\end{example}
+
+\begin{definition}
+    Let $f : X \to Y$ be a function between sets $X$ and $Y$. If $A \subset X$ we define the image of $A$ as
+    \[
+    f(A) = \{f(a) \in Y\,|\, a \in A\} \subset Y.
+    \]
+    For $B \subset Y$ we define the pre-image of $B$ as
+    \[
+    f^{-1}(B) = \{x \in X\,|\,f(x) \in B\} \subset X.
+    \]
+\end{definition}
+
+\begin{example}
+    $f: [-1, 1] \to \R$ $f(x) = x ^ 2 + 3$
+
+    $f([-1, 1]) = [3, 4]$
+
+    $f\left(\left(\frac{1}{2}, 1\right)\right) = \left(\frac{13}{4}, 4\right)$
+
+    $B = (-\infty, 0)$
+    $f^{-1}(B) = \emptyset$
+
+    $B = [3, 4]$
+    $f^{-1}(B) = [-1, 1]$
+    
+    $f^{-1}\left(\left(\frac{13}{4}, 4\right)\right) =
+    \left(\frac{1}{2}, 1\right) \cup \left(-1, -\frac{1}{2}\right)$
+\end{example}
+
+\begin{proposition}
+    Let $f : X \to Y$ be a function, and assume that $A, B \subset X$. Then
+    \begin{itemize}
+        \item $f(A \cap B) \subset f(A) \cap f(B)$
+        \item $f(A \cup B) = f(A) \cup f(B)$
+        \item $f(X \setminus A) \supset f(X) \setminus f(A)$
+    \end{itemize}
+    Assume that $C, D \subset Y$. Then
+    \begin{itemize}
+        \item $f ^ {-1}(C \cap D) = f^{-1}(C) \cap f^{-1}(D)$
+        \item $f^{-1}(C \cup D) = f^{-1}(C) \cup f^{-1}(D)$
+        \item $f^{-1}(Y \setminus C) = X \setminus f^{-1}(C)$
+    \end{itemize}
+
+    \begin{proof}
+        Look at $f(A \cap B) \subset f(A) \cap f(B)$.
+        
+        Take $y \in f(A \cap B)$. Then there is $x \in A \cap B$ with $f(x) = y$.
+        The $x \in A$ and $x \in B$. The $y = f(x) \in f(A)$ and $y = f(x) \in f(B)$.
+        So $y \in f(A) \cap f(B)$ \\
+
+        Look at $f(A \cup B) = f(A) \cup f(B)$.
+
+        Firstly, we need to examine the two conditions for equality, $f(A \cup B) \subset f(A) \cup f(B)$ and $f(A \cup B) \supset f(A) \cup f(B)$.
+        
+        Take $y \in f(A \cup B)$. There is a unique $x \in A \cup B$ such that $f(x) = y$\footnote{By definition of image.}, this implies that $x \in A$ or $x \in B$. Hence, $y = f(x) \in f(A)$ or $y = f(x) \in f(B)$, which is equivalent to saying $y \in f(A) \cup f(B)$ which proves that $y \in f(A \cup B) \implies y \in f(A) \cup f(B)$.
+
+        Now take $y \in f(A) \cup f(B)$. There is a unique $x \in A$ or $x \in B$ such that $f(x) = y$, therefore $x \in A \cup B$ so $y = f(x) \in f(A \cup B)$. This proves the goal that $f(A \cup B) \supset f(A) \cup f(B)$.
+
+        Finally, we have proven that $f(A \cup B) = f(A) \cup f(B)$ by showing that $f(A \cup B) \subset f(A) \cup f(B)$ and that $f(A \cup B) \supset f(A) \cup f(B)$. \\
+
+        Look at $f(X \setminus A) \supset f(X) \setminus f(A)$.
+
+        Take $y \in f(X) \setminus f(A)$. Then there is a unique $x \in X$ and $x \notin A$ such that $f(x) = y$, this means that there is an $x \in X \setminus A$ such that $f(x) = y$, therefore $y = f(x) \in f(X \setminus A)$. \\
+
+        Look at $f^{-1}(C \cap B) = f^{-1}(C) \cap f^{-1}(D)$.
+
+        Take $x \in f^{-1}(C \cap B)$. The $f(x) \in C \cap D$. So $f(x) \in C$ and $f(x) \in D$. So $x \in f^{-1}(C)$ and $x \in f^{-1}(D)$. Hence $x \in f^{-1}(C) \cap f^{-1}(D)$.
+
+        Take $x \in f^{-1}(C) \cap f^{-1}(D)$. So $x \in f^{-1}(C)$ and $x \in f^{-1}(D)$ so $f(x) \in C$ and $f(x) \in D$. So $f(x) \in C \cap D$. So $x \in f^{-1}(C \cap D)$. \\
+
+        Look at $f^{-1}(C \cup D) = f^{-1}(C) \cup f^{-1}(D)$.
+
+        To prove equality we need to prove both that $f^{-1}(C \cup B) \subset f^{-1}(C) \cup f^{-1}(D)$ and that $f^{-1}(C \cup B) \supset f^{-1}(C) \cup f^{-1}(D)$.
+
+        Take $x \in f^{-1}(C \cup D)$. This implies that $f(x) \in C \cup D$ which means $f(x) \in C$ or $f(x) \in D$ therefore $x \in f^{-1}(C)$ or $x \in f^{-1}(D)$, hence $x \in f^{-1}(C) \cup f^{-1}(D)$, proving $f^{-1}(C \cup B) \subset f^{-1}(C) \cup f^{-1}(D)$.
+
+        Next, take $x \in f^{-1}(C) \cup f^{-1}(D)$. This implies that $x \in f^{-1}(C)$ or $x \in f^{-1}(D)$. Therefore $f(x) \in C$ or $f(x) \in D$ in other words $f(x) \in C \cup D$ so $x \in f^{-1}(C \cup D)$. Finally, this proves that $f^{-1}(C \cup D) = f^{-1}(C) \cup f^{-1}(D)$. \\
+
+        Look at $f^{-1}(Y \setminus C) = X \setminus f^{-1}(C)$.
+
+        We have to prove that $f^{-1}(Y \setminus C) \subset X \setminus f^{-1}(C)$ and $f^{-1}(Y \setminus C) \supset X \setminus f^{-1}(C)$ to prove the equality of the sets.
+
+        Take $x \in f^{-1}(Y \setminus C)$. $f(x) \in Y \setminus C$ therefore $f(x) \in Y$ and $f(x) \notin C$, $x \in f^{-1}(Y)$ and $f(x) \notin f^{-1}(C)$, but $x \in f^{-1}(Y) \implies x \in X$ hence, $x \in X \setminus f^{-1}(C)$.
+
+        Take $x \in X \setminus f^{-1}(C)$. $x \in X$ and $x \notin f^{-1}(C)$. But $x \in X \implies x \in f^{-1}(Y)$, so $f(x) \in Y$ and $f(x) \notin C$, therefore $f(x) \in Y \setminus C$. Hence $x \in f^{-1}(Y \setminus C)$.
+
+        This completes the proof that $f^{-1}(Y \setminus C) = X \setminus f^{-1}(C)$.
+    \end{proof}
+\end{proposition}
+
+
+\subsection{The set of real numbers}
+There is a set of real numbers $\R$ which admits a function $+: \R \times \R \to \R$, called addition, write $+(x, y) = x + y$
+
+Addition satisfies,
+\begin{enumerate}[label = (A.\arabic*)]
+    \item Commutativity: $a + b = b + a$ for all $a, b \in \R$.
+    \item Associativity: $(a + b) + c = a + (b + c)$ for all $a, b, c \in \R$.
+    \item Existence of $0$: There is a real number $0$ with $0 + a = a$ for all $a \in \R$.
+    \item Existence of the negative: For every $a \in \R$ there is a unique $x \in \R$ such that $a + x = 0$.
+    
+    We write $-a$ for the unique $x$ with $a + x = 0$. $a + (-a) = 0$ by (A.2) $-a + a = 0$ so by uniqueness of the negative $-(-a) = a$.
+\end{enumerate}
+
+There is also a multiplication, a function $\cdot: \R \times \R \to \R$, write $a \cdot b = ab$ for $\cdot(a, b)$.
+
+Multiplication satisfies,
+\begin{enumerate}[label = (M.\arabic*)]
+    \item Commutativity: $a \cdot b = b \cdot a$ for all $a, b \in \R$.
+    \item Associativity: $a \cdot (b \cdot c) = (a \cdot b) \cdot c$ for all $a, b, c \in \R$.
+    \item Existence of $1$: There is a real number $1$ different from $0$ such that $1 \cdot a = a$ for all $a \in \R$.
+    \item Existence of the inverse: For every $a \in \R \setminus \{0\}$ there is a unique $x \in \R$ such that $a \cdot x = 1$. We write $a ^ {-1}$ for the inverse (or $\frac{1}{a}$).
+\end{enumerate}
+\begin{enumerate}[label = (D.\arabic*)]
+    \item Distributivity : We have
+    \[
+    a \cdot (b + c) = (a \cdot b) + (a \cdot c)
+    \]
+    we'll write $a \cdot b + a\cdot c$ as multiplication has precedence over addition.
+\end{enumerate}
+
+
+Let $a \in \R$, $a \cdot 0 = a \cdot (0 + 0) = a \cdot 0 + a \cdot 0$. Recall $a \cdot 0 \in \R$ so there is a negative $-(a \cdot 0)$, add to equation to get, $0 = a \cdot 0$.
+
+Similarly we can show $-a = (-1) \cdot a$ for $a \in \R$. Also $(-a) \cdot (-a) = (-a) ^ 2 = a ^ 2$.
+
+
+The next property of the reals is an existence of an order $<$. For any $a, b \in \R$ there is a statement $a < b$. We need to specify when this is true. We read this as "$a$ is smaller than $b$".
+
+We require
+\begin{enumerate}[label = (O.\arabic*)]
+    \item Trichotomy\label{analy:axiom:trichotomy}: We either have $a < b,\, a = b,\,\text{or } b < a$ (as a true statement).
+    \item Transitivity: If $a < b$ and $b < c$, then $a < c$.
+    \item Monotony of Addition: If $a < b$, then $a + c < b + c$ for all $c \in \R$.
+    \item Monotony of Multiplication: If $a < b$ and $0 < c$ then $c \cdot a < c \cdot b$
+\end{enumerate}
+If $a < b$ we also write $b > a$, we also write $a \leq b$ for ($a < b$ or $a = b$).
+
+If $a \in \R$ different from $0$, then either $a < 0$ or $0 < a$. Then $-a$ is also different from $0$ and by   (O.3) we have $0 < -a$ or $-a < 0$.
+
+\begin{proposition}\label{prop:anly:prop1}
+    Let $a, b, c, d \in \R$. Then
+    \begin{enumerate}[label = (\alph*)]
+        \item If $a \neq 0$, then $a ^ 2 > 0$. In particular $1 > 0$.
+        \item If $a < b$ and $c < d$, then $a + c < b + d$.
+        \item If $0 < a < b$ and $0 < c < d$, then $a \cdot c < b \cdot d$.
+        \item If $a < b$ and $c < 0$, then $c \cdot b < c \cdot a$.
+        \item If $0 < a < b$ then $0 < b ^ {-1} < a ^ {-1}$.
+    \end{enumerate}
+
+    \begin{proof}\phantom{}
+        \begin{enumerate}[label = (\alph*)]
+            \item If $a > 0$, then $a ^ 2 = a \cdot a > a \cdot 0 = 0$
+            if $a < 0$, then $-a > 0$ now we use $(-a) ^ 2 = a ^ 2$ and $(-a) ^ 2 > 0$. $1 = 1 \cdot 1 = 1 ^ 2 > 0$.
+
+            \item b
+            \item c
+            \item Use $-c > 0$ so $-c \cdot a < -c \cdot b$ now apply (O.3) adding $c \cdot a + c \cdot b$.
+            \item Note $b ^ {-1} \neq 0$ because $b \cdot b ^ {-1} = 1$.
+            \[
+            b ^ {-1} = \underbrace{(b ^ {-1}) ^ 2}_{> 0} \cdot \underbrace{b}_{> 0}.
+            \]
+            Also works for $(ab) ^ {-1} = a^{-1}b ^ {-1} > 0$ look at $a < b$ multiply with $a ^ {-1} b ^ {-1} \implies b ^ {-1} < a ^ {-1}$
+        \end{enumerate}
+    \end{proof}
+\end{proposition}
+
+\subsection{Numbers and the absolute value}
+$0 < 1 \implies 1 < 1 + 1 \implies 1 + 1 \neq 0$a
+
+Similarly, $1 + 1 + 1 + \dotsi$ always different from $0$. Use the usual symbols for numbers.
+
+\begin{definition}
+    The set of natural numbers $\N$ is a smallest subset of $\R$ which contains $1$, and if $n \in \N$, so is $n + 1$.
+    \[
+    \N = \{1,\,2,\,3,\,\dotsc\}.
+    \]
+    \[
+    \N_0 = \N \cup \{0\}.
+    \]
+\end{definition}
+
+\begin{definition}
+    The set of integers $\Z$ is given by $\Z = \{n\, |\, n \in \N_0 \text{ or } -n \in \N\}$
+    \[
+    \Z = \{\dotsc,\,-2,\,-1,\,0,\,1,\,2,\,\dotsc\}.
+    \]
+\end{definition}
+
+\begin{definition}
+    The set of rational numbers $\Q$ is
+    \[
+    \Q = \left\{n \cdot m ^ {-1} = \frac{n}{m}\,\bigm\lvert\, n \in \Z,\, m \in \N\right\}.
+    \]
+    Satisfies all the axioms of the real numbers we have seen so far. 
+\end{definition}
+
+We also use the usual notation for intervals
+\begin{align*}
+    &(a,\,b) & &(a,\, b], &[a,\,b), & &[a,\, b) \\
+    &(-\infty,\,a) & &(-\infty,\, a], &[a,\,\infty), & &(a,\, \infty), & &(-\infty, \infty)
+\end{align*}
+
+\begin{definition}
+    Let $a \in \R$. The absolute value of $a$ is defined as
+    \[
+    |a| = \begin{cases}
+        a &\text{ for } a \geq 0 \\ 
+        -a &\text{ for } a < 0 \\ 
+    \end{cases}.
+    \]
+    This is a function $|\cdot|\,:\, \R \to [0,\,\infty)$.
+\end{definition}
+
+\begin{proposition}\label{prop:anly:prop2}
+    Let $a, b, c \in \R$. Then
+    \begin{enumerate}[label = (\alph*)]
+        \item $0 \leq |a| = |-a|$
+        \item $|a| \leq c$ is equivalent to $-c \leq a \leq c$
+        \item $|a + b| \leq |a| + |b|$\quad(Triangle inequality)
+        \item $||a| - |b|| \leq |a - b|$
+    \end{enumerate}
+
+    \begin{proof}\phantom{}
+    \begin{enumerate}[label = (\alph*)]
+        \item Check definition
+        \item 
+        If $c < 0$ both statements are never true. If $c \geq 0$, check two directions.
+
+        Assume $|a| \leq c$, if $a \geq 0$, then 
+        \[
+        -c \leq 0 \leq a = |a| \leq c\quad\text{Works}.
+        \]
+        If $a < 0$, then 
+        \[
+        -a = |a| \leq c
+        \]
+        multiply with $-1$ implies $-c \leq a < 0 \leq c$\quad\text{works}
+
+        $-c \leq a \leq c$ if $a \geq 0$, then $|a| = a \leq c$, if $a < 0$, then $|a| = -a \leq c$.
+
+        \item
+        Apply (b) with $c = |a|$ gives
+        \[
+        -|a| \leq a \leq |a|
+        \]
+        $c = |b|$
+        \[
+        -|b| \leq b \leq |b|
+        \]
+        By \autoref{prop:anly:prop1}(b)
+        \[
+        \overbrace{-(|a| + |b|)}^{-c} \leq a + b \leq \overbrace{|a| + |b|}^{c}
+        \]
+        by (b) we get $|a + b| \leq |a| + |b|$.
+
+        \item
+        \begin{align*}
+            |a| &= |a - b + b| \\
+            &\leq |a - b| + |b|
+        \end{align*}
+        so
+        $|a| - |b| \leq |a - b|$
+        \begin{align*}
+            |b| &= |b - a + a| \\
+            &\leq |b - a| + |a|
+        \end{align*}
+        so $|b| - |a| \leq |a - b|$ multiply by $-1$
+        \[
+        -|a - b| \leq |a| - |b|
+        \]
+        by part (b)
+        \[
+        ||a| - |b|| \leq |a - b|
+        \]
+    \end{enumerate}
+    \end{proof}
+\end{proposition}
+
+\begin{example}
+    \begin{enumerate}[label = (\alph*)]
+        \item Solve $|3x - 4| \leq 2$
+        \item $|2x + 4| > 5$
+        \item Solve $|x + 2| \leq |2x - 1|$
+    \end{enumerate}
+    
+    \begin{enumerate}[label = (\alph*)]
+    \item
+    by \autoref{prop:anly:prop2}(b) this is equivalent to
+    \begin{align*}
+    -2 \leq 3x - 4 \leq 2 &\iff 2 \leq 3x \leq 6 \\
+    &\iff \frac{2}{3} \leq x \text{ and } x \leq 2 \\
+    &\iff x \in \left[\frac{2}{3}, 2\right]
+    \end{align*}
+
+    \item
+    This is equivalent to
+    \begin{align*}
+        2x + 3 < -5\text{ or }2x + 3 > 5 &\iff x < -4 \text{ or } x > 1 \\
+        &\iff x \in (-\infty, -4) \cup (1, \infty)
+    \end{align*}
+
+    \item
+    This is equivalent to
+    \begin{align*}
+        (x + 2) ^ 2 \leq (2x - 1) ^ 2 &\iff x ^ 2 + 4x + 4 \leq 4x ^ 2 - 4x + 1 \\
+        &\iff 0 \leq 3x ^ 2 - 8x - 3 = (3x + 1)(x - 3) \\
+        &\iff x \geq 3 \text{ or } x \leq -\frac{1}{3} \\
+        &\iff x \in \left(-\infty, -\frac{1}{3}\right] \cup \left[3, \infty\right)
+    \end{align*}
+    \end{enumerate}
+\end{example}
+
+\subsection{Proof Techniques}
+\begin{itemize}[label = *]
+    \item[(*)] If $n \in \Z$ is an even integer, then $n ^ 2$ is even. To prove this, write $n = 2k,\, k \in \Z$, look at $n ^ 2 = 2k \cdot 2k = 2 \cdot (2k ^ 2) \in \Z$
+    \item[(**)] If $n ^ 2$ is even, then $n$ is even. Write $n ^ 2 = 2k$.
+    \item[(***)] If $n$ is odd, then $n ^ 2$ is odd.
+    $n = 2k + 1$, $n ^ 2 = 4k ^ 2 + 4k + 1 = 2(2k ^ 2 + 2k) + 1$
+\end{itemize}
+For (**) to be false, we need $n \in \Z$ such that $n ^ 2$ is even and $n$ is odd. Can't be possible by (***), so (**) is true. This is called a contrapositive proof.
+
+\begin{theorem}
+    Let $A$ and $B$ be statements. The statement "If $A$ then $B$" is equivalent to "If not $B$ then not $A$".
+    \begin{proof}
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{cccccc}
+                $A$ & $B$ & $A \implies B$ & not $B$ & not $A$ & not $B$ $\implies$ not $A$ \\
+                 T & T & T & F & F & T \\
+                 T & F & F & T & F & F \\
+                 F & T & T & F & T & T \\
+                 F & F & T & T & T & T \\
+            \end{tabular}
+        \end{table}
+    \end{proof}
+\end{theorem}
+
+Indirect proof
+
+Uses not(not $A$) is equivalent to $A$. Rather than showing that $A$ is true, we show not $A$ is false.
+\begin{example}
+    There is no rational $x$ with $x ^ 2 = 2$.
+    \begin{proof}
+        Negation is "There is rational $x$ with $x ^ 2 = 2$".
+
+        Then $x = \frac{p}{q}$ with $p \in \Z,\, q \in \N$. If both are divisible by $2$ we can write this as
+        \[
+        \frac{\frac{p}{2} \in \Z}{\frac{q}{2} \in \N}
+        \]
+        Do this while one of them is not divisible by $2$.
+
+        $x ^ 2 = 2$ means $\frac{p ^ 2}{q ^ 2} = 2 \implies p ^ 2 = 2q ^ 2$, $p ^ 2$ is even, hence $p$ is even $p = 2k$, $p ^ 2 = 4k ^ 2 = 2q ^ 2 \implies q ^ 2 = 2k ^ 2$ is even, hence $q$ is even. Contradiction.
+    \end{proof}
+\end{example}
+
+Assume we have a statement
+
+For all $x$ we have $A(x)$
+
+Negation is
+
+There is $x$ such that not $A(x)$
+
+There is $x$ such that $B(x)$ negates to, for all $x$ we have not $B(x)$.
+
+For all $x$ there is $y$ with $C(x, y)$. Negates to, there is $x$ such that for all $y$ we have not $C(x, y)$.
+
+\begin{example}
+    'For all rational $x$ we have $x ^ 2 \neq 2$'. Negation is 'There is a rational $x$ with $x ^ 2 = 2$'.
+\end{example}
+
+\begin{proposition}
+    Let $A, B$ be statements. The negation of 'if $A$ then $B$' is '$A$ and not $B$'
+    \begin{proof}
+        \begin{table}[h!]
+            \centering
+            \begin{tabular}{cccc}
+                $A$ & $B$ & $A \implies B$ & $A$ and not $B$ \\
+                 T & T & T & F \\
+                 T & F & F & T \\
+                 F & T & T & F \\
+                 F & F & T & F \\
+            \end{tabular}
+        \end{table}
+    \end{proof}
+\end{proposition}
+
+Mathematical Induction
+
+Here we need a statement $A(n)$ for every $n \in \N$.
+
+If we want to show that $A(n)$ is a true statement for every $n \in \N$, we need to show
+\begin{enumerate}[label = (I\arabic*)]
+    \item Statement $A(1)$ is true
+    \item For every $n \in \N\ A(n) \implies A(n + 1)$
+\end{enumerate}
+
+\begin{example}
+    \begin{enumerate}[label = (\alph*)]
+        \item $1 + 2 ^ 3 + 3 ^ 3 + \dotsc + n ^ 3 = \frac{n ^ 2 (n + 1) ^ 2}{4}$.
+        \item Let $a_1, \dotsc, a_n$ be positive real numbers with $a_1 \cdot a_2 \cdot \dotsc \cdot a_n = 1$. Then $a_1 + \dotsc + a_n \geq n$ with equality if and only if all $a_i = 1$.
+    \end{enumerate}
+    
+    \begin{enumerate}[label = (\alph*)]
+    \item
+    \begin{proof}
+        \[
+        A(1)\quad 1 = \frac{1 ^ 2 2 ^ 2}{4} = 1.
+        \]
+        Assume $A(n)$ is true for some $n \in \N$, want to show that the $A(n + 1)$ is true.
+
+        \begin{align*}
+            1 + 2 ^ 3 + \dotsc + n ^ 3 + (n + 1) ^ 3 &= \frac{n ^ 2 (n + 1) ^ 2}{4} + (n + 1) ^ 3 \\
+            &= (n + 1) ^ 2 \left(\frac{n ^ 2}{4} + (n + 1)\right) \\
+            &= (n + 1) ^ 2 \left(\frac{n ^ 2}{4} + \frac{4(n + 1)}{4}\right) \\
+            &= \frac{(n + 1) ^ 2}{4} \left(n ^ 2 + 4n + 4\right) \\
+            &= \frac{(n + 1) ^ 2 (n + 2) ^ 2}{4}\quad\text{so } A(n) \implies A(n + 1) \\
+        \end{align*}
+        and this holds for all $n \in \N$.
+    \end{proof}
+    \item
+    \begin{proof}
+        \[
+        A(1)\text{ we have } a_1 = 1\text{ statement is true}.
+        \]
+        Assume $A(n)$ is true, let's see if $A(n + 1)$ is implied by $A(n)$.
+
+        Take $a_1, \dotsc, a_{n + 1}$ positive real numbers with
+        \[
+        a_1 \dotsi a_{n + 1} = 1.
+        \]
+        Need $a_1 + \dotsc + a_{n + 1} \geq n + 1$ with equality $\iff a_i = 1\quad(i = 1, \dotsc (n + 1)$.
+
+        If all $a_i = 1$, sum is $n + 1$.
+
+        Assume not all are $1$. So some $a_i \neq 1$. Assume $a_i < 1$. Then there must be $a_j > 1$, otherwise all $a_j \leq 1$ one $a_i < 1$, then $a_1 \dotsi a_{n + 1} < 1$. Without loss of generality assume $a_1 < 1\ a_2 > 1$.
+        \[
+        (a_1 - 1)(a_2 - 1) = a_1 a_2 - a_2 - a_1 + 1 < 0 \iff a_1 a_2 < a_1 + a_2 - 1
+        \]
+        $a_1 a_2, a_3, \dotsc, a_{n + 1}$ $n$ positive numbers with
+        \[
+        a_1 a_2 \cdot a_3 \dotsi a_{n + 1} = 1.
+        \]
+        By induction assumption
+        \begin{align*}
+            n &\leq a_1a_2 + a_3 + \dotsc + a_{n + 1} \\
+            &< a_1 + a_2 + a_3 + \dotsc + a_{n + 1} - 1            
+        \end{align*}
+        so $a_1 + a_2 + adotsc + a_{n + 1} > n + 1$.
+    \end{proof}
+    \end{enumerate}
+\end{example}
+
+Let $a_1, \dotsc, a_n$ be real numbers, we write
+\[
+\sum_{i = 1}^{n}a_n = a_1 + a_2 + \dotsi + a_n.
+\]
+\[
+\prod_{i = 1}^{n}a_i = a_1 \cdot a_2 \dotsi a_n.
+\]
+If $n \in \N$ define $n$-factorial by
+\[
+n! = \prod_{i = 1}^{n}i.
+\]
+For $n = 0$ use $0! = 1$.
+
+\begin{definition}
+    For $n, k \in \N_0$ with $k \leq n$, define
+    \[
+    \binom{n}{k} = \frac{n!}{(n - k)!k!}.
+    \]
+\end{definition}
+
+\begin{theorem}[Binomial Theorem]\label{analy:thm:binom}
+    Let $a, b \in \R$ and $n \in \N$. Then
+    \[
+    (a + b) ^ n = \sum_{k = 0}^{n}\binom{n}{k}a^{n - k}b^{k} = a ^ n + \binom{n}{1}a^{n - 1}b + \dotsc + b ^ n.
+    \]
+    \begin{proof}
+        By induction
+
+        $n = 1$, this is easily verified.
+
+        Assume true for $n \in \N$.
+
+        \begin{align*}
+            (a + b) ^ {n + 1} &= (a + b)^n(a + b) \\
+            &= (a + b)\sum_{k = 0}^{n}\binom{n}{k}a^{n - k}b^{k} \\
+            &= a\sum_{k = 0}^{n}\binom{n}{k}a^{n - k}b^{k} + b\sum_{k = 0}^{n}\binom{n}{k}a^{n - k}b^{k} \\
+            &= \sum_{k = 0}^{n}\binom{n}{k}a^{n + 1 - k}b^{k} + \sum_{k = 0}^{n}\binom{n}{k}a^{n - k}b^{k + 1} \\
+            &= a ^ {n + 1} + \sum_{k = 1}^{n}\binom{n}{k}a^{n + 1 - k}b^{k} + b ^ {n + 1} + \sum_{k = 1}^{n}\binom{n}{k - 1}a^{n + 1 - k}b^{k} \\
+            &= a ^ {n + 1} + b ^ {n + 1} + \sum_{k = 1}^{n}\left(\binom{n}{k} + \binom{n}{k - 1}\right)a^{n + 1 - k}b^{k} \\
+            &= \sum_{k = 0}^{n + 1}\binom{n + 1}{k}a^{n + 1 - k}b^{k}.
+        \end{align*}
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}[Bernoulli Inequality]\label{analy:thm:bernoineq}
+    Let $x \geq -1$ and $n \in \N$. Then
+    \[
+    (1 + x) ^ n \geq 1 + nx.
+    \]
+    \begin{proof}
+        For $x = -1\quad 0 \geq 1 - n$ so this is true.
+
+        So assume $x > -1$. Now we use induction on $n$.
+
+        $n = 1$
+        \[
+        1 + x \geq 1 + x\text{ this is even an equality}
+        \]
+
+        Assume statement holds for some $n \in \N$. Then
+        \begin{align*}
+            (1 + x) ^ {n + 1} &= \overset{0 >}{(1 + x)}(1 + x) ^ n \\
+            &\geq (1 + x)(1 + nx) \\
+            &= 1 + nx + x + nx ^ 2 \\
+            &= 1 + (n + 1)x + nx ^ 2 \\
+            &\geq 1 + (n + 1)x.
+        \end{align*}
+        By induction, Bernoulli inequality holds.
+    \end{proof}
+\end{theorem}
+
+\subsection{The Completeness Axiom}
+\begin{definition}
+    Let $X \subset \R$. We say that $X$ is bounded above, if there exists a $c \in \R$ with $z \leq c$ for all $x \in X$.
+    
+    Similar, $X$ is bounded below, if there is a $c \in \R$ with $c \leq x$ for all $x \in X$. Such $c$ is called a lower bound for $X$.
+    
+    If $X$ is bounded above and bounded below, we say $X$ is bounded.
+\end{definition}
+
+\begin{example}
+    The set $X = \{x \in \R | x < 2\}$. This set is bounded above: $c = 2$ works. We have $x \leq 2$ for all $x \in X$. $c = 3$ also works. Note, $0 \in X$, so if $c$ were a lower bound for $X$ then we have $c \leq 0$, then also $c \in X$. Then also $c - 1 \in X$, but $c \leq c - 1$ is not true, so $c$ cannot be a lower bound. $X$ is not bounded below.
+\end{example}
+
+\begin{example}
+    $X = \N$ is bounded below: $1$ is a lower bound, $1 \leq n$ for all $n \in \N$.
+
+    For $\N$ to be bounded above, we would need $c \in \R$ such that $n \leq c$ for all $n \in \N$.
+\end{example}
+
+\begin{definition}
+    Let $X \subset \R$. An element $M \in X$ is called the maximum of $X$, if $x \leq M$ for all $x \in X$, we write $M = \max X$, if such $M$ exists.
+
+    Similarly, $m \in X$ is called the minimum of $X$, if $m \leq x$ for all $x \in M$, we write $m = \min X$, if such $m$ exists.
+\end{definition}
+
+\begin{example}\label{examp:analy:1}
+    $x = \N$ $1$ is the minimum since $1 \leq n$ for all $n \in \N$, but $1 \in \N$. This set has no maximum. A maximum would have to be some $n \in \N$. But $n < n + 1$, so $n \geq x$ for all $x \in \N$ is not possible, since $n + 1 \in \N$.
+\end{example}
+
+\begin{example}
+    $Y = \left\{\frac{1}{n} \,\middle|\, n \in \N\right\}$ is bounded above by $1$.
+    
+    $\frac{1}{n} \leq1$ for all $n \in \N$, $1$ is an upper bound.
+    Also $1 = \frac{1}{1} \in Y$, so $1 = \max\{Y\}$.
+    Note $0 < \frac{1}{n}$ for all $n \in \N$, so $Y$ is bounded below by $0$.
+    There is no minimum,
+    since $\frac{1}{n + 1} < \frac{1}{n}$ for all $n \in \N$.
+\end{example}
+
+\begin{example}
+    $Z = \{x \in \Q\,|\, x ^ 2 \leq 2\}$ bounded set.
+    If $x \in Z$,
+    then $-2 \leq x \leq 2$.
+    If there was a positive rational number $\frac{p}{q}$ with $\frac{p ^ 2}{q ^ 2} = 2$,
+    this would be the maximum.,
+    but there is no such $\frac{p}{q}$.
+\end{example}
+
+\begin{definition}
+    Let $X$ be a set which is bounded above.
+    A number $C \in \R$ is called the supremum of $X$,
+    or the least upper bound of $X$, if
+    \begin{enumerate}[label = (\alph*)]
+        \item $C$ is an upper bound of $X$.
+        \item Whenever $B \in \R$ is another upper bound of $X$, the $C \leq B$.
+    \end{enumerate}
+    We write $\sup X$ for such a $C$.
+    
+    Similarly, if $X$ is bounded below,
+    a number $c \in \R$ is called the infimum of $X$ or greatest lower bound of $X$, if
+    \begin{enumerate}[label = (\alph*)]
+        \item $c$ is an lower bound of $X$.
+        \item Whenever $b \in \R$ is a lower bound of $X$, then $b \leq c$.
+    \end{enumerate}
+    We write $\inf X$ for such $c$.
+\end{definition}
+
+Observation: if $X$ has a maximum $M = \max X$,
+then $M$ is the supremum:
+we have $x \leq M$ for all $x \in X$.
+Gives (a).
+If $B$ is an upper bound of $X$,
+then $M \leq B$ since $M \in X$,
+so (b) is also satisfied.
+
+\begin{example}
+    $X = \{x \in \R\,|\, x < 2\}$.
+
+    We want to say that $2 = \sup X$:
+    $2$ is an upper bound,
+    so (a) is satisfied.
+    For (b), take an upper bound $B$,
+    we want $2 \leq B$
+    use an indirect proof:
+    Assume $B < 2$.
+    Note $B = \frac{B + B}{2} < \frac{B + 2}{2} < \frac{2 + 2}{2} = 2$,
+    we have an upper bound $B$ and our element of $X$ $\frac{B + 2}{2}$,
+    a contradiction,
+    this implies (b) is satisfied.
+\end{example}
+
+\begin{example}\label{examp:analy:2}
+    $Y = \left\{\frac{1}{n}\,\middle|\, n \in \N\right\}$
+
+    $\sup Y = \max Y = 1$,
+    $0$ is a lower bound,
+    is it the infimum?
+    (a) is satisfied.
+    (b) same as \autoref{examp:analy:1}
+\end{example}
+
+
+The Completeness Axiom:
+
+(C.1) Every non-empty subset of $\R$ which is bounded above has a supremum.
+
+\begin{theorem}[Archimedes]\label{analy:thm:archim}
+    Let $a, b \in \R$ with $b > 0$. Then there exists an $n \in \N$ with $nb > a$.
+    [Think $b = 1$, then this is saying for every $a \in \R$ there is $n \in \N$ with $n > a$.]
+    \begin{proof}
+        Assume not.
+        Then the set $X = \{nb \in \R \,|\, n \in \N\}$ is bounded above by $a$.
+        It is also non-empty:
+        $b \in X$.
+        By (C.1.) we have a supremum $C = \sup X$.
+
+        Look at $C - b < C$,
+        this $C - b$ cannot be an upper bound of $X$.
+        So there is $x \in X$ with $nb = x > C - b \iff nb + b = \underset{\in X}{(n + 1)b} > C$
+        Contradiction $C$ being an upper bound of $X$.
+    \end{proof}
+\end{theorem}
+
+Looking back at \autoref{examp:analy:2},
+$0 = \inf Y$,
+it is a lower bound.
+Assume $b \in \R$ satisfies $0 < b$ we cannot have $b < \frac{1}{n}$ for all $n \in \N$,
+as this is equivalent to $n < \frac{1}{b}$ for all $n \in \N$.
+
+\begin{example}
+    $Z = \{x \in \R | x ^ 2 \leq 2\}$
+    bounded above by $2$.
+    $0 \in Z$, so $Z \neq \emptyset$.
+    By (C.1) $C = \sup Z$ exists.
+    We would like to have $C ^ 2 = 2$.
+    Need to rule out $C ^ 2 < 2$ and $C ^ 2 > 2$.
+    Assume $C ^ 2 < 2$,
+    show that $C$ is not an upper bound.
+    $\left(C + \frac{1}{n}\right) ^ 2 = C ^ 2 + \frac{2C}{n}+ \frac{1}{n ^ 2} = C ^ 2 + \frac{1}{n}\left(2C + \frac{1}{n}\right) < C ^ 2 + \frac{\alpha}{n}$, $\alpha = \left(2C + 1\right)$
+    We assume $C ^ 2 < 2$ so $2 - C ^ 2 > 0$.
+    Want $C ^ 2 \frac{\alpha}{n} < 2$.
+    Need $\frac{\alpha}{n} < 2 - C ^ 2 \iff n > \frac{\alpha}{2 - C ^ 2}$.
+\end{example}
+
+\begin{theorem}
+    Let $a \geq 0$ and $p \in \N$.
+    Then there exists a unique $x \geq 0$ with $x ^ p = a$.
+    We call $x$ the $p$-th root of $a$,
+    and write $\sqrt[p]{a} = x$.
+    This gives us functions $\sqrt[p]{\cdot} : [0, \infty) \to [0, \infty)$.
+
+    For odd $p$ we can extend this to $\sqrt[p]{\cdot} : \R \to \R$.
+    If $a < 0$, then let $\sqrt[p]{a} = -\sqrt[p]{-a}$.
+    \begin{proof}
+        If $a = 0$, $x = 0$ works.
+        So assume $a > 0$.
+
+        Look at $A = \{x \in \R\,|\, x ^ p < a\}$
+        $0 \in A$, so $A$ is non-empty.
+
+        Bounded above: If $a \geq 1$ then $x ^ p < a \leq a ^ p$,
+        so $x ^ p < a ^ p$ and hence $x < a$ (If $x \geq 0$). We can use $a$ as the upper bound.
+        If $a \in (0, 1)$, then $x ^ p < 1 \implies x < 1$, here we can use $1$ as an upper bound.
+        
+        By Completeness axiom, the $\sup A$ exists. 
+        
+        Call $\xi = \sup A$.
+        We want $\xi ^ p = a$.
+        To show: $\xi ^ p$ is not less than $a$ and not bigger than $a$.
+        So assume $\xi ^ p < a$, note $\xi \in A$.
+        Look at $\xi + \frac{1}{n}$ with $n \in \N$.
+        \begin{align*}
+            \left(\xi + \frac{1}{n}\right) ^ p &= \xi ^ p + \frac{1}{n} \cdot \binom{p}{1} \xi ^ {p - 1} + \frac{1}{n ^ 2} \cdot \binom{p}{2} \xi ^ {p - 2} + \dotsi + \frac{1}{n ^ p}\footnotemark \\
+            &\leq \xi ^ p + \frac{1}{n}\left(\binom{p}{2}\xi ^ {p - 1} + \binom{p}{2}\xi ^ {p - 2} + \dotsi + 1\right) \\
+            &= \xi ^ p + \frac{\alpha}{n}\quad\text{ with } \alpha > 0
+        \end{align*}
+        \footnotetext{By \autoref{analy:thm:binom}.}
+        We want $\xi ^ p + \frac{\alpha}{n} < a \iff \frac{\alpha}{n} < a - \xi ^ p \iff \alpha < \left(a - \xi ^ p\right) \cdot n$ By \autoref{analy:thm:archim} there exists such an $n \in \N$
+        so far such $n$
+        \[
+        \left(\xi + \frac{1}{n}\right) ^ p < a
+        \]
+        and therefore $\xi + \frac{1}{n} \in A$ contradicting $\xi$ is an upper bound for $A$.
+
+        So assume $\xi ^ o > a$.
+        Look at $\xi - \frac{1}{n}$ with $n \in \N$.
+        \begin{align*}
+            \left(\xi - \frac{1}{n}\right) ^ p &= \left(\xi \cdot\left(1 - \frac{1}{\xi n}\right)\right) ^ p \\
+            &= \xi ^ p \left(1 - \frac{1}{\xi n}\right) ^ p \\
+            &\geq \xi ^ p \left(1 - \frac{p}{\xi n}\right)\footnotemark \\
+            &= \xi ^ p - \frac{\xi ^ {p - 1}p}{n}
+        \end{align*}
+        \footnotetext{By \autoref{analy:thm:bernoineq}}
+        Want $\xi ^ p - \frac{\xi ^ {p - 1}p}{n} > a \iff (\xi ^ p - a) > \frac{\xi ^ {p - 1}p}{n} \iff n \cdot (\xi ^ p - a) > \xi ^ {p - 1} \cdot p \in \R$.
+        By \autoref{analy:thm:archim} there exists such $n \in \N$.
+        Contradicting $\xi$ being the supremum (We showed that $\xi - \frac{1}{n}$ is also an upper bound of $A$).
+        By \autoref{analy:axiom:trichotomy} axiom $\xi ^ p = a$.
+        \end{proof}
+\end{theorem}
+
+\begin{definition}
+    Let $a > 0$ and $r = \frac{p}{q}$ with $p, q \in \N$. Then define
+    \[
+    a ^ r = \sqrt[q]{a ^ p}\qquad a ^ {-r} = \frac{1}{a ^ r}
+    \]
+    we also set $a ^ 0 = 1$.
+\end{definition}
+
+\begin{definition}
+    Let $x \subset \R$ and $f : X \to \R$ a function.
+    If $f(x)$ is bounded above,
+    denote by $\sup(f)$ the supremum of this set $f(x)$.
+
+    If $f(x)$ is bounded below,
+    denote by $\inf(f)$ the infimum of $f(x)$.
+\end{definition}
+
+\begin{example}
+    Let $f : \R \to \R$
+    \[
+    f(x) = \frac{x}{1 + x ^ 2}
+    \]
+    we claim that $f(x) \leq \frac{1}{2}$ for all $x \in \R$.
+    \begin{proof}
+        \begin{align*}
+            &\iff \frac{x}{1 + x ^ 2} \leq \frac{1}{2} \\
+            &\iff 2x \leq 1 + x ^ 2 \\
+            &\iff  0 \leq (x - 1) ^ 2.
+        \end{align*}
+        Also, $f(1) = \frac{1}{2} \implies \sup(f) = \frac{1}{2}$.
+        Similarly $\inf(f) = -\frac{1}{2}$.
+    \end{proof}
+\end{example}
+
+\newpage
+
+\section{Sequences}
+
+\subsection{Basics about sequences and limits}
+\begin{definition}
+    A sequence of real numbers is a function from $\N \to \R$.
+\end{definition}
+
+It assigns to each $n \in \N$ an element $x_n \in \R$
+\[
+x : \N \to \R\qquad x(n) = x_n
+\]
+sequences are denoted $(x_n)_{n \in \N}$
+
+\begin{example}\phantom{}
+    \begin{enumerate}[label = (\alph*)]
+        \item Let $x_n = 5$ for $n \in \N$. This is a constant sequence.
+        \item Let $a_n = \frac{1}{n}$ for $n \in \N$.
+        \item Let $b_n = (-1) ^ n$ for $n \in \N$.
+        \item You can define sequences recursively, the $n$-th term depends on previous terms.
+        \[
+        y_1 = 1, y_2 = 1,\text{ for } n \geq 3\text{ define}
+        \]
+        \[
+        y_n = y_{n - 1} + y_{n - 2}.
+        \]
+        \item $x_1 = 1$ for $n \geq 2$ set
+        \[
+        x_n = \frac{x_{n - 1}}{2} + \frac{1}{x_{n - 1}}.
+        \]
+        Note each $x_n > 0$.
+    \end{enumerate}
+\end{example}
+
+\begin{definition}
+    A real sequence $\seq$ is said to be convergent to the limit $x \in \R$, if for every $\varepsilon > 0$, there exists an $n_0 \in \N$ with
+    \[
+    |x_n - x| < \varepsilon\text{ for all } n \geq n_0.
+    \]
+\end{definition}
+We write $x = \lim_{n \to \infty} x_n$ or we say $x_n \to x$ as $n \to \infty$.
+
+A sequence which converges to a limit is called a convergent sequence.
+If a sequence does not converge to a limit we call it a divergent sequence.
+
+\begin{example}
+    \begin{enumerate}[label = (\alph*)]
+    \item
+    $x_n = 5$ for all $n \in \N$.
+
+    Is $x = 5$ the limit.
+    Pick $\varepsilon > 0$
+    \[
+    |x_n - x| = |5 - 5| = 0 < \varepsilon
+    \]
+    and choose $n_0 = 1$,
+    then this is true for all $n \geq 1 = n_0$.
+    \item 
+    \[
+    a_n = \frac{1}{n}
+    \]
+    use $x = 0$.
+    Pick $\varepsilon > 0$
+    \[
+    \left|\frac{1}{n} - 0\right| = \frac{1}{n} < \varepsilon\text{ for all } n \geq n_0
+    \]
+    choose $n_0 \in \N$ such that $n_0 > \frac{1}{\varepsilon}$ (possible by \autoref{analy:thm:archim})
+    \item
+    \[
+    b_n = (-1) ^ n
+    \]
+    Does it converge to $1$?
+    For every $\varepsilon > 0$,
+    is there an $n_0 \in \N$ with
+    \[
+    \underbrace{|b_n - 1|}_{\begin{subarray}
+        \phantom{}= 0\ n \text{ is even} \\
+        \ 2\ n \text{ is odd}
+    \end{subarray}} < \varepsilon\text{ for all } n \geq n_0
+    \]
+    we cannot achieve this for any $\varepsilon < 2$.
+    $x = 0$ also doesn't work,
+    $|b_n - 0| = |b_n| = 1$.
+    No other $x$ works.
+    This sequence is divergent.
+    \end{enumerate}
+\end{example}
+
+\begin{theorem}[Uniqueness of the limit]
+    A convergent sequence $\seq$ has precisely one limit.
+    \begin{proof}
+        Let $x, x'$ be limits of this sequence,
+        with $x \neq x'$
+
+        Let $\varepsilon = \frac{|x - x'|}{2} > 0$.
+
+        Since $\seq$ converges to $x$,
+        there is $n_0 \in \N$ with
+        \[
+        |x_n - x| < \varepsilon\text{ for all } n \geq n_0.
+        \]
+        We also have convergence to $x'$,
+        there is $n_1 \in \N$, with
+        \[
+        |x_n - x'| < \varepsilon\text{ for all } n \geq n_1.
+        \]
+        For $n \geq \max\{n_0, n_1\}$ we now get
+        \begin{align*}
+            |x - x'| &= |x - x_n + x_n - x'| \\
+            &\leq |x - x_n| + |x_n - x'| \\
+            &< 2\varepsilon \\
+            &= \frac{|x - x'|}{2} + \frac{|x - x'|}{2} \\
+            &= |x - x'|
+        \end{align*}
+        Contradiction.
+    \end{proof}
+\end{theorem}
+
+\begin{definition}
+    Let $\seq$ be a real sequence,
+    and denote $X$ the set $\{x_n \in \R \,|\, n \in \N\}$.
+    The sequence $\seq$ is called bounded above,
+    if $X \subset \R$ is bounded above.
+
+    Bounded below, if $X \subset \R$ is bounded below.
+
+    Bounded, if $X \subset \R$ is bounded above and below\footnote{$b_n = (-1) ^ n$ is bounded $X = \{-1, 1\}$.}.
+\end{definition}
+
+\begin{example}
+    Fibonacci sequence
+    $y_1 = 1 = y_2$.
+    For $n \geq 3$
+    \[
+    y_n = y_{n - 1} + y_{n - 2}.
+    \]
+    $y_n \geq 1$ and now also $y_n \geq n - 1$ (induction)
+    this implies the sequence is not bounded above.
+\end{example}
+A sequence which is not bounded is called unbounded.
+
+\begin{theorem}\label{analy:thm:convseqisbound}
+    Every convergent sequence is bounded.
+\end{theorem}
+\begin{remark}
+    A bounded sequence need not be convergent.
+    
+    e.g. $(-1) ^ n$
+\end{remark}
+
+Contrapositive of \autoref{analy:thm:convseqisbound} says:
+An unbounded sequence is divergent.
+Fibonacci sequence is divergent.
+
+\subsection{Convergence criteria}
+\begin{theorem}[Squeezing Theorem]\label{analy:thm:squeezethm}
+    Let $\seq$ and $\seq[y]$ be real sequences.
+    If $|x_n| \leq y_n$ for all $n \in \N$ and $y_n \to 0$ as $n \to \infty$, then
+    \[
+    \lim_{n \to \infty}x_n = 0.
+    \]
+    \begin{proof}
+        Let $\varepsilon > 0$ be given.
+        Then there is $n_0 \in \N$ with
+        \[
+        |y_n - 0| = |y_n| < \varepsilon\text{ for all } n \geq n_0.
+        \]
+        Then
+        \[
+        |x_n - 0| = |x_n| \leq y_n = |y_n| < \varepsilon\text{ for all } n \geq n_0
+        \]
+        This means $x_n \to 0$ as $n \to \infty$.
+    \end{proof}
+\end{theorem}
+
+\begin{example}
+    Let $c \in \R$, $x_n = c ^ n$.
+    If $c = 0$ or $c = 1$,
+    then $x_n$ is constant,
+    so we get convergence to $c$.
+    If $c = -1$,
+    then we get $x_n = (-1) ^ n$ is divergent.
+    If $c > 1$,
+    write $c = 1 + h$ with $h > 0$.
+    Now $x_n = (1 + h) ^ n \geq 1 + nh \geq nh$ (Bernoulli inequality)
+    this implies $x_n$ is unbounded so is divergent by \autoref{analy:thm:convseqisbound}.
+    If $c < -1$,
+    $x_{2n} = (c ^ 2) ^ n$ with $c ^ 2 > 1$ is also unbounded and divergent.
+
+    If $0 < c < 1$ write $c = \frac{1}{1 + h}$ with $h > 0$
+    \[
+    x_n = \frac{1}{(1 + h) ^ n} \leq \frac{1}{1 + nh} \leq \frac{1}{nh} = y_n \to 0
+    \]
+    this implies $x_n \to 0$ by \autoref{analy:thm:squeezethm}.
+
+    If $-1 < c < 0$ write $c = -\frac{1}{1 + h}$ with $h > 0$
+    \[
+    |x_n| = \frac{1}{(1 + h) ^ n} \to 0.
+    \]
+    By \autoref{analy:thm:squeezethm} $x_n \to 0$.
+\end{example}
+
+\begin{example}
+    Look at $a_n = 1 + \frac{1}{2} + \dotsc + \frac{1}{2 ^ n}$
+
+    $2 - a_n = \frac{1}{2 ^ n}$ prove by induction: $n = 1$.
+    Exercise!
+    \[
+    |a_n - 2| = \frac{1}{2 ^ n} \leq \frac{1}{2 ^ n} \to 0 \implies a_n - 2 \to 0 \implies a_n \to 2.
+    \]
+\end{example}
+
+\begin{theorem}[Calculus of Limits Theorem (COLT)]\label{analy:thm:COLT}
+    Let $\seq$ and $\seq[y]$ be sequences which are convergent with $x = \lim_{n \to \infty}x_n$ and $y = \lim_{n \to \infty}$.
+    Also, let $a, b \in \R$.
+    Then
+    \begin{enumerate}[label = (\alph*)]
+        \item $ax_n + by_n \to ax + by$ as $n \to \infty$.
+        \item $x_n \cdot y_n \to x \cdot y$ as $n \to \infty$.
+        \item $\frac{x_n}{y_n} \to \frac{x}{y}$ as $n \to \infty$ provided that $y \neq 0$ and $y_n \neq 0\,\forall n \in \N$.
+    \end{enumerate}
+    \begin{enumerate}[label = (\alph*)]
+        \item
+        \begin{proof}
+        \end{proof}
+        \item 
+        \begin{proof}
+        We need to know that
+        \begin{align*}
+        |x_n \cdot y_n - x \cdot y| &= |x_n \cdot y_n - x_n \cdot y + x_n \cdot y - x \cdot y| \\
+        &\leq |x_n (y_n - y)| + |(x_n - x)\cdot y| \\
+        &= |x_n| \cdot |y_n - y| + |x_n - x| \cdot |y|
+        \end{align*}
+        Note,
+        there is a $C > 0$ with $|x_n| \leq C$ by \autoref{analy:thm:convseqisbound}.
+        Can also assume that $C \geq |y|$.
+        Then we have
+        \[
+        |x_n \cdot y_n - x \cdot y| \leq C \cdot (|y_n - y| + |x_n - x|)
+        \]
+        Let $\varepsilon > 0$,
+        there exists an $n_0$ with
+        \[
+        |y_n - y| < \frac{\varepsilon}{2C}\text{ for all } n \geq n_0
+        \]
+        and there exists an $n_1$ with
+        \[
+        |x_n - x| < \frac{\varepsilon}{2C}\text{ for all } n \geq n_1.
+        \]
+        Then for all $n \geq \max\{n_0, n_1\}$ we have
+        \[
+        |x_n \cdot y_n - xy| \leq C \cdot (|y_n - y| + |x_n - x|) < C \cdot (\frac{\varepsilon}{2C} + \frac{\varepsilon}{2C}) = 2C \cdot \frac{\varepsilon}{2C} = \varepsilon.
+        \]
+        \end{proof}
+        \item
+        \begin{proof}
+        \end{proof}
+    \end{enumerate}
+\end{theorem}
+
+\begin{example}
+    \[
+    x_n = \frac{n ^ 3 - 2n ^ 2 + 3n - 4}{3n ^ 4 + 10n ^ 2 - 8}.
+    \]
+    \begin{align*}
+        x_n &= \frac{n ^ 3 - 2n ^ 2 + 3n - 4}{3n ^ 4 + 10n ^ 2 - 8} \\
+        &= \frac{n ^ 3 \left(1 - \frac{2}{n} + \frac{3}{n ^ 2} - \frac{4}{n ^ 3}\right)}{n ^ 4 \left(3 + \frac{10}{n ^ 2} - \frac{8}{n ^ 4} \right)} \\
+        &= \frac{1}{n} \cdot \frac{\left(1 - \frac{2}{n} + \frac{3}{n ^ 2} - \frac{4}{n ^ 3}\right)}{\left(3 + \frac{10}{n ^ 2} - \frac{8}{n ^ 4} \right)}
+    \end{align*}
+    By COLT $\lim_{n \to \infty}x_n = 0 \cdot \frac{1}{3} = 0$.
+\end{example}
+
+\begin{example}
+    \[
+    x_1 = 1\quad x_n = \frac{x_{n - 1}}{2} + \frac{1}{x_{n - 1}}\text{ for } n \geq 2.
+    \]
+    $x_n \in [1, 2]$ by induction $x_1 \in [1, 2]$
+    if $x_{n - 1} \in [1, 2]$,
+    then $\frac{x_{n - 1}}{2} \in \left[\frac{1}{2}, 1\right]$
+    $\frac{1}{x_{n - 1}}$ so in $[1, 2]$
+
+    Let us assume that $x_n$ converges to $x$.
+    Then $x_{n - 1}$ also converges to $x$
+    By \autoref{analy:thm:COLT} $x = \lim x_n = \lim \left(\frac{x_{n - 1}}{2} + \frac{1}{x_{n - 1}}\right) = \frac{x}{2} + \frac{1}{x} \implies x ^ 2 = 2$
+    Two candidates for $x$,
+    $x = \sqrt{2}$ or $x = -\sqrt{2}$ but $x_n \in [1, 2]$ so no $-\sqrt{2}$.
+    Now let's try to show convergence:
+    \begin{align*}
+        |x_n - \sqrt{2}| &= \left|\frac{x_{n - 1}}{2} + \frac{1}{x_{n - 1}} - \sqrt{2}\right| \\
+        &= \left|\frac{x_{n - 1} ^ 2 + 2 - 2\sqrt{2}\cdot x_{n - 1}}{2x_{n - 1}}\right| \\
+        &= \frac{|(x_{n - 1} - \sqrt{2}) ^ 2|}{2|x_{n - 1}|} \\
+        &\leq \frac{|x_{n - 1} - \sqrt{2}|}{2} \\
+        &\leq \frac{|x_{n - 2} - \sqrt{2}|}{4} \\
+        &\leq \frac{1}{2 ^ n} \text{by induction true for all } n \in \N.
+    \end{align*}
+    By \autoref{analy:thm:squeezethm} $x_n - \sqrt{2} \to 0$ so by \autoref{analy:thm:COLT}
+    $x_n \to \sqrt{2}$.
+\end{example}
+
+\begin{theorem}\label{analy:thm:contofsqrt}
+    Let $\seq$ be a sequence such that $x_n \in [a, b]$ for all $n$.
+    If the sequence converges to $x \in \R$.
+    Then $x \in [a, b]$.
+    \begin{proof}
+        Assume $x < a$ pick $\varepsilon - \frac{a - x}{2} > 0$.
+        By convergence there is an $n_0 \in \N$ with
+        \[
+        |x_n - x| < \varepsilon \text{ for all } n \geq n_0.
+        \]
+        In particular
+        $x - x_n > - \varepsilon$.
+        Now $a - x_n = a - x + x - x_n = 2\varepsilon + x - x_n > \varepsilon > 0 \iff a > x_n$.
+        Contradiction.
+    \end{proof}
+\end{theorem}
+
+\begin{corollary}\label{analy:corol:seq:convgeq}
+    Let $\seq$ and $\seq[y]$ be convergent sequences with $x_n \leq y_n$ for all $n \in \N$.
+    Then
+    \[
+    \lim_{n \to \infty}x_n \leq \lim_{n \to \infty}y_n
+    \]
+    \begin{proof}
+        Consider $a_n = y_n - x_n$.
+        Then $a_n \geq 0$
+        By the previous $\lim_{n \to \infty}a_n \geq 0$. By \autoref{analy:thm:COLT}
+        \[
+        \lim_{n \to \infty}y_n - \lim_{n \to \infty}x_n \geq 0.
+        \]
+    \end{proof}
+\end{corollary}
+\begin{theorem}
+    Let $\seq$ be a convergent sequence with each $x_n \geq 0$.
+    Then
+    $(\sqrt{x_n})_{n \in \N}$ is a convergent sequence with
+    \[
+    \lim_{n \to \infty}\sqrt{x_n} = \sqrt{\lim_{n \to \infty}x_n}.
+    \]
+    \begin{proof}
+        Denote $x = \lim_{n \to \infty}x_n \geq 0$ by \autoref{analy:corol:seq:convgeq}.
+        Distinguish the cases $x = 0$ and $x > 0$.
+        Assume $x > 0$.
+        \begin{align*}
+            |\sqrt{x_n} - \sqrt{x}| &= \left|\frac{(\sqrt{x_n} - \sqrt{x})(\sqrt{x_n} + \sqrt{x})}{\sqrt{x_n} + \sqrt{x}}\right| \\
+            &= \frac{|x_n - x|}{\sqrt{x_n} + \sqrt{x}} \\
+            &\leq \frac{|x_n - x|}{\sqrt{x}}
+        \end{align*}
+        by \autoref{analy:thm:squeezethm} $\sqrt{x_n} - \sqrt{x} \to 0$ and by \autoref{analy:thm:COLT} $\sqrt{x_n} \to \sqrt{x}$.
+    \end{proof}
+\end{theorem}
+
+\begin{example}
+    Consider
+    \begin{enumerate}[label = (\alph*)]
+        \item 
+        \begin{align*}
+            y_n &= \frac{n ^ 2 - n(-1) ^ n}{\sqrt{n ^ 4 + 1}} \\
+            &= \frac{n ^ 2 \left(1 - \frac{(-1) ^ n}{n}\right)}{n ^ 2 \sqrt{1 + \frac{1}{n ^ 4}}} \\
+            &= \frac{1 - \frac{(-1) ^ n}{n}}{\sqrt{1 + \frac{1}{n ^ 4}}}
+        \end{align*}
+        by \autoref{analy:thm:COLT} and \autoref{analy:thm:contofsqrt} $y_n \to \frac{1 - 0}{\sqrt{1 + 0}} = 1$.
+        \item
+        \begin{align*}
+            \sqrt{n}(\sqrt{n + 1} - \sqrt{n}) &= \frac{\sqrt{n}(\sqrt{n + 1} - \sqrt{n})(\sqrt{n + 1} + \sqrt{n}}{\sqrt{n + 1} + \sqrt{n}} \\
+            &= \sqrt{n} \cdot \frac{1}{\sqrt{n + 1} + \sqrt{n}} \\
+            &= \frac{\sqrt{n}}{\sqrt{n}\left(\sqrt{\frac{n + 1}{n}} + 1\right)} \\
+            &= \frac{1}{\underbrace{\sqrt{1 + \frac{1}{n}}}_{\text{by \autoref{analy:thm:contofsqrt}} \to 0} + 1} \to \frac{1}{2}
+        \end{align*}
+        by \autoref{analy:thm:COLT}.
+    \end{enumerate}
+\end{example}
+
+\begin{theorem}\label{analy:thm:boundmonoincseqconv}
+    Let $\seq$ be a sequence which is monotonically increasing,
+    that is,
+    $x_m \leq x_n$ for $m \leq n$.
+    If $\seq$ is bounded,
+    then $\seq$ is convergent.
+    \begin{proof}
+        Look at $X = \{x_n \in \R | n \in \N\}$,
+        this is a bounded set,
+        and it is non-empty.
+        By the completeness axiom $x = \sup X$ exists.
+        To show $x = \lim_{n \to \infty}x_n$
+        let $\varepsilon > 0$.
+        Then $x - \varepsilon < x$,
+        so $x - \varepsilon$ is not an upper bound for $X$.
+        There is $x_{n_0} \in X$ with
+        $x - \varepsilon < x_{n_0} \leq x_n \leq x < x + \varepsilon$ for all $n \geq n_0$
+        this implies that
+        $|x_n - x| < \varepsilon$ for all $n \geq n_0$.
+    \end{proof}
+\end{theorem}
+Note, $\lim_{n \to \infty}x_n = \sup\{x_n \in \R | n \in \N\}$.
+\begin{example}
+    Let
+    \begin{align*}
+        x_n &= \left(1 + \frac{1}{n}\right) ^ n \\
+        &= \sum_{k = 0}^{n}\binom{n}{k}\frac{1}{n ^ k} \\
+        &= 1 + 1 + \sum_{k = 2}^{n}\binom{n}{k}\frac{1}{n ^ k}
+    \end{align*}
+    By problem $51$
+    \[
+    \frac{1}{m ^ k}\binom{m}{k} < \frac{1}{n ^ k}\binom{n}{k} \leq \frac{1}{2 ^ {k - 1}}.
+    \]
+    So $x_m \leq x_n$ for $m \leq n$ and the sequence is monotonically increasing.
+    Also $x_n \leq 2 + \frac{1}{2} + \frac{1}{4} + \frac{1}{8} + \dotsc + \frac{1}{2 ^ {n - 1}} < 3$
+    and the sequence is bounded.
+    By \autoref{analy:thm:boundmonoincseqconv} $\lim_{n \to \infty}x_n$ exists and is in $[2, 3]$.
+    
+    The limit is Euler's number $e = \displaystyle\lim_{n \to \infty}\left(1 + \frac{1}{n}\right) ^ n = 2.71828182\dotsc$.
+\end{example}
+
+\subsection{The exponential function and the logarithm}
+\begin{example}
+    \begin{align*}
+        y &= \left(1 + \frac{2}{n}\right) ^ n \\
+        &= \left(\frac{n + 2}{n}\right) ^ n \\
+        &= \frac{(n + 2) ^ n}{n ^ n}\frac{(n + 1) ^ n}{(n + 1) ^ n} \\
+        &= \left(\frac{n + 1}{n}\right) ^ n \cdot \left(\frac{n + 2}{n + 1}\right) ^ n \\
+        &= \left(1 + \frac{1}{n}\right) ^ n\frac{\left(1 + \frac{1}{n + 1}\right) ^ {n + 1}}{1 + \frac{1}{n + 1}}
+        &\xrightarrow{\text{COLT}}\to\frac{e \cdot e}{1} = e ^ 2
+    \end{align*}
+    Induction can show $\left(1 + \frac{k}{n}\right) ^ n \to e ^ k$ for $k \in \N$.
+
+    For $n \geq 2$
+    \begin{align*}
+        z_n &= \left(1 - \frac{1}{n}\right) ^ n \\
+        &= \left(\frac{n - 1}{n}\right) ^ n \\
+        &= \frac{1}{\left(\frac{n}{n - 1}\right) ^ n} \\
+        &= \frac{1}{\left(1 + \frac{1}{n - 1}\right) ^ {n - 1}\cdot\left(1 + \frac{1}{n - 1}\right)} \\
+        &\xrightarrow{\text{COLT}}\frac{1}{e \cdot 1} = \frac{1}{e}.
+    \end{align*}
+\end{example}
+
+Define
+\[
+e ^ x = \lim_{n \to \infty}\left(1 + \frac{x}{n}\right) ^ n\text{ for } x \in \R.
+\]
+
+\begin{theorem}
+    For every $x \in \R$ the sequence $\left(1 + \frac{x}{n}\right) ^ n$ is convergent.
+    The limit is denoted by $e ^ x$,
+    it satisfies $e ^ x  > 0$ and
+    \[
+    e ^ {-x} = \frac{1}{e ^ x}.
+    \]
+    \begin{proof}[Proof sketch]\renewcommand{\qedsymbol}{$\triangle$}
+        Proof for $e ^ {-x} = \frac{1}{e ^ x}$.
+
+        \begin{align*}
+            \left(1 + \frac{x}{n}\right) ^ n \cdot \frac{\left(1 - \frac{x}{n}\right) ^ n}{\left(1 - \frac{x}{n}\right) ^ n} &= \frac{\left(\left(1 + \frac{x}{n}\right)\left(1 - \frac{x}{n}\right)\right) ^ n}{\left(1 - \frac{x}{n}\right) ^ n} \\
+            &= \frac{\left(1 - \frac{x ^ 2}{n ^ 2}\right) ^ n}{\left(1 + \frac{-x}{n}\right) ^ n}
+        \end{align*}
+        \[
+        1 \geq \left(1 - \frac{x ^ 2}{n ^ 2}\right) ^ n \geq 1 - \frac{nx ^ 2}{n ^ 2} = 1 - \frac{x ^ 2}{n}
+        \]
+        By \autoref{analy:thm:bernoineq} for $n ^ 2 > x ^ 2$
+        and by \autoref{analy:thm:squeezethm}
+        \[
+        \left(1 - \frac{x ^ 2}{n ^ 2}\right) ^ n \to 1
+        \]
+        then by \autoref{analy:thm:COLT} this implies
+        \[
+        e ^ x = \frac{1}{e ^ {-x}}.
+        \]
+    \end{proof}
+\end{theorem}
+
+\begin{lemma}\label{analy:lem:expboundlemma}
+    Let $x \in (-\infty, 1)$.
+    Then
+    \[
+    1 + x \leq e ^ x \leq \frac{1}{1 - x}.
+    \]
+    \begin{proof}
+        Pick $n \in \N$ with $\frac{x}{n} > -1$.
+        Then
+        \[
+        \left(1 + \frac{x}{n}\right) ^ n \geq 1 + \frac{nx}{n} = 1 + x
+        \]
+        By Thm 2.12.,
+        $e ^ x \geq 1 + x$
+        (works for all $x \in \R$).
+        For the other inequality look at
+        \[
+        \frac{1}{\left(1 - \frac{x}{n}\right) ^ n} \leq \frac{1}{1 - x}
+        \]
+        By Thm 2.12.,
+        $e ^ x \leq \frac{1}{1 - x}$.
+    \end{proof}
+\end{lemma}
+
+\begin{theorem}
+    Let $x, y \in \R$.
+    Then
+    \[
+    e ^ {x + y} = e ^ x \cdot e ^ y.
+    \]
+\end{theorem}
+
+Since $x$ was an arbitrary real number,
+we have a function
+\[
+\exp : \R \to (0, \infty)
+\]
+\[
+x \mapsto e ^ x = \exp(x)
+\]
+If $x < y$,
+then
+\[
+\exp(y - x) = \lim_{n \to \infty}\left(1 + \frac{\overbrace{y - x}^{>0}}{n}\right) ^ n > 1
+\]
+this is a monotonically increasing sequence.
+\begin{align*}
+    &= \exp(y)\cdot\exp(-x) \\
+    &= \frac{\exp(y)}{\exp(x)} \implies \exp(x) < \exp(y).
+\end{align*}
+The exponential function is strictly monotonically increasing.
+
+We define logarithm as the inverse function of $\exp$.
+\begin{theorem}
+    Let $a > 0$.
+    Then there exists a unique $x \in \R$ with $\exp(x) = a$.
+    \begin{proof}
+        Consider $X = \{y \in \R\,|\,\exp(y) < a\}$.
+        For $n \in \N\ \exp(n) = e ^ n$,
+        which gives an unbounded sequence.
+        So there is $n \in \N$ with $e ^ n > a\ n \notin X$.
+        
+        Also,
+        if $x < n$,
+        $e ^ n < e ^ x\ x \notin X$.
+        $n$ is an upper bound for $X$.
+        $X$ is not empty.
+        Look at $e ^ {-n} = \left(\frac{1}{e}\right) ^ n \to 0$.
+        There is $n \in \N$ with $e ^ {-n} < a$,
+        so $-n \in X$.
+        Use $x = \sup X$ from the Completeness axiom.
+        
+        Show that $\exp(x) < a$ or $\exp(x) > a$ is not true.
+        Assume $\exp(x) > a$.
+        Look at $\exp\left(x - \frac{1}{n}\right)$ with $n \in \N$.
+        \[
+        \exp\left(x - \frac{1}{n}\right) = \frac{\exp(x)}{\exp\left(\frac{1}{n}\right)} \geq \frac{\exp(x)}{\frac{1}{1 - \frac{1}{n}}} = \exp(x) \cdot \left(1 - \frac{1}{n}\right)
+        \]
+        \[
+        1 + x \leq e ^ x \leq \frac{1}{1 - x}\text{ on } \frac{1}{n}.
+        \]
+        So $\exp\left(x - \frac{1}{n}\right) \geq \exp x - \frac{\exp x}{n}$\quad(want $> a$).
+        Choose $n$ so large that
+        \[
+        \frac{\exp x}{n} < \underbrace{\exp x}_{> 0} - a
+        \]
+        with such $n$ we have $\exp\left(x - \frac{1}{n}\right) > \exp x - (\exp x - a) = a \implies x - \frac{1}{n}$ is an upper bound for $X$. Contradicting $x$ was the supremum.
+        So $\exp(x) > a$ is not true ($\exp(x) \leq a$).
+    \end{proof}
+\end{theorem}
+
+\begin{definition}
+    The logarithm function
+    \[
+    \log : (0, \infty) \to \R
+    \]
+    defined by
+    $\log x = a$,
+    where $a \in \R$ is such that $\exp(a) = x$.
+\end{definition}
+
+For $a > 0$ and $x \in \R$ define
+\[
+a ^ x = \exp(x \cdot \log a).
+\]
+For $a > 0, a \neq 1$ define $\log_a x = \frac{\log x}{\log a}$
+
+\begin{proposition}
+    Let $a, b > 0$ with $b \neq 1$ and $x, y \in \R$.
+    Then
+    \begin{enumerate}[label = (\alph*)]
+        \item $a ^ {x + y} = a ^ x \cdot a ^ y$
+        \item $(a ^ x) ^ y = a ^ {x \cdot y}$
+        \item $\log_b(xy) = \log_b x + \log_b y$ for $x, y > 0$
+        \item $\log_b(x ^ y) = y \cdot \log_b(x)$ for $x > 0$
+    \end{enumerate}
+\end{proposition}
+
+\begin{lemma}
+    Let $x \in (0, \infty)$.
+    Then 
+    \[
+    \frac{x - 1}{x} \leq \log(x) \leq x - 1.
+    \]
+    \begin{proof}
+        
+    \end{proof}
+\end{lemma}
+
+\begin{example}
+    For $k \in \N$ we have
+    \[
+    \lim_{n \to \infty}\frac{n ^ k}{e ^ n} = 0.
+    \]
+    \begin{proof}
+        "Exponentials beat powers"
+        \[
+        e ^ n \geq \left(1 + \frac{n}{k + 1}\right) ^ {k + 1} \geq \frac{n ^ {k + 1}}{(k + 1) ^ {k + 1}}
+        \]
+        This is the last term of the binomial theorem.
+        Now
+        \[
+        0 \leq \frac{n ^ k}{e ^ n} \leq \frac{n ^ k(k + 1) ^ {k + 1}}{n ^ {k + 1}} = \frac{(k + 1) ^ {k + 1}}{n} \to 0.
+        \]
+        
+        "Powers beat logarithms"
+        \[
+        \lim_{n \to \infty}\frac{\log(n)}{\sqrt[k]{n}} = \lim_{m \to \infty}\frac{\log(m ^ k)}{m} = \lim_{m \to \infty}k \cdot \frac{\log m}{m} = \lim_{\ell \to \infty}k \cdot \frac{\ell}{e ^ \ell} = 0.
+        \]
+        $m = \sqrt[k]{n}$,
+        $\ell = \log m$.
+    \end{proof}
+\end{example}
+
+\subsection{The Bolzano-Weierstrass Theorem}
+\begin{definition}
+    Let $\seq$ be a sequence.
+    A subsequence of $\seq$ is a sequence $(x_{n_j})_{j \in \N}$ with
+    $n_1 < n_2 < n_3 < \dotsi$,
+    $n_j$ is strictly monotonically increasing.
+\end{definition}
+
+\begin{example}
+    Let $x_n = (-1) ^ n\left(1 - \frac{1}{n}\right)$
+    look at subsequence $x_{2n} = 1 - \frac{1}{2n}$,
+    or $x_{2n + 1} = -\left(1 - \frac{1}{2n + 1}\right)$,
+    or $x_{n ^ 2}$
+\end{example}
+
+\begin{proposition}
+    Let $\seq$ be a convergent sequence with $\displaystyle\lim_{n \to \infty}x_n = x$.
+    If $(x_{n_j})_{j \in \N}$ is a subsequence,
+    then this is also convergent with $\displaystyle\lim_{j \to \infty}x_{n_j} = x$.
+    \begin{proof}
+        
+    \end{proof}
+\end{proposition}
+
+\begin{lemma}
+    Every real sequence $\seq$ contains a subsequence which is either increasing or decreasing.
+    \begin{proof}
+        Given a sequence $\seq$,
+        call $n_0 \in \N$ a peak index,
+        if $x_{n_0} \geq x_n$ for all $n > n_0$.
+        Assume,
+        our sequence has infinitely many peak indices
+        $n_1 < n_2 < n_3 < \dotsi$,
+        $x_{n_1} \geq x_{n_2} \geq x_{n_3} \geq x_{n_4} \geq \dotsi$ which is the required subsequence.
+        Otherwise only finitely many peak indices.
+        $n_1 < n_2 < \dotsi < n_k$ look at $n_{k + 1}$ it is not a peak index.
+        So there is $n_{k + 2}$ with $x_{n_k + 1} < x_{n_k + 2}$
+        $n_{k + 2}$ is also not a peak index,
+        so there is $n_{k + 3} > n_{k + 2}$,
+        $x_{n_k + 2} < x_{n_k + 3}$.
+        Required subsequence $(x_{n_k + j})_{j \in N}$
+    \end{proof}
+\end{lemma}
+
+\begin{theorem}[Bolzano-Weierstrass]\label{analy:thm:bolzanoweierstrass}
+    Let $\seq$ be a bounded sequence.
+    Then $\seq$ has a convergent subsequence.
+    \begin{proof}
+        Let $(x_{n_j})_{j \in \N}$ be a subsequence which is monotonically increasing or decreasing.
+        This is also bounded.
+        By \autoref{analy:thm:boundmonoincseqconv} $(x_{n_j})_{j \in \N}$ is convergent.
+    \end{proof}
+\end{theorem}
+
+\subsection{Lim sup and Lim inf}
+Given a bounded sequence $\seq$ define two
+(related)
+sequences $\seq[\overline{x}]$ and $\seq[\underline{x}]$ as follows let
+\begin{align*}
+    \overline{x_n} &= \sup\{x_m \in \R\,|\,m \geq n\} \\
+    \underline{x_n} &= \inf\{x_m \in \R\,|\,m \geq n\}
+\end{align*}
+
+\begin{lemma}
+    Let $\seq$ be a bounded sequence.
+    Then $\seq[\overline{x}]$ is monotonically decreasing and bounded,
+    and $\seq[\underline{x}]$ is monotonically increasing and bounded.
+    Furthermore
+    \[
+    \lim_{n \to \infty}\underline{x_n} \leq \lim_{n \to \infty}\overline{x_n}.
+    \]
+    \begin{proof}
+        $\seq$ is bounded,
+        so there is $C \in \R$ with $-C \leq x_n \leq C$ for all $n \in \N$.
+        Define $X_n = \{x_m \in \R\,|\, m \geq n\} \subseteq [-C, C]$ bounded,
+        non-empty set.
+        Infimum and supremum exist,
+        and $-C \leq \underline{x_n} \leq \overline{x_n} \leq C$.
+        both sequences are bounded.
+        $X_{n + 1} \subset X_n \implies \overline{x_n}$ is an upper bound for $X_{n + 1} \implies \overline{x_{n + 1}} \leq \overline{x_n}$ for all $n \in \N$.
+        Similarly,
+        $\underline{x_n}$ is a lower bound for $X_{n + 1} \implies \underline{x_n} \leq \underline{x_{n + 1}}$ for all $n \in \N$ which implies $\overline{x_n} - \underline{x_n} \geq 0$.
+        Taking limits gives
+        \[
+        \lim\overline{x_n} - \lim\underline{x_n} \geq 0.
+        \]
+    \end{proof}
+\end{lemma}
+
+\begin{example}
+    (a) let $x_n (-1) ^ n \left(1 + \frac{1}{n}\right)$
+    let $n \in \N$ be even,
+    then
+    \[
+    x_n = 1 + \frac{1}{n}, x_{n + 1} = -1 - \frac{1}{n + 1}, x_{n + 2} = 1 + \frac{1}{n + 2}, \dotsc.
+    \]
+    \[
+    \overline{x_n} = \sup\left\{1 + \frac{1}{n}, -1 - \frac{1}{n + 1}, 1 + \frac{1}{n + 2}, \dotsc\right\} \implies \overline{x_n} = 1 + \frac{1}{n}
+    \]
+    $n$ is odd
+    \[
+    \overline{x_n} = \sup\left\{-1 - \frac{1}{n}, 1 + \frac{1}{n + 1}, -1 - \frac{1}{n + 2}, \dotsc\right\} \implies \overline{x_n} = 1 + \frac{1}{n + 1}
+    \]
+    Note $1 \leq x_n \leq 1 + \frac{1}{n}$ for all $n \in \N$.
+    By \autoref{analy:thm:squeezethm} $\lim_{n \to \infty}\overline{x_n} = 1$
+    (b) $y_n = (-1) ^ n(1 - \frac{1}{n})$
+    Hence
+    \[
+    \overline{y_n} = \sup\{1 - \frac{1}{n}, -1 + \frac{1}{n + 1}, 1 - \frac{1}{n + 2}, \dotsc\} = 1.
+    \]
+    also for $n$ odd
+\end{example}
+
+\begin{definition}
+    Let $\seq$ be a bounded sequence.
+    The limes superior of $\seq$ is defined as
+    \[
+    \limsup_{n \to \infty}{x_n} = \lim_{n \to \infty}\overline{x}_n = \inf_{n \geq 1}\{\sup{\{x_m\,|\, m \geq n\}}\}.
+    \]
+    The lines inferior of $\seq$ is defined as
+    \[
+    \liminf_{n \to \infty}{x_n} = \lim_{n \to \infty}{\underline{x}_n} = \sup_{n \geq 1}{\{\inf{\{x_m\,|\, m \geq n\}}\}}.
+    \]
+\end{definition}
+
+\begin{example}
+    \begin{enumerate}[label = (\alph*)]
+        \item $x_n = (-1) ^ n\left(1 + \frac{1}{n}\right)$
+        $1 \leq \overline{x}_n \leq 1 + \frac{1}{n}$ which shows $\limsup_{n \to \infty}{x_n} = 1$,
+        similarly
+        $-1 - \frac{1}{n} \leq \underline{x}_n \leq -1$ which shows $\liminf_{n \to \infty}{x_n} = -1$.
+        \item $y_n = (-1) ^ n \left(1 - \frac{1}{n}\right)$
+        $\overline{y}_n = 1$ for all $n \in \N$,
+        $\underline{y}_n = -1$ for all $n \in \N$,
+        hence
+        $\limsup{y_n} = 1$ and $\liminf{y_n} = -1$.
+        
+    \end{enumerate}
+\end{example}
+
+\begin{theorem}
+    Let $\seq$ be a bounded sequence.
+    \begin{enumerate}[label = \alph*)]
+        \item There is a subsequence $(x_{n_j})_{j \in \N}$ with
+        \[
+        \lim_{j \to \infty}x_{n_j} = \limsup_{n \to \infty}{x_n}.
+        \]
+        \item There is a subsequence $(x_{n_k})_{k \in \N}$ with
+        \[
+        \lim_{k \to \infty}x_{n_k} = \liminf_{n \to \infty}{x_n}.
+        \]
+        \item If $(x_{n_j})_{j \in \N}$ is a convergent subsequence,
+        then
+        \[
+        \liminf_{n \to \infty}{x_n} \leq \lim_{j \to \infty}{x_{n_j}} \leq \limsup_{n \to \infty}{x_n}
+        \]
+    \end{enumerate}
+\end{theorem}
+
+\subsection{Cauchy Sequence}
+\begin{definition}
+    A sequence $\seq$ is called a Cauchy sequence,
+    if for every $\varepsilon > 0$ there exists $n_0 \in \N$ such that
+    \[
+    |x_m - x_n| < \varepsilon\qquad\forall n, m \geq n_0.
+    \]
+\end{definition}
+
+\begin{theorem}\label{analy:thm:cauchyisbounded}
+    Let $\seq$ be a Cauchy sequence.
+    Then $\seq$ is bounded.
+    \begin{proof}
+        
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}
+    Let $\seq$ be a convergent sequence.
+    Then $\seq$ is a Cauchy sequence.
+    \begin{proof}
+        
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}
+    Let $\seq$ be a Cauchy sequence.
+    Then $\seq$ is a convergent sequence.
+    \begin{proof}
+        By \autoref{analy:thm:cauchyisbounded} $\seq$ is a bounded sequence.
+        By \autoref{analy:thm:bolzanoweierstrass},
+        there is a convergent subsequence $(x_{n_j})_{j \in \N}$.
+        Let $x = \lim_{j \to \infty}x_{n_j}$.
+        So given $\varepsilon > 0$,
+        there is a $j_0 \in \N$ with
+        \[
+        |x_{n_j} - x| < \frac{\varepsilon}{2}\qquad\forall j \geq j_0.
+        \]
+        Since $\seq$ is a Cauchy sequence,
+        there is an $n_0 \in \N$ with
+        \[
+        |x_n - x_m| < \frac{\varepsilon}{2}\qquad\forall n, m \geq n_0.
+        \]
+        Now
+        \begin{align*}
+            |x_n - x| &= |x_n - x_{n_j} + x_{n_j} - x| \\
+            &\leq |x_n - x_{n_j}| + |x_{n_j} - x|.
+        \end{align*}
+        Need $j \geq j_0$ and $n_j \geq n_0$
+        (just choose $j$ large enough).
+        Then $|x_n - x| < \frac{\varepsilon}{2} + \frac{\varepsilon}{2} = \varepsilon$ for all $n \geq n_0$.
+    \end{proof}
+\end{theorem}
+
+\begin{example}
+    Let $a, c > 0$ and $\seq[u]$ given by $u_1 = c$ and
+    \[
+    u_{n + 1} = \frac{1}{2}\left(u_n + \frac{a}{u_n}\right)\text{ for } n \geq 1.
+    \]
+    Start with
+    \begin{align*}
+        u_{n + 2} - u_{n + 1} &= \frac{1}{2}\left(u_{n + 1} + \frac{a}{u_{n + 1}}\right) - \frac{1}{2}\left(u_{n} + \frac{a}{u_{n}}\right) \\
+        &= \frac{1}{2}\left(u_{n + 1} - u_n + \frac{au_n}{u_{n + 1}u_n} - \frac{au_{n + 1}}{u_{n + 1}u_n}\right) \\
+        &= \frac{1}{2}(u_{n + 1} - u_n)\left(1 - \frac{a}{u_nu_{n + 1}}\right)
+        \intertext{}
+    \end{align*}
+    We want $\left|1 - \frac{a}{u_nu_{n + 1}}\right| < 1$ since then $|u_{n + 2} - u_{n + 1} < \frac{1}{2}|u_{n + 1} - u_n|$
+    \begin{align*}
+        u_nu_{n + 1} &= \frac{u_n}{2}\left(u_n + \frac{a}{u_n}\right) \\
+        &= \frac{u_n ^ 2}{2} + \frac{a}{2} \\
+        &> \frac{a}{2} \\
+        &> 0
+    \end{align*}
+    which implies $0 < \frac{a}{u_nu_{n + 1}} < 2 \implies \left|1 - \frac{a}{u_nu_{n + 1}}\right| < 1$.
+    Inductively
+    \[
+    |u_{n + 2} - u_{n + 1}| < \frac{1}{2 ^ n}\overbrace{|u_2 - u_1|}^{\in \R}
+    \]
+    \[
+    |u_n - u_m|
+    \]
+    with $n, m \geq n_0$.
+    Assume $n > m \geq n_0 \geq 2$
+    \begin{align*}
+        |u_n - u_m| &= |u_n - u_{n - 1} + u_{n - 1} - \dotsc + u_{m + 1} - u_m| \\
+        &\leq |u_n - u_{n - 1}| + |u_{n - 1} - u_{n - 2}| + \dotsc + |u_{m + 1} - u_m| \\
+        &< \underbrace{\left(\frac{1}{2 ^ {n - 2}} + \frac{1}{2 ^ {n - 3}} + \dotsi + \frac{1}{2 ^ {m - 1}}\right)}_{< \frac{1}{2 ^ {m - 2}}}|u_2 - u_1|.
+    \end{align*}
+    But $|u_n - u_m| < \frac{1}{2 ^ {m - 2}}|u_2 - u_1|$,
+    where $|u_2 - u_1|$ is constant.
+    Let $\varepsilon > 0$ choose $n_0$ such that $\frac{1}{2 ^ {n_0 - 2}}\cdot |u_2 - u_1| < \varepsilon$.
+    Hence $\seq[u]$ is a Cauchy sequence.
+\end{example}
+
+\newpage
+
+\section{Series}
+
+\subsection{Fundamental notions and properties of series}
+
+\begin{definition}
+    Let $\dseq[k]{a}$ be a sequence of real numbers.
+    Then the sequence of partial sums $\dseq{S}$ is defined as
+    \[
+    S_n = \sum_{k = 1}^{n}a_k.
+    \]
+    If the sequence of partial sums converges,
+    we say the series $\sum_{k = 1}^{\infty}a_k$ is convergent,
+    and then $\sum_{k = 1}^{\infty}a_k = \lim_{n \to \infty}S_n$.
+    Otherwise,
+    we say $\sum_{k = 1}^{\infty}a_k$ is divergent.
+\end{definition}
+
+\begin{remark}
+    Series can start with a summand different from $a_1$,
+    e.g.
+    $\infsum[k = 0]a_k$ or $\infsum[k = 3]a_k$.
+    Make sure all the terms are defined.
+\end{remark}
+
+\[
+\infsum a_k\text{ converges } \iff \infsum[k = N]a_k\text{ converges } (N \in \N).
+\]
+\begin{example}[Geometric Series]
+    For $k \in \N_0$ let $a_k = q ^ k$ with $q \in \R$.
+    Starts with $a_0 = 1$.
+
+    \[
+    S_n = \sum_{k = 0}^{n}q ^ k = \frac{1 - q ^ {n + 1}}{1 - q}\text{ for } q \neq 1.
+    \]
+    Induction:
+    $n = 0$
+    \[
+    S_0 = 1 = \frac{1 - q}{1 - q}
+    \]
+    Assume true for $n$, $n \geq 0$,
+    \begin{align*}
+        S_{n + 1} &= S_n + q ^ {n + 1} \\
+        &= \frac{1 - q ^ {n + 1}}{1 - q} + \frac{q ^ {n + 1} - q ^ {n + 2}}{1 - q} \\
+        &= \frac{1 - q ^ {n + 2}}{1 - q}.
+    \end{align*}
+    For $|q| < 1$,
+    $S_n$ converges to $\frac{1}{1 - q}$.
+
+    For $|q| > 1$,
+    $q ^ {n + 1}$ is unbounded,
+    and so is $S_n$,
+    $(S_n)$ is divergent.
+
+    $q = -1$,
+    $S_{2n} = 1, S_{2n + 1} = 0$ also divergent.
+    
+    $q = 1$,
+    $S_n = n + 1$ is unbounded,
+    so diverges.
+
+    For $|q| < 1$ we have
+    \[
+    \infsum[k = 0]q ^ k = \frac{1}{1 - q}
+    \]
+    $q = \frac{1}{2}$:
+    \[
+    1 + \frac{1}{2} + \frac{1}{4} + \frac{1}{8} + \dotsi = \frac{1}{1 - \frac{1}{2}} = 2.
+    \]
+\end{example}
+
+\begin{example}
+    For $k \in \N$ let
+    \[
+    a_k = \frac{1}{k(k + 1)} = \frac{1}{k} - \frac{1}{k + 1}.
+    \]
+    \begin{align*}
+        S_n &= \sum_{k = 1}^{n}\frac{1}{k(k + 1)} \\
+        &= \sum_{k = 1}^{n}\left(\frac{1}{k} - \frac{1}{k + 1}\right) \\
+        &= 1 - \frac{1}{2} + \frac{1}{2} - \frac{1}{3} + \frac{1}{3} - \frac{1}{4} + \dotsi + \frac{1}{n} - \frac{1}{n + 1} \\
+        &= 1 - \frac{1}{n + 1}
+    \end{align*}
+    So
+    \[
+    \infsum\frac{1}{k(k + 1)} = \lim_{n \to \infty}1 - \frac{1}{n + 1} = 1.
+    \]
+\end{example}
+
+\begin{lemma}
+    If $\infsum[k = 0]a_k$ is convergent,
+    then
+    \[
+    \lim_{k \to \infty}a_k = 0.
+    \]
+    \begin{proof}
+        Let $S_n = \sum_{k = 0}^{n}a_k$,
+        then $\lim_{n \to \infty}S_n = s$ for some $s \in \R$.
+        Write $a_n = S_n - S_{n - 1}$ for $n \geq 1$.
+        By COLT $\lim_{n \to \infty}a_n = s - s = 0$.
+    \end{proof}
+\end{lemma}
+This is a criterion for divergence of a series,
+it is not a criterion for convergence of a series.
+
+\begin{example}[Harmonic Series]
+    This is the series
+    \[
+    \infsum\frac{1}{k}.
+    \]
+    Note $\frac{1}{k} \to 0$ as $k \to \infty$,
+    as we shall see $S_n$ is unbounded.
+    \begin{align*}
+    S_1 &= 1 \\
+    S_2 &= 1 + \frac{1}{2} \\
+    S_4 &= 1 + \frac{1}{2} + \frac{1}{3} + \frac{1}{3} + \frac{1}{4} \geq 1 + \frac{1}{2} + \left(\frac{1}{4} + \frac{1}{4}\right) = 1 + 2 \cdot \frac{1}{2} \\
+    S_8 &= 1 + \frac{1}{2} + \frac{1}{3} + \frac{1}{3} + \frac{1}{4} + \frac{1}{5} + \frac{1}{6} + \frac{1}{7} + \frac{1}{8} \geq 1 + 3 \cdot \frac{1}{2} \\
+    \vdots \\
+    S_{2 ^ n} &\geq 1 + \frac{n}{2} \implies \text{the sequence of partial sums is divergent}.
+    \end{align*}
+    The Harmonic Series is divergent.
+\end{example}
+
+\begin{theorem}[COLT for series]
+    Assume the series $\infsum[k = 0]a_k$ and $\infsum[k = 0]b_k$ are convergent with limit $a$ and $b$
+    (respectively).
+    Then
+    \begin{enumerate}[label = (\alph*)]
+        \item
+        \[
+        \infsum[k = 0](a_k + b_k) \text{ converges to } a + b
+        \]
+        \item
+        \[
+        \infsum[k = 0]c\cdot a_k\text{ converges to } c \cdot a, \text{ where } c \in \R.
+        \]
+    \end{enumerate}
+    \begin{proof}
+        Use COLT for sequences on partial sums.
+    \end{proof}
+\end{theorem}
+
+\subsection{Convergence Criteria}
+\begin{theorem}[Comparison Test]
+    Let $N \in \N$ let $(a_k)_{k \in \N_0}$, $(b_k)_{k \in \N_0}$ sequences with
+    \[
+    0 \leq a_k \leq b_k \text{ for } k \geq N.
+    \]
+    \begin{enumerate}[label = (\alph*)]
+        \item If $\infsum[k = 0]b_k$ is convergent,
+        then $\infsum[k = 0]a_k$ is convergent.
+        \item If $\infsum[k = 0]a_k$ is divergent,
+        then $\infsum[k = 0]b_k$ is divergent.
+    \end{enumerate}
+    \begin{proof}
+        Use $\infsum[k = 0]a_k$ is convergent if and only if $\infsum[k = N]a_k$ is convergent.
+
+        For $n \geq N$ let $s_n = \sum_{k = N}^{n}a_k$ and $t_n = \sum_{k = N}^{n}b_k$.
+        Theses are monotonically increasing.
+
+        If $\infsum[k = 0]b_k$ is convergent so is $(t_n)_{n \geq N}$ to $t$.
+        \[
+        s_n \leq t_n \leq t.
+        \]
+        The sequence $s_n$ is monotonically increasing by $t$,
+        so is convergent by Thm 2.16.
+
+        (b)
+        Since $s_n$ is monotonically increasing,
+        divergence means $(s_n)$ is unbounded,
+        but then $(t_n)$ is also unbounded.
+    \end{proof}
+\end{theorem}
+
+\begin{example}
+    \[
+    \infsum[n = 1]\frac{1}{n ^ 2}.
+    \]
+    \begin{align*}
+        \frac{1}{n ^ 2} &= \frac{2}{n ^ 2 + n ^ 2} \\
+        &\leq \frac{2}{n ^ 2 + n} \\
+        &= \frac{2}{n(n + 1)}.
+    \end{align*}
+    \[
+    \infsum[n = 1]\frac{2}{n(n + 1)}\text{ converges to $2$ by COLT and by the example}.
+    \]
+    By comparison test $\infsum[n = 1]\frac{1}{n ^ 2}$ also converges.
+\end{example}
+
+\begin{theorem}
+    Let $\alpha \in \R$.
+    Then
+    \[
+    \infsum\frac{1}{k ^ \alpha}\text{ is convergent, if and only if $\alpha > 1$}.
+    \]
+    \begin{proof}
+        For $\alpha = 1$ we know it is divergent,
+        by comparison test we also get divergence for $\alpha \leq 1$.
+
+        For $\alpha > 1$ we need convergence.
+        Look at sequence of partial sums $\displaystyle S_n = \sum_{k = 1}^{n}\frac{1}{k ^ \alpha}$.
+        This sequence is monotonically increasing.
+        \begin{align*}
+            S_{2n + 1} &= \sum_{k = 1}^{2n + 1}\frac{1}{k ^ \alpha} \\
+            &= 1 + \sum_{k = 1}^{n}\left(\frac{1}{(2k) ^ \alpha} + \frac{1}{(2k + 1) ^ \alpha}\right) \\
+            &\leq 1 + \sum_{k + 1}^{n}\frac{2}{(2k) ^ \alpha} \\
+            &= 1 + \sum_{k = 1}^{n}\frac{2 ^ {1 - \alpha}}{k ^ \alpha} \\
+            &= 1 + 2 ^ {1 - \alpha}\sum_{k = 1}^{n}\frac{1}{k ^ \alpha} \\
+            &\leq 1 + 2 ^ {1 - \alpha}S_n \\
+            &\leq 1 + 2 ^ {1 - \alpha}S_{2n + 1}
+        \end{align*}
+        So
+        \begin{align*}
+            S_{2n + 1} \leq 1 + \underbrace{2 ^ {1 - \alpha}}_{< 1}S_{2n + 1} &\iff (1 - 2 ^ {1 - \alpha})S_{2n + 1} \leq 1 \\
+            &\iff S_{2n + 1} \leq \frac{1}{1 - 2 ^ {1 - \alpha}}.
+        \end{align*}
+        Since the sequence is monotonically increasing,
+        it is now also bounded.
+        By \autoref{analy:thm:boundmonoincseqconv} the sequence of partial sums is convergent.
+        
+        Hence $\displaystyle\infsum[n = 1]\frac{1}{n ^ \alpha}$ is convergent for $\alpha > 1$.
+    \end{proof}
+\end{theorem}
+
+\begin{example}\phantom{}
+    \begin{enumerate}[label = \alph*)]
+        \item $a_k = \frac{\sqrt{k + 1}}{k ^ 2}$
+        \[
+        a_n = \frac{\sqrt{k ^ 2 + 1}}{k ^ 2} \geq \frac{\sqrt{k ^ 2}}{k ^ 2} = \frac{1}{k}
+        \]
+        By comparison theorem
+        \[
+        \infsum a_k\text{ is also divergent}.
+        \]
+        \item $b_k = \frac{\sqrt{k ^ 2 - 1}}{k ^ 2}$
+        \begin{align*}
+        b_k &= \frac{\sqrt{k ^ 2 - 1}}{k ^ 2} \leq \frac{\sqrt{k ^ 2}}{k ^ 2} = \frac{1}{k}\text{ doesn't help.} \\
+        (\text{for $k \geq 2$}) \\
+        &\geq \frac{\sqrt{k ^ 2 - \frac{1}{2}k ^ 2}}{k ^ 2} = \frac{1}{\sqrt{2}} \frac{k}{k ^ 2} = \frac{1}{\sqrt{2}}\frac{1}{k}
+        \end{align*}
+        this is a divergent series.
+        Again by the comparison theorem
+        \[
+        \infsum b_k \text{ is also divergent}.
+        \]
+        \item $c_k = \frac{\sqrt{k ^ 2 - k + 2}}{4k ^ 2 - 2}$
+        \begin{align*}
+            c_k &= \frac{\sqrt{k ^ 2 - k + 2}}{4k ^ 2 - 2} \\
+            &= \frac{k ^ {\frac{3}{2}}\sqrt{1 - \frac{1}{k ^ 2} + \frac{2}{k ^ 3}}}{k ^ 2\left(4 - \frac{2}{k ^ 2}\right)} \\
+            &\geq \frac{1}{k ^ {\frac{1}{2}}} \cdot \frac{\sqrt{\frac{1}{2}}}{4}.
+        \end{align*}
+        By the comparison test
+        \[
+        \infsum c_k\text{ diverges}.
+        \]
+        \item $d_k = \frac{(2k ^ 2 - 2k + 9)(k ^ 2 - 4k + 3)}{(k ^ 3 + 6k - 1) ^ 2}$
+        \begin{align*}
+            d_k &= \frac{(2k ^ 2 - 2k + 9)(k ^ 2 - 4k + 3)}{(k ^ 3 + 6k - 1) ^ 2} \\
+            &\leq \frac{(2k ^ 2 + 9)(k ^ 2 + 3)}{k ^ 6} \\
+            &\leq \frac{11k ^ 2 \cdot 4k ^ 2}{k ^ 6} \\
+            &= 44 \cdot \frac{1}{k ^ 2}.
+        \end{align*}
+        By the comparison test
+        \[
+        \infsum d_k\text{ converges}.
+        \]
+        \item $e_k = \frac{k + 1}{\sqrt{k ^ 3 + 1} \cdot e ^ k}$
+        \[
+        e_k = \frac{k + 1}{\sqrt{k ^ 3 + 1}\cdot e ^ k} \leq \frac{1}{e ^ k} = \left(\frac{1}{e}\right) ^ k
+        \]
+        which gives a converging geometric series.
+
+        By the comparison test,
+        this is convergent.
+    \end{enumerate}
+\end{example}
+
+\begin{definition}
+    A series $\infsum a_k$ is called alternating,
+    if
+    \[
+    a_{2k} \geq 0\text{ and } a_{2k - 1} \leq 0\text{ for all $k \in \N$}
+    \]
+    or if 
+    \[
+    a_{2k} \leq 0\text{ and } a_{2k - 1} \geq 0\text{ for all $k \in \N$}.
+    \]
+\end{definition}
+
+\begin{theorem}[Alternating Sign Test]
+    Let $\dseq[k]{a}$ be a monotonically decreasing sequence of positive numbers with $\lim_{k \to \infty}a_k = 0$.
+    Then the alternating series $\infsum(-1) ^ {k + 1}a_k$ is convergent.
+
+    For the sequence of partial sums $\dseq{s}$ we have
+    \[
+    S_2 \leq S_4 \leq \dotsi \leq S_{2n} \leq \dotsi \leq \infsum(-1) ^ {k + 1}a_k \leq \dotsi \leq S_{2n - 1} \leq \dotsi \leq S_3 \leq S_1
+    \]
+    and
+    \[
+    \left|S_n - \infsum(-1) ^ {k + 1}a_k\right| \leq a_{n + 1}.
+    \]
+    \begin{proof}
+        Since the $a_k$ are monotonically decreasing,
+        we have $a_k - a_{k + 1} \geq 0$.
+        Hence $S_{2n + 2} = S_{2n} + a_{2n + 1} - a_{2n + 2} \geq S_{2n}$.
+        
+        Similarly
+        \[
+        S_{2n + 1} = S_{2n - 1} - a_{2n} + a_{2n + 1} \leq S_{2n - 1}
+        \]
+        so $(S_{2n})_{n \in \N}$ monotonically increasing,
+        and $(S_{2n - 1})_{n \in \N}$ monotonically decreasing.
+        We get
+        \[
+        S_2 \leq S_{2n} \leq S_{2n - 1} \leq S_1
+        \]
+        sequences are bounded,
+        hence convergent.
+        Write $S ^ e = \lim_{n \to \infty}S_{2n}$
+        $S ^ o = \lim_{n \to \infty}S_{2n - 1}$.
+        Note $S_{2n} = S_{2n - 1} - a_{2n}$
+        that is,
+        $a_{2n} = S_{2n - 1} - S_{2n}$
+        which converges to $0 = S ^ o - S ^ e$
+        and by COLT
+        $S ^ o = S ^ e$.
+
+        Let $\varepsilon > 0$.
+        We have $n ^ e \in \N$ with
+        \begin{equation}\tag{*}
+            |S_{2n} - s| < \varepsilon
+        \end{equation}
+        whenever $2n \geq n ^ e$ and there exist $n ^ o \in \N$ with
+        \begin{equation}\tag{**}
+            |S_{2n - 1} - s| < \varepsilon
+        \end{equation}
+        whenever $2n - 1 \geq n ^ o$.
+        Take $n_0 = \max\{n ^ e, n ^ o\}$.
+        For $n \geq n_0$ we get
+        \[
+        |S_n - s| < \varepsilon,
+        \]
+        since $n$ is either even or odd,
+        but since $n \geq n ^ e$ and $n \geq n ^ o$ we can use either inequality (*) or (**).
+    \end{proof}
+\end{theorem}
+
+\begin{example}
+    \begin{enumerate}[label = (\alph*)]
+        \item The series
+        \[
+        \sum_{k = 1}^{a}\frac{(-1) ^ {k + 1}}{k}
+        \]
+        $a_k = \frac{1}{k} \to 0$.
+        Check that it is monotonically decreasing.
+        \[
+        \frac{1}{k + 1} < \frac{1}{k} \iff k < k + 1.
+        \]
+        \item
+        \[
+        \infsum[k = 1]\frac{(-1) ^ k}{\sqrt{k}}\text{ converges by alternating sign test (and COLT)}.
+        \]
+        \[
+        \infsum[k = 1]\frac{(-1) ^ k}{\sqrt{k}} = -\infsum[k = 1]\frac{(-1) ^ {k + 1}}{\sqrt{k}}.
+        \]
+        Monotonically decreasing
+        \[
+        \frac{1}{\sqrt{k + 1}} \leq \frac{1}{\sqrt{k}} \iff k \leq k + 1
+        \]
+        and $\frac{1}{\sqrt{k}} \to 0$.
+        \item
+        \[
+        \infsum[k = 1]\left(\frac{1}{k} + \frac{(-1) ^ {k + 1}}{\sqrt{k}}\right)
+        \]
+        is an alternating series.
+        Note $\frac{1}{k} < \frac{1}{\sqrt{k}}$ for $k \geq 2$.
+        Odd $k$ are positive and even $k$ are negative.
+        
+        Series is $\infsum[k = 1](-1) ^ {k + 1}\underbrace{\left|\frac{1}{k} + \frac{(-1) ^ {k + 1}}{\sqrt{k}}\right|}_{\coloneqq b_k}$.
+        $b_k \leq \frac{1}{k} + \frac{1}{\sqrt{k}} \to 0$.
+        Note sequence is not monotonically decreasing.
+        Can't use the alternating sign test here.
+        Series is not convergent.
+    \end{enumerate}
+\end{example}
+
+\subsection{Absolute Convergence}
+\begin{definition}
+    Let $\displaystyle\infsum[k = 1]a_k$ be a series,
+    we call it absolutely convergent,
+    if $\displaystyle\infsum[k = 1]|a_k|$ is convergent.
+\end{definition}
+
+\begin{example}
+    \[
+    \infsum[k = 1]\frac{(-1) ^ {k + 1}}{k}
+    \]
+    for absolute convergence,
+    look at
+    \[
+    \infsum[k = 1]\frac{1}{k},
+    \]
+    which is not convergent.
+    This series is not absolutely convergent.
+\end{example}
+
+\begin{example}
+    \[
+    \infsum[k = 1]\frac{(-1) ^ {k + 1}}{k ^ 2}
+    \]
+    is absolutely convergent because $\infsum[k = 1]\frac{1}{k ^ 2}$ is convergent.
+\end{example}
+
+\begin{theorem}
+    Let $\infsum[k = 1]a_k$ be absolutely convergent.
+    Then the series is convergent.
+    \begin{proof}
+        We have $\infsum[k = 1]|a_k|$ is convergent.
+        By COLT
+        \[
+        \infsum[k = 1]2|a_k|\text{ is convergent}.
+        \]
+        We have $-|a_k| \leq a_k \leq |a_k|$.
+        So $0 \leq |a_k| + a_k \leq 2|a_k|$.
+        By the comparison test,
+        \[
+        \infsum[k = 1](a_k + |a_k|)
+        \]
+        is convergent.
+        By COLT
+        \[
+        \infsum[k = 1]a_k = \infsum[k = 1]((a_k + |a_k|) - |a_k|)
+        \]
+        is convergent.
+        Additionally,
+        \[
+        \infsum[k = 1]a_k \leq \infsum[k = 1]|a_k|
+        \]
+        we have
+        \[
+        \sum_{k = 1}^{n}a_k \leq \sum_{k = 1}^{n}|a_k|.
+        \]
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}[Ratio Test]
+    Let $\dseq[k]{a}$ be a sequence with $a_k \neq 0$ for all $k \in \N$ except finitely many.
+    \begin{enumerate}[label = (\alph*)]
+        \item If $\displaystyle\lim_{k \to \infty}\left|\frac{a_{k + 1}}{a_k}\right| < 1$,
+        then the series $\displaystyle\infsum[k = 1]$ is absolutely convergent.
+        \item If $\displaystyle\lim_{k \to \infty}\left|\frac{a_{k + 1}}{a_k}\right| > 1$,
+        then the series $\displaystyle\infsum[k = 1]a_k$ is divergent.
+    \end{enumerate}
+\end{theorem}
+
+\begin{remark}
+    The limit $\displaystyle\lim_{k \to \infty}\left|\frac{a_{k + 1}}{a_k}\right|$ need not exist.
+    But we can still make a conclusion,
+    \begin{enumerate}[label = (\alph*')]
+        \item If $\displaystyle\limsup_{k \to \infty}\left|\frac{a_{k + 1}}{a_k}\right| < 1$,
+        that is $\left|\frac{a_{k + 1}}{a_k}\right| \leq q < 1$ for all finitely many $k$,
+        then the series is absolutely convergent.
+        \item If $\left|\frac{a_{k + 1}}{a_k}\right| \geq 1$ for all but finitely many $k$,
+        then $\displaystyle\infsum[k = 1]a_k$ diverges.
+    \end{enumerate}
+    \begin{proof}
+        Assume (a').
+        There exists $n_0$ with
+        \begin{align*}
+            &\left|\frac{a_{k + 1}}{a_k}\right| \leq q\text{ for all } k \geq n_0 \\
+            &\implies |a_{k + 1}| \leq |a_k|\cdot q \\
+            &\implies |a_{n_0 + j}| \leq |a_{n_0 + j - 1}| \cdot q \leq |a_{n_0 + j - 2}|\cdot q ^ 2 \leq \dotsc \leq |a_{n_0}|q ^ {j}.
+        \end{align*}
+        $0 \leq q < 1$,
+        so
+        \[
+        \infsum[j = 0]|a_{n_0}| \cdot q ^ j = |a_{n_0}|\frac{1}{1 - q}
+        \]
+        \[
+        \infsum[j = 0]|a_{n_0 + j}|
+        \]
+        is convergent by comparison test.
+        \[
+        \infsum[j = 0]|a_{n_0 + j}| = \infsum[k = n_0]|a_k|
+        \]
+        so this is absolutely convergent.
+        Hence $\displaystyle\infsum[k = 1]|a_k|$ is absolutely convergent.
+        
+        \textit{Note:}
+        If $\lim_{k \to \infty}\frac{|a_{k + 1}|}{|a_k|} = q > 1$
+        look at $\varepsilon = q - 1 > 0$.
+        
+        Then we have $n_0 \in \N$ with
+        \[
+        \left|\left|\frac{a_{k + 1}}{a_k}\right| - q\right| < \varepsilon
+        \]
+        for all $k \geq n_0$
+        so
+        \[
+        -\varepsilon < \left|\frac{a_{k + 1}}{a_k}\right| - q < \varepsilon = q - 1
+        \]
+        so
+        \[
+        \left|\frac{a_{k + 1}}{a_k}\right| > 1
+        \]
+        for all $k \geq n_0$.
+        Proof of (b'):
+        
+        There is $n_0 \in \N$ with $\left|\frac{a_{k + 1}}{a_k}\right| \geq 1$ for all $k \geq n_0$
+        which implies $|a_{k + 1} \geq |a_k| > 0$.
+        In particular,
+        $\dseq[k]{a}$ does not converge to $0$,
+        the series is therefore divergent.
+    \end{proof}
+\end{remark}
+
+\begin{theorem}[Root test]
+    For a sequence $\dseq[k]{a}$ set
+    \[
+    a = \limsup_{k \to \infty}\sqrt[k]{|a_k|}
+    \]
+    \begin{enumerate}[label = (\alph*)]
+        \item If $a < 1$,
+        then $\displaystyle\infsum[k = 1]a_k$ is absolutely convergent.
+        \item If $a > 1$,
+        then $\displaystyle\infsum[k = 1]a_k$ is divergent.
+    \end{enumerate}
+    \begin{proof}
+        Assume $a < 1$.
+        Then for all but finitely many $k$ we have
+        \[
+        \sqrt[k]{|a_k|} \leq q < 1
+        \]
+        use $q = \frac{a + 1}{2}$.
+        So for all $k \geq n_0$ we have $|a_k| \leq q ^ k$.
+        By comparison test with the convergent geometric series
+        \[
+        \infsum[k = 1]q ^ k
+        \]
+        we get absolute convergence.
+
+        Assume $a > 1$,
+        then for all but finitely many $k$,
+        $\sqrt[k]{|a_k|} \geq q > 1$.
+        hence for all $k \geq n_1$ $|a_k| \geq q ^ k$.
+        By the comparison test with the diverging geometric series
+        \[
+        \infsum[k = 1]q ^ k
+        \]
+        we get divergence.
+    \end{proof}
+\end{theorem}
+
+\begin{example}
+    Look at $\infsum\frac{1}{n}$,
+    $\infsum\frac{1}{n ^ 2}$.
+    For ratio test,
+    look at
+    \[
+    \frac{\frac{1}{n + 1}}{\frac{1}{n}} = \frac{n}{n + 1} \to 1
+    \]
+    can't say anything.
+    \[
+    \sqrt[n]{\frac{1}{n}}
+    \]
+    $\log\sqrt[n]{\frac{1}{n}} = \frac{1}{n}\log\frac{1}{n} = -\frac{\log n}{n} \to 0$
+    can't say anything
+    \[
+    \frac{\frac{1}{(n + 1) ^ 2}}{\frac{1}{n ^ 2}} = \frac{n ^ 2}{(n + 1) ^ 2} \to 1
+    \]
+    will fail.
+\end{example}
+
+Ratio and root test will fail to give an answer when $a_n = \frac{f(n)}{g(n)}$ with $f$ and $g$ being polynomials.
+
+\begin{example}
+    \begin{enumerate}[label = (\alph*)]
+        \item 
+        \[
+        a_k = \frac{c ^ k}{k!}
+        \]
+        with $c \in \R\setminus\{0\}$
+        \[
+        \left|\frac{a_{k + 1}}{a_k}\right| = \frac{|c| ^ {k + 1}}{(k + 1)!}\frac{k!}{|c| ^ k} = \frac{|c|}{k + 1} \to 0 < 1
+        \]
+        \[
+        \infsum[k = 0]\frac{c ^ k}{k!}
+        \]
+        converges absolutely.
+        \item $b_k = k!c ^ k$ $c \neq 0$
+        Ratio test
+        \[
+        \frac{(k + 1)!|c| ^ {k + 1}}{k!|c| ^ k} = (k + 1)|c| \to \infty
+        \]
+        get divergence.
+        \item 
+        $c_k = kc ^ k$.
+        Ratio test:
+        \[
+        \frac{(k + 1)|c| ^ {k + 1}}{k|c| ^ k} = \frac{k + 1}{k}|c| \to |c|.
+        \]
+        We get absolute convergence for $|c| < 1$ and divergence for $|c| > 1$.
+        \item $d_k = {(c + 3) ^ k}{k ^ 3 \cdot 5 ^ k}$,
+        $c \neq -3$.
+
+        Ratio test
+        \[
+        \frac{|c + 3| ^ {k + 1}}{(k + 1) ^ 3\cdot 5 ^ {k + 1}} \cdot \frac{k ^ 3 \cdot 5 ^ k}{|c + 3| ^ k} = \frac{|c + 3|}{5}\frac{k ^ 3}{(k + 1) ^ 3} \to \frac{|c + 3|}{5}.
+        \]
+        We get absolute convergence for $\frac{|c + 3|}{5} < 1 \iff |c + 3| < 5 \iff c \in (-8, 2)$.
+        Divergence for $c < -8$ and $c > 2$.
+        
+        If $c = 2$,
+        \[
+        d_k = \frac{5 ^ k}{k ^ 3 \cdot 5 ^ k} = \frac{1}{k ^ 3}
+        \]
+        we get absolute convergence.
+
+        If $c = -8$,
+        \[
+        d_k = \frac{(-5) ^ k}{k ^ 3 \cdot 5 ^ k} = \frac{(-1) ^ k}{k ^ 3}
+        \]
+        which is also absolutely convergent.
+        \item $e_k = (2 + (-1) ^ k) \cdot c ^ k$,
+        $c \in \R$.
+        \[
+        \frac{|e_{k + 1}|}{|e_k|} = \frac{(2 + (-1) ^ {k + 1})|c| ^ {k + 1}}{(2 + (-1) ^ k)|c| ^ k} = \frac{2 \pm 1}{2 \mp 1}\cdot |c|
+        \]
+        does not converge.
+        \[
+        \limsup\left|\frac{e_{k + 1}}{e_k}\right| = 3\cdot|c|
+        \]
+        for $|c| < \frac{1}{3}$ we get absolute convergence.
+        If $|c| > 3$ the ratio test gives us divergence.
+
+        Root test 
+        \[
+        \sqrt[k]{|e_k|} = \sqrt[k]{|2 + (-1) ^ k| \cdot |c| ^ k} = |c|\underbrace{\sqrt[k]{2 \pm 1}}_{\to 1}
+        \]
+        \[
+        \limsup_{k \to \infty}\sqrt[k]{|e_k|} = |c|.
+        \]
+        Get absolute convergence for $|c| < 1$ and divergence for $|c| > 1$.
+
+        If $c = 1$,
+        \[
+        e_k = 2 + (-1) ^ k
+        \]
+        does not converge to $0$.
+        We get divergence.
+
+        If $c = -1$,
+        \[
+        e_k = (-1) ^ k \cdot (2 + (-1) ^ k)
+        \]
+        does not converge to $0$.
+        We get divergence.
+    \end{enumerate}
+\end{example}
+
+\subsection{Rearrangements of Series}
+\[
+\infsum\frac{(-1) ^ {k + 1}}{k} = c
+\]
+by the alternating sign test with $c \in \left(\frac{1}{2}, 1\right)$.
+Look at
+\begin{align*}
+    &1 - \frac{1}{2} - \frac{1}{4} + \frac{1}{3} - \frac{1}{6} - \frac{1}{8} + \frac{1}{5} - \frac{1}{10} - \frac{1}{12} + \dotsc \\
+    &= \left(1 - \frac{1}{2}\right) - \frac{1}{4} + \left(\frac{1}{3} - \frac{1}{6}\right) - \frac{1}{8} + \left(\frac{1}{5} - \frac{1}{10}\right) - \frac{1}{12} + \dotsc \\
+    &= \frac{1}{2} - \frac{1}{4} + \frac{1}{6} - \frac{1}{8} + \frac{1}{10} - \frac{1}{12} + \dotsc \\
+    &= \frac{1}{2}\left(1 - \frac{1}{2} - \frac{1}{4} + \frac{1}{3} - \frac{1}{6} - \frac{1}{8} + \frac{1}{5} - \frac{1}{10} - \frac{1}{12} + \dotsc\right) \\
+    &= \frac{c}{2}.
+\end{align*}
+
+\begin{definition}
+    Let $\infsum a_k$ be a series.
+    We say this series is conditionally convergent,
+    if it is convergent,
+    but not absolutely convergent.
+\end{definition}
+
+\begin{example}
+    \[
+    \infsum\frac{(-1) ^ {k + 1}}{k}
+    \]
+    is conditionally convergent,
+    \[
+    \infsum\frac{(-1) ^ {k + 1}}{k ^ 2}
+    \]
+    is not conditionally convergent.
+\end{example}
+
+\begin{theorem}[Riemann Rearrangement Theorem]
+    Let $\infsum a_k$ be a conditionally convergent series,
+    and $L \in \R$.
+    Then there exists a rearrangement
+    \[
+    \sigma : \N \to \N
+    \]
+    (which is injective and surjective)
+    such that the rearranged sum
+    \[
+    \infsum a_{\sigma(k)}
+    \]
+    converges to $L$.
+    Moreover,
+    there is a rearrangement that is divergent.
+    \begin{proof}
+        Let
+        \[
+        a_k^{+} = \frac{|a_k| + a_k}{2} = \begin{cases}
+            |a_k| & \text{if } a_k \geq 0 \\
+            0 & \text{if } a_k < 0.
+        \end{cases}
+        \]
+        Let
+        \[
+        a_k^{-} = \frac{|a_k| - a_k}{2} = \begin{cases}
+            0 & \text{if } a_k \geq 0 \\
+            |a_k| & \text{if } a_k < 0.
+        \end{cases}
+        \]
+        Both $\infsum a_k^{+}$ and $\infsum a_k^{-}$ are divergent:
+        \[
+        a_k = a_k^{+} - a_k^{-}
+        \]
+        \[
+        |a_k| = a_k^{+} + a_k^{-}.
+        \]
+        So if one of them were convergent,
+        so would be the other
+        (If $\infsum a_k^{+}$ is convergent,
+        $a_k^{-} = a_k^{+} - a_k$ and $\infsum a_k^{-}$ is convergent by COLT).
+        If both are convergent,
+        series is absolutely convergent.
+
+        Now let $b_k$ be the $k$th element of the sequence $\seq[a]$ which is $\geq 0$,
+        and $c_k$ is the $k$th element which is $< 0$.
+        Then $\infsum b_k$ and $\infsum c_k$ are also divergent.
+        Note $\sum_{k = 1}^{n}c_k = -\sum_{k = 1}^{k_n}a_k^{-}$
+        $k_n$ the $n$the element which gives $a_{k_n} < 0$.
+
+        Given $L \in \R$,
+        let $n_0$ be the first index with
+        \[
+        \sum_{k = 1}^{n_0}b_k > L
+        \]
+        (if $L < 0,\ n_0 = 0$ will work).
+
+        Now let $n_1$ be the first index such that
+        \[
+        \sum_{k = 1}^{n_0}b_k + \sum_{k = 1}^{n_1}c_k < L.
+        \]
+        Now pick $n_2 > n_1$ such that
+        \[
+        \sum_{k = 1}^{n}b_k + \sum_{k = 1}^{n_1}c_k + \sum_{k = n_0 + 1}^{n_2}b_k > L.
+        \]
+        Continue.
+        We have $\lim b_k = \lim c_k = 0$.
+        and this allows us to get convergence to $L$ with the right arrangement.
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}
+    Let $\infsum a_k$ be an absolutely convergent series and $\sigma : \N \to \N$ be a bijection.
+    Then $\infsum a_{\sigma (k)}$ is also absolutely convergent,
+    and we have
+    \[
+    \infsum a_k = \infsum a_{\sigma(k)}.
+    \]
+    \begin{proof}
+        Look at $s_n = \sum_{k = 1}{n}|a_k|$ monotonically increasing sequence which converges to $a$,
+        and so $s_n \leq a$.
+        For $s'_n = \sum_{k = 1}^{n}|a_{\sigma(k)}| \leq s_m$ where $m = \max\{\sigma(1), \dotsc, \sigma(n)\}$ which implies $s'_n \leq a$ for all $n$,
+        so $\seq[s']$ is a convergent series shows absolute convergence of $\infsum a_{\sigma(k)}$ with limit $a' = \infsum|a_{\sigma(k)}|$.
+        Note that $\infsum|a_k|$ is a rearrangement of $\infsum|a_{\sigma(k)}|$
+        (using $\sigma ^ {-1}$) which implies $a \leq a' \leq a$ which implies $a = a'$.
+
+        Look at $b_k = a_k + |a_k| \geq 0$.
+        Then
+        \[
+        \infsum a_k + |a_k| = \infsum a_{\sigma(k)} + |a_{\sigma(k)}|.
+        \]
+        By COLT
+        \[
+        \infsum a_k + \infsum|a_k| = \infsum a_{\sigma(k)} + \infsum|a_{\sigma(k)}|
+        \]
+        which implies $\infsum[k = 1]a_k = \infsum a_{\sigma(k)}$.
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}[Cauchy Product Theorem]
+    Let $\infsum[k = 0]a_k$ and $\infsum[k = 0]b_k$ be two absolutely convergent series with limits $a, b \in \R$,
+    respectively.
+    For $n \geq 0$,
+    let
+    \[
+    c_n = \sum_{k = 0}^{n}a_kb_{n - k}.
+    \]
+    Then the series $\infsum[k = 0]c_k$ is called the Cauchy Product of $\sum a_k$ and $\sum b_k$.
+    The series $\sum c_k$ is also absolutely convergent and we have
+    \[
+    \infsum[k = 0]c_k = a \cdot b.
+    \]
+\end{theorem}
+
+\newpage
+
+\section{Functions, Limits, and Continuity}
+
+\subsection{Basics}
+
+\begin{definition}[Open interval]
+    \[
+    x \in (a, b) \iff a < x < b
+    \]
+    \textit{$a = -\infty, b = \infty$ is fine}.
+\end{definition}
+
+\begin{definition}[Open set]
+    Given $X \subseteq \R$. For all $c \in X$ there exists an open interval in $X$ containing $c$.
+    
+    That is,
+    there exists $\delta > 0$,
+    such that
+    \[
+    (c - \delta, c + \delta) \subseteq X.
+    \]
+\end{definition}
+
+\begin{definition}[Interior point]
+    An interior point $c \in X$ if there exists $(c - \delta, c + \delta) \subset X$.
+\end{definition}
+
+\begin{definition}[Closed interval]
+    \[
+    x \in [a, b] \iff a \leq x \leq b
+    \]
+    ($a, b \in \R$).
+\end{definition}
+
+\begin{lemma}\label{analy:lem:limitliesinab}
+    $(x_n) \in [a, b]$ converging with $\liminfty x_n = L$.
+    Then $L \in [a, b]$.
+    \begin{proof}
+        Assume $L \notin [a, b]$;
+        take $\varepsilon = \min\{|L - b|, |L - a|\}$.
+        Say $L > b$.
+        For all $x_n$ we have
+        \begin{align*}
+            |x_n - L| &= |x_n - b + b - L| \\
+            &= (b - x_n) + (L - b) \\
+            &> \varepsilon.
+        \end{align*}
+        Contradiction to $\liminfty x_n = L$.
+    \end{proof}
+\end{lemma}
+
+\begin{remark}
+    The previous is false for open intervals.
+    For example,
+    \[
+    x_n = \frac{1}{n} > 0\qquad(a, b) = (0, 2).
+    \]
+    But $\liminfty x_n = 0 \notin (0, 2)$.
+\end{remark}
+
+\begin{theorem}[Bolzano-Weierstrass]
+    $(x_n) \in [a, b]$,
+    with $a, b \in \R$,
+    has a converging subsequence converging in $[a, b]$.
+    \begin{proof}
+        $(x_n)$ are bounded which by \autoref{analy:thm:bolzanoweierstrass} has a convergent subsequence and by \autoref{analy:lem:limitliesinab}.
+    \end{proof}
+\end{theorem}
+
+\begin{definition}[Compact interval]
+    Call $[a, b]$
+    ($a, b \in \R$)
+    a compact interval if the interval is bounded and closed.
+\end{definition}
+
+\subsection{Limits of functions}
+
+\begin{definition}
+    Let $f : (a, b) \to \R$ be a function.
+    Let $c \in (a, b)$ and $f$ is possibly not defined at $c$.
+    We say
+    \[
+    \lim_{x \to c}f(x) = L
+    \]
+    if for all $\varepsilon > 0$ there exists a $\delta > 0$ such that
+    \[
+    |f(x) - L| < \varepsilon
+    \]
+    for all $x \neq c$ with
+    \[
+    |x - c| < \delta.
+    \]
+    We also write $f(x) \to L$ as $x \to c$.
+\end{definition}
+
+\begin{remark}
+    \begin{enumerate}[label = (\roman*)]
+        \item $\delta$ is not unique,
+        any smaller positive number will work.
+
+        \item The property does not depend on the interval $(a, b)$,
+        $\lim_{x \to c}f(x)$ is a local property,
+        only depending on any small open interval around $c$,
+        $(c - \delta, c + \delta)$.
+
+        \item $\delta$ will depend on $c$.
+
+        \item $L$ might or might not be equal to $f(c)$ if $f$ is defined at $c$.
+    \end{enumerate}
+\end{remark}
+
+One sided limits
+
+\begin{definition}[Limit from the right]
+    \[
+    \lim_{x \to c ^ {+}}f(x) \text{ same but all } x > c.
+    \]
+\end{definition}
+
+
+\begin{definition}[Limit from the left]
+    \[
+    \lim_{x \to c ^ {-}}f(x) \text{ same but all } x < c.
+    \]
+\end{definition}
+
+\begin{definition}[Infinite limit]
+    $\liminfty[x] f(x) = L$:
+    for all $\varepsilon > 0$ there exists a $k \in \R$ such that
+    \[
+    |f(x) - L| < \varepsilon\qquad\text{for all } x > k.
+    \]
+\end{definition}
+
+\begin{proposition}
+    \[
+    \lim_{x \to c}f(x) = L
+    \]
+    \[
+    \iff
+    \]
+    for all sequences $(x_n)$ with $\liminfty x_n = c$ have $\liminfty f(x_n) = L$.
+    \begin{proof}
+        "$\implies$".
+        Assume $\lim_{x \to c}f(x) = L$.
+        Take $(x_n) \in (a, b)$ $(x_n \neq c)$ with $\liminfty x_n = c$.
+        Take $\varepsilon > 0$.
+        Need an $N$ such that
+        \[
+        |f(x_n) - L| < \varepsilon
+        \]
+        for all $n \geq N$.
+        We know there exists a $\delta > 0$ such that
+        \begin{equation}\label{analy:eq:1}
+            |f(x) - L| < \varepsilon
+        \end{equation}
+        for all $|x - c| < \delta$ $(x \neq c)$.
+        Since $\liminfty x_n = c$ there exists an $N$ such that $|x_n - c| < \delta$ for all $n \geq N$.
+        By \eqref{analy:eq:1} $|f(x_n) - L| < \varepsilon$ for all $n \geq N$.
+
+        "$\impliedby$".
+        By contrapositive.
+        Assume $\lim_{x \to c}f(x) \neq L$
+        (or does not exist).
+        Need to find a sequence $x_n$ where $\liminfty x_n = c$ but $\liminfty f(x_n) \neq L$
+        (or does not exist).
+        Hence there exists a $\varepsilon > 0$ such that for all $\delta > 0$ such that there exists an $x$ with $|x - c| < \delta$ but $|f(x) - L| \geq \varepsilon$.
+        Take the "bad" $\varepsilon > 0$.
+        Take $\delta = 1 / n$,
+        get an $x = x_n$ with $|x_n - c| < \delta = \frac{1}{n}$ but $|f(x_n) - L| \geq \varepsilon$.
+        \[
+        \liminfty x_n = c
+        \]
+        but
+        \[
+        \liminfty f(x_n) \neq L.
+        \]
+        This completes the proof by the contrapositive.
+    \end{proof}
+\end{proposition}
+
+\begin{proposition}[COLT]
+    We have $\lim_{x \to c}f(x) = L_1$,
+    $\lim_{x \to c}g(x) = L_2$.
+    Then
+    \begin{enumerate}[label = (\roman*)]
+        \item
+        \[
+        \lim_{x \to c}(af(x) + bg(x)) = aL_1 + bL_2.
+        \]
+
+        \item
+        \[
+        \lim_{x \to c}(f(x)g(x)) = L_1L_2.
+        \]
+
+        \item If $L_2 \neq 0$
+        \[
+        \lim_{x \to c}\left(\frac{f(x)}{g(x)}\right) = \frac{L_1}{L_2}
+        \]
+    \end{enumerate}
+
+    \begin{proof}
+        Using the previous proposition,
+        and apply COLT for sequences.
+        \begin{enumerate}[label = (\roman*)]
+            \item \phantom{}
+            
+            \item Take $x_n \to c$
+            \[
+            \liminfty\left[f(x_n)g(x_n)\right]
+            \]
+            
+            by COLT for sequences
+            \[
+            \liminfty\left[f(x_n)g(x_n)\right] = \lim_{x \to c}f(x_n)\cdot\liminfty g(x_n) = L_1L_2.
+            \]
+            
+            \item \phantom{}
+        \end{enumerate}
+    \end{proof}
+\end{proposition}
+
+\begin{proposition}[Squeezing]
+    Assume $f(x) \leq g(x) \leq h(x)$.
+    For all $x$ in a neighbourhood\footnote{Close to $c$.} of $c$ with
+    \[
+    \lim_{x \to c}f(x) = \lim_{x \to c}h(x) = L.
+    \]
+    Then
+    \[
+    \lim_{x \to c}g(x) = L.
+    \]
+\end{proposition}
+
+\subsection{Continuous functions}
+
+\begin{definition}[Co]
+    $f : X \to \R$,
+    $X = (a, b)$
+    $c \in (a, b)$.
+    Call $f(x)$ continuous at $x = c$ if
+    \[
+    \lim_{x \to c}f(x) = f(c).
+    \]
+    For all $\varepsilon > 0$,
+    there exists $\delta > 0$ such that
+    \[
+    |f(x) - f(c)| < \varepsilon
+    \]
+    for all $x$ with
+    \[
+    |x - c| < \delta.
+    \]
+\end{definition}
+
+\begin{remark}\phantom{}
+    \begin{enumerate}[label = (\roman*)]
+        \item Continuity is a local property,
+        only depending on the behaviour of $f(x)$ in a potentially small neighbourhood of $c$.
+        Can restrict $f(x)$ to such a neighbourhood if necessary.
+
+        \item Can define left and right continuity as well as before
+        \[
+        \lim_{x \to c ^ {\pm}}f(x) = f(c).
+        \]
+        \textit{Notion:
+        get continuity on $[a, b]$}.
+    \end{enumerate}
+\end{remark}
+
+We can get the following proposition from the previous
+\begin{proposition}
+    $f(x)$ is continuous at $x = c$ if and only if
+    \[
+    \liminfty f(x_n) = f\left(\liminfty x_n\right).
+    \]
+\end{proposition}
+
+\begin{theorem}[Continuous COLT]
+    $f, g$ are continuous at $x = c$.
+    \begin{enumerate}[label = (\roman*)]
+        \item
+        \[
+        af(x) + bg(x) \text{ is continuous at } c.
+        \]
+
+        \item
+        \[
+        f(x)g(x) \text{ is continuous at } c.
+        \]
+
+        \item If $g(c) \neq 0$
+        \[
+        \frac{f(x)}{g(x)} \text{ is continuous at } c.
+        \]
+    \end{enumerate}
+\end{theorem}
+
+\begin{example}
+    \begin{enumerate}[label = (\roman*)]
+        \item $f(x) = L$ constant is continuous.
+
+        \item $f(x) = x$ is continuous on $\R$.
+
+        \item Using COLT $p(x)$ any polynomial is continuous on $\R$.
+    \end{enumerate}
+    \begin{solution}
+        \begin{enumerate}[label = (\roman*)]
+            \item $|f(x) - f(c)| = |L - L| < \varepsilon$ for all $x$,
+            so any $\delta > 0$ will work.
+
+            \item Given $\varepsilon > 0$,
+            can take $\delta = \varepsilon$.
+            Indeed,
+            if $|x - c| < \delta = \varepsilon$ then $|f(x) - f(c)| = |x - c| < \varepsilon$ as required.
+
+            \item Comes from products and sums.
+            $\frac{p(x)}{q(x)}$ is continuous in the domain for $q(x) \neq 0$.
+        \end{enumerate}
+    \end{solution}
+\end{example}
+
+\begin{example}
+    $f(x) = \frac{1}{x}$ with $x \neq 0$
+    Pick $\varepsilon > c$,
+    we need $\delta > c$
+    \[
+    |f(x) - f(c)| = \left|\frac{1}{x} - \frac{1}{c}\right| = \frac{|c - x|}{|xc|}.
+    \]
+    Pick $\delta = \frac{c ^ 2}{2}\varepsilon$.
+    Continuity is a "local" property so restrict $f(x)$ to the neighbourhood of $c$,
+    so $x \in \left[\frac{c}{2}, \frac{3c}{2}\right]$.
+    Then $|f(x) - f(c)| = \frac{|c - x|}{|xc|} \leq \frac{|c - x|}{\left|\frac{c}{2}\right||c|} = \frac{2}{c ^ 2}|c - x| < \frac{2}{c ^ 2} \cdot \delta = \frac{2}{c ^ 2} \cdot \frac{c ^ 2}{2} \cdot \varepsilon = \varepsilon$.
+\end{example}
+
+\begin{example}
+    $f(x) = \sqrt{x}$
+
+    $c = 0$:
+    Take $\varepsilon > 0$.
+    \[
+    |f(x) - f(c)| = |\sqrt{x} - \sqrt{0}| = \sqrt{x} < \varepsilon
+    \]
+    wherever $|x - 0| = |x| < \delta$.
+    Pick $\delta = \varepsilon ^ 2$
+    \begin{align*}
+        \sqrt{x} < \sqrt{\delta} &= \sqrt{\varepsilon ^ 2} \\
+        &= \varepsilon.
+    \end{align*}
+
+    General $c > 0$:
+    \begin{align*}
+        |f(x) - f(c)| &= \frac{|\sqrt{x} - \sqrt{c}|}{|\sqrt{x} + \sqrt{c}|}|\sqrt{x} + \sqrt{c}| \\
+        &= \frac{|x - c|}{|\sqrt{x} + \sqrt{c}|} \\
+        &\leq \frac{|x - c|}{\sqrt{c}} \\
+        \intertext{pick $\delta = \varepsilon\sqrt{c}$} \\
+        &< \frac{\delta}{c} \\
+        &= \frac{\sqrt{c}}{\sqrt{c}} \cdot \varepsilon \\
+        &= \varepsilon.
+    \end{align*}
+\end{example}
+
+\begin{example}
+    \[
+    \mathrm{sgn}(x) = \begin{cases}
+        1 & \text{if } x > 0, \\
+        0 & x = 0, \\
+        -1 & x < 0.
+    \end{cases}
+    \]
+    Not continuous at $c = 0$.
+    Pick $\varepsilon = \frac{1}{2}$
+    (anything less than $1$ would do).
+
+    Pick any $\delta > 0$,
+    then $x = \frac{\delta}{2}$ so that $|x - 0| = \frac{\delta}{2} < \delta$.
+    But
+    \begin{align*}
+        |f(x) - f(c)| &= f\left|\frac{\delta}{2} - f(0)\right| \\
+        &= |1 - 0| \\
+        &= 1 \\
+        &> \frac{1}{2} \\
+        &= \varepsilon.
+    \end{align*}
+\end{example}
+
+\begin{example}
+    \[
+    d(x) \coloneqq \begin{cases}
+        1 & \text{if } x \in \Q \\
+        0 & \text{if } x \notin \Q.
+    \end{cases}
+    \]
+    but continuous at at any point $c \in \R$.
+\end{example}
+
+Composition of functions
+
+$f : X \to Y \subseteq \R$,
+$g : Y \to \R$.
+So $g \circ f(x)$ is defined on $X$.
+For example $\sqrt{x ^ 2 + x + 1}$.
+
+\begin{proposition}
+    Assume $f$ is continuous at $c \in X$ and $g$ is continuous at $f(c) \in Y$.
+    Then $g \circ f(x)$ is continuous at $x = c$.
+    \begin{proof}
+        Use the sequence criterion:
+        take $x_n \in X$ with $\liminfty x_n = c$.
+        Need $\liminfty g \circ f(x_n) = g(f(c))$.
+        
+        Set $y_n = f(x_n)$ since $f$ is continuous at $c$ we have that $\liminfty f(x_n) = \liminfty y_n = f(c)$,
+        this sequence,
+        $f(x_n)$,
+        is in $Y$.
+        Since $g$ is continuous at $f(c)$ we have $\liminfty g(y_n) = \liminfty g(f(c)) = \liminfty g(f(x_n))$.
+    \end{proof}
+\end{proposition}
+
+\begin{example}
+    $f(x) = e ^ x$ first $c = 0$ then by a previous result
+    \[
+    1 + x \leq e ^ x \leq \frac{1}{1 - x}
+    \]
+    for all $x \in (-\infty, 1)$,
+    this is a local property.
+    \[
+    \lim_{x \to 0}\left[1 + x \leq e ^ x \leq \frac{1}{1 - x}\right] \iff 1 \leq \lim_{x \to 0}e ^ x \leq 1
+    \]
+    by squeezing $\lim_{x \to 0}e ^ x = 1 = e ^ 0$.
+    Therefore is continuous at $c = 0$.
+
+    Need to show
+    \[
+    e ^ x \to e ^ c
+    \]
+    as $x \to x$.
+
+    \begin{align*}
+        e ^ x &= e ^ c \cdot e ^ {x - c} \\
+        \intertext{$x = c$} \\
+        &= e ^ c \cdot e ^ 0 \\
+        &= e ^ c \cdot 1 \\
+        &= e ^ c.
+    \end{align*}
+\end{example}
+
+\subsection{Great Theorems}
+\begin{theorem}[Intermediate Value Theorem]
+    $f : [a, b] \to \R$ continuous.
+    with $f(a) < f(b)$
+    (say).
+    Pick $d \in [f(a), f(b)]$;
+    $f(a) \leq d \leq f(b)$.
+    Then there exists a $c \in [a, b]$
+    (not necessarily unique)
+    such that $f(c) = d$.
+    \begin{proof}
+        Pick $d$,
+        assume $d < f(b)$
+        (otherwise can pick $c = b$).
+        
+        Define the set
+        \[
+        X \coloneqq \{x \in [a, b]; f(x) \leq d\}.
+        \]
+        $X \neq \emptyset$,
+        since $a \in X$ and bounded as a subset of $[a, b]$.
+        Hence has a supremum,
+        $c$.
+        (By term $1$)
+        exists a sequence $x_n \in X$ such that $\liminfty x_n = c$.
+        $x_n \in X \subseteq [a, b]$ hence $c = \liminfty x_n \in [a, b]$.
+        By continuity $\liminfty f(x_n) = f\left(\liminfty x_n\right) = f(c)$.
+
+        Claim:
+        $f(c) = d$.
+
+        Assume not,
+        i.e. $f(c) < d$\footnote{Since $f(c) = \liminfty f(x_n) \in X$ hence $\liminfty f(x_n) \leq d$}.
+        Then by problem sheet $1$
+        (this term)
+        Q7,
+        there exists a
+        (small)
+        neighbourhood $(c - \delta, c + \delta) \in (a, b)$ such that $f(x) < d$ for all $x \in (c - \delta, c + \delta)$.
+
+        In particular, $f(c + \delta / 2) < d$ so $c + \delta / 2 \in X$
+        but $c < c + \delta / 2$ but $c = \sup{X}$ contradiction!
+
+        So $f(c) =  d$.
+    \end{proof}
+\end{theorem}
+
+\begin{corollary}
+    $f : I \to \R$ continuous on an interval $I$.
+    Then the image $f(I)$ is also an interval.
+    
+    \begin{proof}
+        An interval $J$ is a set such that whenever $x < y \in J$,
+        then all numbers in between are also in $J$.
+        Now apply Intermediate Value Theorem.
+
+        \textit{Use $x = f(a), y = f(b)$ and apply IVT.}
+    \end{proof}
+\end{corollary}
+
+\begin{example}
+    \[
+    f(x) = \frac{x - 25}{x(x - 39)}
+    \]
+    on $(0, 39)$ is continuous,
+    $\lim_{x \to 0 ^ {+}}f(x) = \infty$,
+    $\lim_{x \to 0 ^ {-}}f(x) = -\infty$
+    By corollary
+    \[
+    f((0, 39)) = (-\infty, \infty) = \R.
+    \]
+\end{example}
+
+\begin{theorem}
+    $f : [a, b] \to \R$ is continuous.
+    Then $f$ takes minimum and maximum on $[a, b]$.
+    
+    \begin{proof}
+        Only do maximum.
+
+        Step $1$.
+        
+        $f$ is bounded above,
+        on $[a, b]$.
+
+        Say it did,
+        then given $n \in \N$,
+        exists $x_n \in [a, b]$ such that $f(x_n) > n$ by Bolzano-Weierstrass there exists a convergent subsequence $x_{n_i}$ with limit $c \in [a, b]$,
+        here we use closed interval.
+        So $f(n_i) \to f(c) \in \R$ with $f(n_i) > n_i$,
+        at some point $n_i > c$.
+
+        Hence $\sup\{f(a, b)\}$ exists in $\R$,
+        $M = \sup\{f(a, b)\}$.
+        (By term $1$)
+        there exists a sequence $y_n \in f([a, b])$ such that $\liminfty y_n = M$,
+        but $y_n = f(x_n)$ by continuity $\liminfty f(x_n) = M$.
+
+        $x_n$ might not converge but by Bolzano-Weierstrass will have a converging subsequence in $[a, b]$ so $\lim x_{n_i} = c \in [a, b]$.
+
+        Then $f(c) = f(\lim x_{n_i}) = \lim f(x_{n_i}) = \lim y_{n_i} = M$.
+
+        Together with the Intermediate Value theorem we get the image of a continuous function on a compact interval is again a compact interval.
+    \end{proof}
+\end{theorem}
+
+\begin{definition}
+    Continuity on a set $X$,
+    for all $c \in X$ and for all $\varepsilon > 0$,
+    there exists $\delta > 0$ for all $x \in X$ with
+    \[
+    |x - c| < \delta \implies |f(x) - f(c)| < \varepsilon.
+    \]
+\end{definition}
+
+\begin{definition}[Uniform continuity]
+    $f : X \to \R$ is uniform continuous if for all $\varepsilon > 0$ there exists $\delta > 0$ such that for all $x, y \in X$ with
+    \[
+    |x - y| < \delta \implies |f(x) - f(y)| < \varepsilon.
+    \]
+    \textit{In other words}
+    \[
+    \forall \varepsilon > 0, \exists \delta > 0 \text{ s.t. } \forall x, y \in X, |x - y| < \delta \implies |f(x) - f(y)| < \varepsilon.
+    \]
+\end{definition}
+
+\begin{theorem}
+    $f : [a, b] \to \R$ continuous on a compact interval.
+    Then $f$ is uniformly continuous.
+    \begin{proof}
+        Assume not.
+        There exists $\varepsilon > 0$ such that for all $\delta > 0$ there exists $x, y \in X$ with
+        \[
+        |x - y| < \delta
+        \]
+        but
+        \[
+        |f(x) - f(y)| \geq \varepsilon.
+        \]
+        Take such a "bad" $\varepsilon > 0$.
+        So for $\delta = \delta_n = \frac{1}{n}$,
+        has $x_n, y_n \in [a, b]$ with $|x_n - y_n| < \delta$ but $|f(x_n) - f(y_n)| \geq \delta$.
+        By Bolzano-Weierstrass for a converging subsequence $(x_{n_i})$ of the $(x_n)$
+        (since $x_n \in [a, b]$)
+        say $\lim x_{n_i} = x ^ {*} \in [a, b]$.
+
+        Claim:
+        also $\lim y_{n_i} = x ^ {*}$.
+        Indeed,
+        \begin{align*}
+            |x ^ {*} - y_{n_i}| &= |x ^ {*} - x_{n_i} + x_{n_i} - y_{n_i}| \\
+            &\leq |x ^ {*} - x_{n_i}| + |x ^ {*} - y_{n_i}| \\
+            &\to 0 + 0 = 0
+        \end{align*}
+        Squeezing gives the claim.
+
+        Claim:
+        \[
+        \lim f(x_{n_i}) - f(y_{n_i}) = 0.
+        \]
+        Indeed
+        \begin{align*}
+            |f(x_{n_i}) - f(y_{n_i})| &= |f(x_{n_i}) - f(x ^ {*}) + f(x ^ {*}) - f(y_{n_i})| \\
+            &\leq |f(x_{n_i}) - f(x ^ {*})| + |f(x ^ {*}) - f(y_{n_i})| \\
+            &\to 0 + 0 = 0
+        \end{align*}
+        by continuity of $f$ and $x_{n_i}, y_{n_i} \to x ^ {*}$.
+
+        So for $n_i$ sufficiently large
+        \[
+        |f(x_{n_i}) - f(y_{n_i})| < \varepsilon
+        \]
+        contradiction!
+    \end{proof}
+\end{theorem}
+
+\begin{remark}
+    \begin{enumerate}[label = (\roman*)]
+        \item Proof is non-constructive,
+        no indication for finding the $\delta$ in general,
+        hard to impossible.
+
+        \item Statement useful/crucial for defining integration of continuous functions.
+
+        \item In particularly nice class of functions are Lipschitz-continuous which satisfy $|f(x) - f(y)| \leq M|x - y|$ for all $x, y \in X$,
+        where $M$ is the Lipschitz constant.
+        These are uniform continuous.
+
+        \item "Many" functions are Lipschitz continuous on compact intervals,
+        but not all.
+        For example $f(x) = \sqrt{x}$ is not Lipschitz on the interval $[0, 1]$.
+
+        \item $f(x) = \frac{1}{x}$ on $(0, 1)$ is not uniformly continuous.
+
+        \item $f(x) = e ^ x$ is not uniformly continuous on $[0, \infty)$.
+
+        \item $f(x) = \log(x)$ is uniformly continuous on $[1, \infty)$.
+    \end{enumerate}
+\end{remark}
+
+\subsection{Inverse functions}
+Assume $f : X \to \R$ is injective so the inverse function $f ^ {-1} : f(x) \to \R$ exists,
+$f(x) = Y$.
+
+Principle question:
+
+if $f$ is "nice"
+(e.g. continuous)
+is the inverse also nice?
+
+\begin{theorem}
+    Let $f : I \to \R$ be a continuous function on an interval $I$,
+    and injective
+    (1-1)
+    so $f(I) = J$ is also an interval and the inverse function $f ^ {-1} : J \to I$ is also continuous.
+
+    \begin{proof}
+        One of the key steps:
+        if $f$ is continuous and 1-1.
+        Then $f$ is either strictly monotonically increasing or decreasing.
+    \end{proof}
+\end{theorem}
+
+\newpage
+
+\section{Differentiability}
+
+\begin{definition}
+    $f : X \to \R$
+    ($X$ open).
+    We say that $f$ is differentiable at a point $c \in X$ if
+    \[
+    \lim_{x \to c}\frac{f(x) - f(c)}{x - c}
+    \]
+    exists.
+    If so,
+    we write $f'(c)$ for the limit.
+\end{definition}
+
+\begin{lemma}[First order Taylor]\label{analy:lem:firstordertaylor}
+    $f : X \to \R$,
+    $f$ is differentiable at $c$ if and only if there exists a constant $n \in \R$ and a function $r(x)$ on $X$ such that
+    \begin{equation}\label{analy:eq:2}
+        f(x) = f(c) + m(x - c) + r(x)(x - c)
+    \end{equation}
+    with $r(x)$ is continuous at $c$ and $\lim_{x \to c} r(x) = r(c) = 0$.
+    In that case $m = f'(c)$.
+\end{lemma}
+
+Continuity,
+in that context is Taylor of order $0$
+\[
+f(x) = f(c) + \tilde{r}(x)
+\]
+with $\lim_{x \to c}\tilde{r}(x) = \tilde{r}(0) = 0$.
+
+We can write \eqref{analy:eq:2} as
+\[
+f(x) = f(c) + \overbrace{f_1(x)}^{= m + r(x)}(x - c)
+\]
+with $f_1(x)$ continuous at $c$ and
+\[
+\lim_{x \to c}f(x) = m(= f'(c))
+\]
+
+\begin{lemma}[continues = analy:lem:firstordertaylor]
+    \begin{proof}
+        "$\implies$":
+        Set $m = f'(c)$ and
+        \[
+        r(x) \coloneqq \begin{cases}
+            \frac{f(x) - f(c) - m(x - c)}{x - c} & x \neq c, \\
+            0 & x = c.
+        \end{cases}
+        \]
+        \eqref{analy:eq:2} holds by construction.
+        Need to show
+        \[
+        \lim_{x \to c}r(x) = 0 = r(c),
+        \]
+        \begin{align*}
+            \lim_{x \to c}\left(\frac{f(x) - f(c)}{x - c} - m\right) &= \lim_{x \to c}\left(\frac{f(x) - f(c)}{x - c} - f'(c)\right) = 0.
+        \end{align*}
+
+        "$\impliedby$":
+        \begin{align*}
+            0 &= r(c) \\
+            &= \lim_{x \to c}r(x) \\
+            &= \lim_{x \to c}\frac{f(x) - f(c) - m(x - c)}{x - c} \\
+            &= \lim_{x \to c}\left(\frac{f(x) - f(c)}{x - c} - m\right).
+        \end{align*}
+        Only way this is possible if $\lim_{x \to c}\frac{f(x) - f(c)}{x - c}$ exists and is equal to $m$.
+        \[
+        \]
+    \end{proof}
+\end{lemma}
+
+\begin{example}
+    \begin{enumerate}[label = (\roman*)]
+        \item 
+        \[
+        f(x) = \frac{1}{x ^ 2},\qquad x \neq 0.
+        \]
+        at $c \neq 0$
+        \begin{align*}
+            \lim_{x \to c}\frac{f(x) - f(c)}{x - c} &= \lim_{x \to c}\frac{\frac{1}{x ^ 2} - \frac{1}{c ^ 2}}{x - c} \\
+            &= \lim_{x \to c}\frac{c ^ 2 - x ^ 2}{x ^ 2c ^ 2(x - c)} \\
+            &= \lim_{x \to c}\frac{(c - x)(c + x)}{x ^ 2c ^ 2(x - c)} \\
+            &= \lim_{x \to c}\frac{-(c + x)}{x ^ 2c ^ 2} \\
+            &= \frac{-2c}{c ^ 4} \\
+            &= -\frac{2}{c ^ 3}.
+        \end{align*}
+
+        \item $f(x)$ a polynomial.
+        By polynomial division can write
+        \[
+        f(x) - f(c) = (x - c)f_1(x)
+        \]
+        with $f_1(x)$ a polynomial,
+        hence continuous at $x = c$.
+    \end{enumerate}
+\end{example}
+
+\begin{proposition}
+    $f : X \to \R$ as before.
+    Then if $f$ is differentiable at $x = c$,
+    then $f(x)$ is also continuous at $x = c$.
+
+    \begin{proof}
+        Assume $f$ is differentiable at $x = c$.
+        Then $f(x) - f(c) = (x - c) \frac{f(x) - f(c)}{x - c} \xrightarrow[x \to c]{} 0 \cdot f'(c) = 0$.
+        So $\lim_{x \to c}f(x) = f(c)$,
+        that is exactly continuity.
+    \end{proof}
+\end{proposition}
+The converse is false.
+\begin{example}
+    \[
+    f(x) = |x|.
+    \]
+
+    \begin{solution}
+        \[
+        \frac{f(x) - f(0)}{x - 0} = \frac{|x|}{x} = \mathrm{sgn}(x) = \begin{cases}
+            -1 & x < 0, \\
+            1 & x > 0
+        \end{cases}
+        \]
+        and $\lim_{x \to 0}\frac{f(x) - f(0)}{x - 0}$ does not exist.
+        So $|x|$ is continuous at $x = 0$ but not differentiable.
+    \end{solution}
+\end{example}
+
+\[
+f(x) \coloneqq \infsum[k = 0]\frac{1}{2 ^ k}\cos\left(15 ^ k\pi x\right),
+\]
+is continuous for all $x$ on $\R$,
+but not differentiable at any point.
+
+\begin{theorem}
+    $f, g$ are differentiable at $x = c$.
+    Then $f(x) + g(x)$ and $\alpha f(x)$ are differentiable at $x = c$.
+    With
+    \[
+    (f + g)'(c) = f'(c) + g'(c)
+    \]
+    and
+    \[
+    (\alpha f)'(c) = \alpha f'(c).
+    \]
+    Also the product $f(x)g(x)$ with
+    \[
+    (f(x)g(x))'(c) = f'(c)g(c) + f(c)g'(c).
+    \]
+    Assume $f(c) \neq 0$.
+    Then $\frac{1}{f(x)}$ is defined in a open neighbourhood around $x = c$ and is differentiable with
+    \[
+    \left(\frac{1}{f(c)}\right)' = \frac{-f'(c)}{f ^ 2(c)}
+    \]
+    
+    \begin{proof}
+        For the product.
+        Write
+        \[
+        f(x) = f(c) + (x - c)f_1(x)
+        \]
+        \[
+        g(x) = g(c) + (x - c)g_1(x)
+        \]
+        with $f_1, g_1$ continuous at $x = c$ and $\lim_{x \to c}f_1(x) = f'(c)$ and $\lim_{x \to c}g_1(x) = g'(c)$.
+        Then
+        \begin{align*}
+            f(x)g(x) &= (f(c) + (x - c)f_1(x))(g(c) + (x - c)g_1(x)) \\
+            &= f(c)g(c) + (x - c)(f_1(x)g(c) + f(c)g_1(x) + (x - c)f_1(x)g_1(x)) \\
+            \intertext{with $x = c$}
+            &= f'(c)g'(c) + f(c)g'(c) + 0.
+        \end{align*}
+        \[
+        \]
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}[Chain rule]
+    $g : X \to Y \subseteq \R$,
+    $f : Y \to \R$,
+    $X, Y$ open,
+    $g$ is differentiable at $x = c$,
+    $f$ is differentiable at $y = d = g(c)$.
+
+    Then the composition
+    \[
+    f \circ g(x) : X \to \R
+    \]
+    is differentiable at $x = c$ and
+    \[
+    (f \circ g)'(c) = g'(c)f'(g(c)).
+    \]
+
+    \begin{proof}
+        $g$ differentiable at $c$:
+        \[
+        g(x) = g(c) + g_1(x)(x - c)
+        \]
+        continuous at $c$ and $g_1(c) = \lim_{x \to c}g_1(x) = g'(c)$.
+
+        $f$ differentiable at $g(c) = d$:
+        \[
+        f(y) = f(g(c)) + f_1(y)(y - g(c)).
+        \]
+        So
+        \begin{align*}
+            f \circ g(x) &= f(g(x)) \\
+            &= f(g(c)) + f_1(g(x))(g(x) - g(c)) \\
+            &= f(g(c)) + f_1(g(x))[g(c) + g_1(x)(x - c) - g(c) ^ 2] \\
+            &= f(g(c)) + f_1(g(x))g_1(x)(x - c)
+            \intertext{have $h(x) = f \circ g(x)$,
+            $h_1(x) = f_1(g(x))g_1(x)$}
+            &= h(c) + h_1(x)(x - c)
+        \end{align*}
+        since $f_1$ is continuous at $g(c)$ and $g_1$ is continuous at $c$,
+        \begin{align*}
+            \lim_{x \to c}h_1(x) &= f_1(g(c))g_1(c)
+            \intertext{by continuity}
+            &= f'(g(c))g'(c).
+        \end{align*}
+    \end{proof}
+\end{theorem}
+
+\begin{example}
+    $f(x) = \frac{1}{x}$.
+
+    \begin{solution}
+        \begin{align*}
+            \frac{f(x) - f(c)}{x - c} &= \frac{\frac{1}{x} - \frac{1}{c}}{x - c} \\
+            &= \frac{c - x}{xc(x - c)} \\
+            &= -\frac{1}{xc} \xrightarrow[x \to c]{} -\frac{1}{c ^ 2}.
+        \end{align*}
+        \begin{align*}
+            r(x) &= \frac{f(x) - f(c)}{x - c} - f'(c) \\
+            &= -\frac{1}{xc} + \frac{1}{c ^ 2} \\
+            &= \frac{x - c}{xc ^ 2}.
+        \end{align*}
+    \end{solution}
+\end{example}
+
+\begin{lemma}
+    \[
+    x \leq e ^ x - 1 \leq \frac{x}{1 - x}\qquad(x < 1).
+    \]
+\end{lemma}
+
+\begin{example}
+    $f(x) = e ^ x$.
+    
+    \begin{solution}
+        By previous
+        \[
+        1 \leq \frac{e ^ x - 1}{x} \leq \frac{1}{1 - x}\qquad(x > 0).
+        \]
+        By squeezing
+        \[
+        \lim_{x \to 0}\frac{e ^ x - 1}{x} = \lim_{x \to 0}\frac{e ^ x - e ^ 0}{x - 0} = 1 = e ^ 0.
+        \]
+
+        General $c$
+        \begin{align*}
+            \frac{e ^ x - e ^ c}{x - c} &= e ^ c\left(\frac{e ^ {x - c} - 1}{x - c}\right) \\
+            &\xrightarrow[x \to c]{}e ^ c \cdot 1 = e ^ c.
+        \end{align*}
+
+        We have shown $(e ^ x)' = e ^ x$.
+    \end{solution}
+\end{example}
+
+\subsection{Inverse functions}
+\begin{theorem}
+    $f : I \to \R$
+    ($I$ an interval)
+    continuous and differentiable at $x = c$,
+    and $f'(c) \neq 0$.
+    Assume $f$ is $1$-$1$
+    (invertible).
+    So
+    \[
+    f ^ {-1} = g : \underset{= f(I)}{Y} \to \R
+    \]
+    exists and is differentiable at $y = d = f(c)$ and
+    \[
+    (f ^ {-1})'(d) = \frac{1}{f'(f ^ {-1}(d))} = \frac{1}{f'(c)}.
+    \]
+
+    \begin{proof}
+        Simple case.
+        Assume you knew that the inverse function $f ^ {-1}$ is differentiable.
+        Then $f ^ {-1} \circ f(x) = x$ by the chain rule
+        \[
+        (f ^ {-1})'(f(x))f'(x) = 1
+        \]
+        \[
+        (f ^ {-1}(f(x)))' = \frac{1}{f'(x)}
+        \]
+        write $x = f ^ {-1}(y)$,
+        \[
+        (f ^ {-1})'(y) = \frac{1}{f'(f ^ {-1}(y))}.
+        \]
+    \end{proof}
+\end{theorem}
+
+\begin{example}
+    For $\log(x) = (e ^ x) ^ {-1}$.
+
+    \begin{solution}
+        We have
+        \[
+        (\log(x))' = \frac{1}{e ^ {\log(x)}} = \frac{1}{x}.
+        \]
+    \end{solution}
+\end{example}
+
+\subsection{Mean Value Theorems}
+
+\begin{proposition}
+    If $f$ is differentiable at $c$ and it has a local maximum or a local minimum at $C$,
+    then $f'(c) = 0$.
+
+    \begin{proof}
+        $f'(c) = \lim_{x \to c}\frac{f(x) - f(c)}{x - c}$.
+        If $x > c$,
+        but $x$ is near $c$,
+        then $f(x) \leq f(c)$ since $c$ is a local maximum.
+        In particular $\frac{f(x) - f(c)}{x - c} \leq 0$.
+        Similarly,
+        for $x < c$,
+        $\frac{f(x) - f(c)}{x - c} \geq 0$ so $\lim_{x \to c ^ {+}}\frac{f(x) - f(c)}{x - c} \leq 0, \lim_{x \to c ^ {-}}\frac{f(x) - f(c)}{x - c} \geq 0 \implies f'(c) = 0$.
+    \end{proof}
+\end{proposition}
+
+\begin{theorem}[Rolle's Theorem]
+    Let $f : [a, b] \to \R$ be continuous and differentiable on $(a, b)$,
+    and suppose $f(a) = f(b)$.
+    Then there exists $c \in (a, b)$ with $f'(c) = 0$.
+
+    \begin{proof}
+        A continuous function on a closed interval attains a maximum and a minimum.
+        So there is a $c \in [a, b]$ with $f(c) \geq f(x)$ for all $x \in [a, b]$,
+        $d \in [a, b]$ with $f(d) \leq f(x)$ for all $x \in [a, b]$.
+        If $c \in (a, b)$,
+        we get $f'(c) = 0$ by last result.
+        If $c = a$ or $c = b$.
+        Then look at minimum $d$ if $f \in (a, b)$ we can use the last result again $f'(d) = 0$.
+        If $d = a$ or $d = b$,
+        then $f(d) = f(c)$ and the whole function is constant.
+        Then $f'(x) = 0$ for all $x \in (a, b)$.
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}[Mean Value Theorem]
+    Let $f : [a, b] \to \R$ be continuous and differentiable on $(a, b)$.
+    Then there exists a $c \in (a, b)$ such that $f'(c) = \frac{f(b) - f(a)}{b - a}$.
+
+    \begin{proof}
+        $g(x) = f(x) - \frac{f(b) - f(a)}{b - a}(x - a)$.
+        Then $g$ is continuous on $[a, b]$ and differentiable on $(a, b)$.
+        \[
+        g(b) = f(b) - \frac{f(b) - f(a)}{b - a}(b - a) = f(b) - f(b) + f(a) = f(a).
+        \]
+        \[
+        g(a) = f(a).
+        \]
+        By Rolle,
+        there is a $c \in (a, b)$ with $g'(c) = 0$.
+        \[
+        g'(c) = f'(c) - \frac{f(b) - f(a)}{b - a} = 0.
+        \]
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}
+    Let $f : I \to \R$ be continuous on an interval $I$,
+    differentiable in its interior.
+    \begin{enumerate}[label = (\roman*)]
+        \item If $f'(x) = 0$ for all $x$,
+        then $f$ is constant.
+
+        \item If $f'(x) \geq 0$
+        ($\leq 0$)
+        for all $x$,
+        then $f$ is monotonically increasing
+        (decreasing).
+
+        \item If $f'(x) > 0$
+        ($< 0$)
+        for all $x$,
+        then $f$ is strictly monotonically increasing
+        (decreasing).
+    \end{enumerate}
+    \begin{proof}
+        Let $c < d$ be two points in $I$.
+        By MVT there is an $\alpha \in (c, d)$ such that
+        \[
+        f(d) - f(c) = (d - c)f'(\alpha) = \begin{dcases*}
+            0 & in case (i) \\
+            \geq 0 & in case (ii) \\
+            > 0 & in case (iii).
+        \end{dcases*}
+        \]
+        In case (i) $f(d) = f(c)$,
+        in case (ii) $f(d) \geq f(c)$,
+        in case (iii) $f(d) > f(c)$.
+    \end{proof}
+\end{theorem}
+
+\textit{Caution:
+It is important that $f$ is defined on an interval.}
+$f(x) = \frac{1}{x}$ differentiable on $(-\infty, 0) \cup (0, \infty)$ $f'(x) = -\frac{1}{x ^ 2} < 0$.
+Only on the two separate intervals do we get strictly monotonically decreasing.
+
+\begin{theorem}[Cauchy's Generalised Mean Value Theorem]
+    Let $f, g : [a, b] \to \R$ continuous and differentiable on $(a, b)$.
+    Assume $g'(x) \neq 0$ for all $x \in (a, b)$.
+    Then there exists $c \in (a, b)$ such that
+    \[
+    \frac{f'(c)}{g'(c)} = \frac{f(b) - f(a)}{g(b) - g(a)}.
+    \]
+
+    \begin{proof}
+        Consider
+        \[
+        h(x) = (g(b) - g(a))f(x) - (f(b) - f(a))g(x)
+        \]
+        continuous on $[a, b]$,
+        differentiable on $(a, b)$.
+        By Rolle there is $c \in (a, b)$ with $h'(c) = 0$
+        \[
+        h'(c) = (g(b) - g(a))f'(c) - (f(b) - f(a))g'(c) = 0.
+        \]
+    \end{proof}
+\end{theorem}
+
+If you try MVT,
+you get $c \in (a, b)$ with $f'(c) = \frac{f(b) - f(a)}{b - a}$,
+$g'(c') = \frac{g(b) - g(a)}{b - a}$.
+
+\subsection{L'H\^opital's Rule}
+
+\begin{theorem}
+    Let $f$ and $g$ be two differentiable functions on $(a, b)$.
+    Assume that
+    \[
+    \lim_{x \to a ^ {+}}f(x) = 0
+    \]
+    and
+    \[
+    \lim_{x \to a ^ {+}}g(x) = 0
+    \]
+    and $g(x) \neq 0$,
+    $g'(x) \neq 0$ for all $x$ on $(a, b)$.
+    Then
+    If
+    \[
+    \lim_{x \to a ^ {+}}\frac{f'(x)}{g'(x)}
+    \]
+    exists then also
+    \[
+    \lim_{x \to a ^ {+}}\frac{f(x)}{g(x)}
+    \]
+    exists
+    and
+    \[
+    \lim_{x \to a ^ {+}}\frac{f(x)}{g(x)} = \lim_{x \to a ^ {+}}\frac{f'(x)}{g'(x)}.
+    \]
+    
+    \begin{proof}
+        We can extend $f, g$ continuously to $x = a$ by setting $f(a) = g(a) = 0$.
+        Take any  sequence $x_n \in (a, b)$ with $\liminfty x_n = a$.
+
+        Need to show
+        \[
+        \liminfty \frac{f(x_n)}{g(x_n)} = L.
+        \]
+        Apply the generalised mean value theorem for $f$ and $g$ on the intervals $[a, x_n]$.
+        So exists a $y_n \in (a, x_n)$ such that $\frac{f'(y_n)}{g'(y_n)} = \frac{f(x_n) - f(a)}{g(x_n) - g(a)} = \frac{f(x_n)}{g(x_n)}$.
+
+        By squeezing $\liminfty y_n = a$
+        ($a < y_n < \underbrace{x_n}_{\to a}$)
+        so
+        \[
+        L = \liminfty\frac{f(y_n)}{g(y_n)} = \liminfty\frac{f(x_n)}{g(x_n)}.
+        \]
+    \end{proof}
+\end{theorem}
+
+\begin{remark}
+    \begin{enumerate}[label = (\roman*)]
+        \item Also holds for left-sided limits or both sided limits.
+
+        \item $a = \pm\infty$ is also ok.
+
+        \item "$\frac{\infty}{\infty}$" is fine.
+
+        \item "$\infty \cdot 0$" can often be handled by $f(x)g(x) = \frac{f(x)}{\frac{1}{g(x)}}$.
+
+        \item $\lim_{x \to 0}\frac{e ^ x - 1}{x} = \lim_{x \to 0}\frac{e ^ x}{1} = 1$.
+
+        \item $\lim_{x \to 1}\frac{x ^ 2 + x + 2}{x - 2} = \lim_{x \to 1}\frac{2x + 1}{-2} = 2$ but this is wrong,
+        we get $\frac{4}{1 - 2} = -4$.
+
+        \item Powers beat $\log$.
+        
+        $a > 0$:
+        \[
+        \liminfty[x]\frac{\log(x)}{x ^ a} = \liminfty[x]\frac{\frac{1}{x}}{a \cdot x ^ {a - 1}} = \liminfty[x]\frac{1}{ax ^ a} = 0
+        \]
+        \[
+        \lim_{x \to 0 ^ {+}}x ^ a\log(x) = \lim_{x \to 0 ^ {+}}\frac{\log(x)}{x ^ {-a}} = \lim_{x \to 0 ^ {+}}\frac{\frac{1}{x}}{-ax ^ {-a - 1}} = \lim_{x \to 0 ^ {+}}-\frac{1}{a}x ^ a = 0.
+        \]
+
+        \item Exponentials beat powers.
+        
+        $a > 0$:
+        \begin{align*}
+            \liminfty[x]\frac{x ^ a}{e ^ x} &= \liminfty[x]\frac{ax ^ {a - 1}}{e ^ x} \\
+            &= \liminfty[x]\frac{a(a - 1)x ^ {a - 2}}{e ^ x} &= \\
+            \dotsi \\
+            &= \frac{(a(a - 1)(a - 2)\dotsi 3 \cdot 2 \cdot 1) \cdot x ^ {-1}}{e ^ x} = 0.
+        \end{align*}
+
+        \item
+        \[
+        \lim_{x \to 0}\frac{\log(1 + x) - x}{x ^ 2} = \lim_{x \to 0}\frac{\frac{1}{1 + x} - 1}{2x} = \lim_{x \to 0}\frac{1 - (1 + x)}{2x(1 + x)} = \lim_{x \to 0}\frac{-\frac{1}{2}}{1 + x} = -\frac{1}{2}.
+        \]
+        So $\frac{\log(1 + x ^ 2) - x}{x ^ 2} = -\frac{1}{2} + r(x)$ with $\lim_{x \to 0}r(x) = 0$.
+
+        So $\log(1 + x ^ 2) = \underbrace{1}_{\frac{d}{dx}\log(1 + x)\text{ at x = 1}}x - \frac{1}{2}x ^ 2 + r(x)x ^ 2$.
+    \end{enumerate}
+\end{remark}
+
+\subsection{Taylor}
+
+Recall:
+$f : I \to \R$ differentiability at $x = c$:
+\[
+f(x) = f(c) + f'(c)(x - c) + r(x)(x - c)
+\]
+with $\lim_{x \to c}r(x) = 0$.
+
+$f(x)$ differentiable $n$-times on $I$.
+$n$-th Taylor polynomial
+\[
+T_{f, c} ^ {(n)} = f(c) + f'(c)(x - c) + \frac{f'(c)}{2}(x - c) ^ 2 + \dotsc + \frac{f ^ {(n)}(c)}{n!}(x - c) ^ n.
+\]
+Why?
+\begin{align*}
+    f(c) &= T_{f, c} ^ {(n)}(c) \\
+    f'(c) &= \left[T_{f, c} ^ {(c)}\right]'(c) \\
+    &\vdots \\
+    f ^ {(k)} &= \left[T_{f, c} ^ {(n)}\right] ^ {(k)}(c)
+\end{align*}
+$k = 0, \dotsc, n$.
+
+\begin{theorem}[Taylor's Theorem
+(Peano remainder)]
+    $f : I \to \R$ $n$-times differentiable.
+    Then there exists a function $r_n(x)$ with $\lim_{x \to c}r_n(x) = 0$ such that
+    \begin{equation}\label{analy:eq:3}
+        f(x) = T_{f, c} ^ {(n)}(x) + r_n(x)(x - c) ^ n.
+    \end{equation}
+
+    \begin{proof}
+        Solve for $r_n(x)$ in \eqref{analy:eq:3}.
+        \[
+        r_n(x) = \frac{f(x) - T_{f, c} ^{(n)}(x)}{(x - c) ^ n}.
+        \]
+        Need to compute $\lim_{x \to c}r_n(x)$.
+        Apply L'H\^opital $n$-times get $\lim_{x \to c}\frac{f ^ {(n)}(x) - f ^ {(n)}(c)}{n!} = 0$.
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}[Taylor's Theorem
+(Lagrange remainder)]
+    Assume in addition that $f$ is $(n + 1)$ times differentiable.
+    Then there exists a $\xi$ between $x$ and $c$ such that
+    \[
+    f(x) = T_{f, c} ^ {(n)}(x) + \frac{f ^ {(n + 1)}(\xi)}{(n + 1)!}(x - c) ^ {n + 1}.
+    \]
+
+    \begin{proof}
+        Fix $x \in I$.
+        Define
+        \[
+        F(t) = f(x) - T_{f, t} ^ {(n)}(x)
+        \]
+        \[
+        f(x) - \left[f(t) - f'(t)(x - t) + \dotsc + \frac{f ^ {(n)}(t)}{n!}(x - t) ^ n\right].
+        \]
+        So $F(c) = r_n(x)(x - c) ^ n$.
+        Have $F'(t) = -\frac{f ^ {(n + 1)}(t)}{n!}(x - t) ^ n$.
+        Apply Cauchy's generalised mean value theorem for $F(t)$ and $G(t) = (x - t) ^ {n + 1}$.
+        Then
+        \[
+        \frac{r_n(x)}{x - c} = \frac{F(c)}{(x - c) ^ {n + 1}} = \frac{F(c)}{G(c)} = \frac{F(c) - \overbrace{F(x)}^{= 0}}{G(c) - \underbrace{G(x)}_{= 0}} = \frac{F'(\xi)}{G'(\xi)} = \frac{{-\frac{f ^ {(n + 1)}(\xi)}{n!}(x - \xi) ^ n}}{-(n + 1)(x - \xi) ^ n} = \frac{f ^ {(n + 1)}(\xi)}{(n + 1)!}
+        \]
+        with $\xi$ between $x$ and $c$.
+    \end{proof}
+\end{theorem}
+That is,
+$r_n(x) = f ^ {(n + 1)}(\xi)(x - c)$.
+
+
+Assume $\left|f ^ {(n + 1)}(x)\right| \leq M_{n + 1}$ is bounded on $I$.
+(e.g. $f ^ {(n + 1)}(x)$ is continuous on $[a, b]$).
+Then $\left|f(x) - T_{f, c}^{(n)}(x)\right| \leq \frac{M_{n + 1}}{(n + 1)!}|x - c| ^ {n + 1}$
+
+\begin{example}
+    $f(X) = e ^ x$,
+    $n = 4$.
+
+    \[
+    T_{f, 0}(x) = 1 + x + \frac{x ^ 2}{2} + \frac{x ^ 3}{6} + \frac{x ^ 4}{24}.
+    \]
+    Then
+    \[
+    \left|e ^ {\frac{1}{2}} - T_{f, 0}\left(\frac{1}{2}\right)\right| \leq \frac{e ^ {\frac{1}{2}}}{120}\left(\frac{1}{2}\right) ^ 5 \leq \frac{2}{1920} = \frac{1}{360}.
+    \]
+\end{example}
+
+\newpage
+
+\section{Power Series}
+
+\begin{definition}
+    \[
+    \infsumo a_kx ^ k
+    \]
+    is a power series.
+    $a_k \in \R$ and $x \in \R$.
+\end{definition}
+
+\begin{theorem}[Cauchy-Hadamard]
+    Given $\infsumo a_kx ^ k$,
+    there exists $R \geq 0$
+    (possibly $\infty$)
+    ($R$ is the radius of convergence)
+    such that
+    \begin{enumerate}[label = (\roman*)]
+        \item $\infsumo a_kx ^ k$ converges absolutely for $|x| < R$,
+
+        \item $\infsumo a_kx ^ k$ diverges for $|x| > R$.
+    \end{enumerate}
+    In fact.
+    If $c = \limsup\sqrt[k]{|a_k|}$ then $R = \frac{1}{c}$
+    (if $c = 0, \infty$,
+    $R = \infty, 0$).
+    
+    \begin{proof}
+        We apply the root test to
+        \[
+        \infsumo a_kx ^ k
+        \]
+        \begin{align*}
+            \limsup\sqrt[k]{|a_kx ^ k|} &= \limsup\sqrt[k]{|a_k|}|x| \\
+            &= |x|\limsup\sqrt[k]{|a_k|} \\
+            &= c|x| &= \begin{cases}
+                < 1 & \text{if } |x| < 1 / c \\
+                > 1 & \text{if } |x| > 1 / c
+            \end{cases}
+        \end{align*}
+        with absolute convergence in the first case and divergence in the second.
+    \end{proof}
+\end{theorem}
+
+\begin{remark}
+    \begin{enumerate}[label = (\roman*)]
+        \item In practice,
+        the ratio test works just as well:
+        \[
+        \frac{|a_{k + 1}|x| ^ {k + 1}}{|a_k||x| ^ k} = \frac{|a_{k + 1}|}{|a_k|}|x|
+        \]
+        if $\liminfty[k]\frac{|a_{k + 1}|}{|a_k|}$ exists and is equal to $c$
+        (say)
+        then as before $R = \frac{1}{c}$.
+
+        \item $x = \pm R$ endpoints of interval of convergence anything can happen.
+        To check do not use the ratio or root test.
+        Plug in $x = \pm R$,
+        and see what happens.
+    \end{enumerate}
+\end{remark}
+
+\begin{example}\phantom{}
+    \begin{enumerate}[label = (\roman*)]
+        \item
+        \[
+        \sum_{k = 0}^{N}a_kx ^ k
+        \]
+        a polynomial.
+        $R = \infty$
+        (of course,
+        no infinite series).
+        Also $\lim\sqrt[k]{|a_k|} = 0$ so $c = 0 \implies R = \infty$.
+
+        \item $\infsumo x ^ k$ geometric series.
+        $a_k = 1$,
+        by root/ratio test $c = 1$ so $R = 1$.
+        \[
+        \infsumo x ^ k = \frac{1}{1 - x}\qquad\text{for } |x| < 1
+        \]
+        divergence for $|x| > 1$
+        $x = \pm 1$:
+        \[
+        \sum(\pm 1) ^ k
+        \]
+        diverges.
+
+        \item $\infsumo\frac{x ^ k}{k!}$.
+        Ratio test,
+        for $x \neq 0$ have
+        \[
+        \frac{|x| ^ {k + 1}}{(k + 1)!} \cdot \frac{k!}{|x| ^ k} = \limas[k]{\frac{|x|}{k + 1}}{0 < 1}
+        \]
+        so $R = \infty$.
+        Hence converges absolutely for all $x \in \R$.
+
+        \item $\infsumo k ^ kx ^ k$.
+        Root test
+        \[
+        \sqrt[k]{|a_k|} = \sqrt[k]{k ^ k} = \limas[k]{k}{\infty}.
+        \]
+        So $c = \infty$ and $R = 0$ only converges for $x = 0$.
+
+        \item $\infsumo\frac{k}{3 ^ k}x ^ k$.
+        Ratio test
+        ($x \neq 0$)
+        \[
+        \frac{k + 1}{3 ^ {k + 1}}|x| ^ {k + 1} / \frac{k|x| ^ k}{3 ^ k} = \frac{k + 1}{k}\cdot\frac{1}{3}|x| \xrightarrow[k \to \infty]{} \frac{1}{3}|x| = \begin{cases}
+            < 1 & |x| < 3 \\
+            > 1 & |x| > 3
+        \end{cases}
+        \]
+        $x = \pm 3$
+        \[
+        \infsumo(\pm k)
+        \]
+        diverges.
+
+        The radius of convergence is the same for $\infsumo\frac{p(k)}{3 ^ k}x ^ k$ and $\infsumo\frac{1}{p(k)x ^ k}$ but not at the endpoints.
+    \end{enumerate}
+\end{example}
+
+\begin{corollary}
+    If $\infsumo a_kc ^ k$ converges for some $c \in \R$,
+    then $\sum a_kx ^ k$ converges for all $x \in (-|c|, |c|)$.
+
+    \begin{proof}
+        Must have $|c| \leq R \implies (-|c|, |c|) \subseteq (-R, R)$.
+    \end{proof}
+\end{corollary}
+
+\begin{proposition}\label{analy:prop:powserderivandantiderivsameradconv}
+    $\infsumo a_kx ^ k$ with radius $R > 0$.
+    Then the formal derivative
+    \[
+    \infsum ka_kx ^ {k - 1} = \frac{1}{x}\infsum ka_kx ^ k
+    \]
+    anti-derivative
+    \[
+    \infsumo \frac{1}{k + 1}a_kx ^ {k + 1}
+    \]
+    have the same radius of convergence $R$.
+    
+    \begin{proof}
+        \begin{align*}
+            \limsup\sqrt[k]{k|a_k|} &= \lim\sqrt[k]{k}\limsup\sqrt[k]{|a_k|} \\
+            &= 1 \cdot \limsup\sqrt[k]{|a_k|}.
+        \end{align*}
+        Anti-derivative the same.
+    \end{proof}
+\end{proposition}
+
+\subsection{Power series as a function}
+\[
+f(x) = \liminfty f_n(x) = \infsumo a_kx ^ k
+\]
+with $f_n = \sum_{k = 0}^{n}a_kx ^ k$.
+
+\begin{theorem}
+    Power series are continuous in $(-R, R)$.
+    
+    In fact,
+    they are "locally" Lipschitz,
+    that is,
+    for any $0 < r < \R$ there exists a constant $M = M_r$ such that
+    \[
+    |f(x) - f(y)| \leq M_r|x - y|
+    \]
+    for all $x \in [-r, r]$.
+
+    \begin{proof}
+        \begin{align*}
+            0 &\leq |f_n(x) - f_n(y)| \\
+            &= \left|\sum_{k = 1}^{n}a_k(x ^ k - y ^ k)\right| \\
+            &= |x - y|\cdot\left|\sum_{k = 1}^{n}a_k(x ^ {k - 1} + x ^ {k - 2}y + \dotsc + xy ^ {k - 2} + y ^ {k - 1})\right|
+            \intertext{assume $|x|, |y| \leq r$}
+            &\leq |x - y|\cdot\sum_{k = 1}^{n}|a_k|\cdot k \cdot r ^ {k - 1} \\
+            &\xrightarrow[n \to \infty]{} |x - y|\cdot\sum_{k = 1}^{n}\underbrace{|a_k|\cdot k \cdot r ^ {k - 1}}_{= M_r}
+        \end{align*}
+        converges by \autoref{analy:prop:powserderivandantiderivsameradconv} which implies by squeezing
+        \[
+        |f(x) - f(y)| \leq |x - y|M_r.
+        \]
+    \end{proof}
+\end{theorem}
+
+\textbf{Warning:}
+Typically $\sum a_kx ^ k$ is not Lipschitz on $(-R, R)$.
+
+\begin{theorem}\label{analy:thm:powerserisdiff}
+    The power series $f(x) = \infsumo a_kx ^ k$ is differentiable in $(-R, R)$ with term-wise derivative
+    \[
+    f'(x) = \infsum ka_kx ^ {k - 1}
+    \]
+    and $f ^ {(n)}(0) = n!a_n$.
+
+    \begin{proof}
+        Next section.
+        
+        Assuming the term-wise derivative,
+        we have
+        \begin{align*}
+            f'(0) &= \infsum ka_k0 ^ {k - 1} \underset{k = 0}{=} 1 \cdot a_1 \\
+            f''(0) &= \infsum[k = 2]k(k - 1)a_kx ^ {k - 2} = 2(2 - 1)a_2 = 2 \cdot a_2 \\
+            &\vdots \\
+            f ^ {(n)}(0) &= \infsum[k = n]k(k - 1) \dotsi (k - n + 1)a_kx ^ {k - n} \underset{x = 0}{=} n!a_n.
+        \end{align*}
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}[Identity Theorem for Power Series]
+    Assume
+    \[
+    \infsumo a_kx ^ k = \infsumo b_kx ^ k
+    \]
+    in some
+    (small)
+    neighbourhood of $x = 0$.
+    Then $a_k = b_k$.
+
+    \begin{proof}
+        Call $f(x) = \infsumo a_kx ^ k$,
+        then $n!b_n = f ^ {(n)}(0) = n!a_n$ by \autoref{analy:thm:powerserisdiff}.
+        So $a_n = b_n$ for all $n$.
+    \end{proof}
+\end{theorem}
+
+What happens at the end points?
+Assume $f(x) = \infsumo a_kx ^ k$ converges at $x = R$.
+Is $f(x)$ left continuous at $x = R$?
+I.e. $\lim_{x \to R ^ {-}}f(x) = f(R)$?
+
+\begin{theorem}[Abel's Limit Theorem]
+    
+\end{theorem}
+
+Have the following definition
+\[
+e ^ x = \infsumo\frac{x ^ k}{k!}.
+\]
+
+\begin{theorem}
+    \begin{enumerate}[label = (\roman*)]
+        \item $\exp(0) = 1$.
+
+        \item The exponential function is infinitely often differentiable on $\R$ with
+        \[
+        \exp'(x) = \exp(x).
+        \]
+
+        \item For all $x, y \in \R$ we have
+        \begin{align*}
+            \exp(x + y) &= \exp(x)\exp(y); \\
+            \exp(-x) &= \frac{1}{\exp(x)}.
+        \end{align*}
+
+        \item $\exp(x) > 0$ for all $x \in \R$.
+
+        \item $\exp(x)$ is strictly monotone increasing.
+
+        \item
+        \[
+        \liminfty[x]\exp(x) = \infty\qquad\text{and}\qquad\lim_{x \to -\infty}\exp(x) = 0.
+        \]
+    \end{enumerate}
+
+    \begin{proof}\phantom{}
+        \begin{enumerate}[label = (\roman*)]
+            \item Trivial by substitution.
+
+            \item
+            \begin{align*}
+                \left(\infsumo \frac{x ^ k}{k!}\right)' &= \infsum\frac{kx ^ {k - 1}}{k!} \\
+                &= \infsumo\frac{(k + 1)x ^ k}{(k + 1)!} \\
+                &= \infsumo\frac{x ^ k}{k!}.
+            \end{align*}
+
+            \item Two options:
+            for the first property we can use the Cauchy product for infinite series.
+
+            Set $f(t) = \exp(x + t)\cdot\exp(y - t)$.
+            \[
+            f(0) = \exp(x)\exp(y)
+            \]
+            \[
+            f(y) = \exp(x + y) \cdot 1 = \exp(x + y)
+            \]
+            \[
+            f'(t) = \exp(x + t)\exp(y - t) + \exp(x + t)(-1)\exp(y - t) = 0
+            \]
+            by the mean value theorem $f(t)$ is constant.
+
+            For $\exp(-x) = \frac{1}{\exp(x)}$.
+            Plug in $y = -x$.
+
+            \item True for $x > 0$,
+            for $x < 0$ use $\exp(x) = \frac{1}{\exp(-x)} > 0$.
+
+            \item $\exp'(x) = \exp(x) > 0$ hence is strictly increasing.
+
+            \item For $x > 0$ $\exp(x) > 1 + x$ $1 + x$ is unbounded so $\exp(x)$ is unbounded.
+            Then for $x < 0$ reuse $\exp(x) = \frac{1}{\exp(-x)}$.
+        \end{enumerate}
+    \end{proof}
+\end{theorem}
+
+\begin{definition}
+    We define the sine and cosine function by
+    \[
+    \sin(x) \coloneqq \infsumo\frac{(-1) ^ k}{(2k + 1)!}x ^ {2k + 1};\qquad\cos(x) \coloneqq \infsumo\frac{(-1) ^ k}{(2k)!}x ^ {2k}.
+    \]
+\end{definition}
+
+\begin{theorem}
+    We have
+    \begin{enumerate}[label = (\roman*)]
+        \item $\sin(0) = 0$ and $\cos(0) = 1$.
+
+        \item The sine-function is odd;
+        cosine is even.
+
+        \item Sine and cosine are infinitely often differentiable on $\R$ with
+        \[
+        \sin'(x) = \cos(x)\qquad\text{and}\qquad\cos'(x) = -\sin(x).
+        \]
+
+        \item For all $x, y \in \R$ we have
+        \begin{align*}
+            \sin(x + y) &= \sin(x)\cos(y) + \cos(x)\sin(y) \\
+            \cos(x + y) &= \cos(x)\cos(y) + \sin(x)\sin(y)
+        \end{align*}
+
+        \item For all $x \in \R$ we have
+        \[
+        \sin ^ 2(x) + \cos ^ 2(x) = 1.
+        \]
+        In particular,
+        $|\sin(x)| \leq 1$;
+        $|\cos(x)| \leq 1$ for all $x \in \R$.
+    \end{enumerate}
+
+    \begin{proof}\phantom{}
+        \begin{enumerate}[label = (\roman*)]
+            \item By definition.
+            
+            \item By definition.
+
+            \item Differentiating term-wise.
+
+            \item
+            \[
+            f(t) \coloneqq \sin(x + t)\cos(y - t) + \cos(x + t)\sin(y - t).
+            \]
+            \begin{align*}
+                f(0) &= \sin(x)\cos(y) + \cos(x)\sin(y) \\
+                f(y) &= \sin(x + y)\cos(0) + \cos(x + y)\sin(0) = \sin(x + y) \\
+                f'(t) &= \dotsi = 0.
+            \end{align*}
+            Hence $f(t)$ is constant so $f(0) = f(y)$,
+            addition law for sine.
+
+            \item
+            \[
+            \sin ^ 2(x) + \cos ^ 2(x) = 1
+            \]
+            true for $x = 0$.
+            Differentiate
+            \[
+            2\sin(x)\cos(x) + 2\cos(x)(-\sin(x)) = 0
+            \]
+            by mean value theorem.
+        \end{enumerate}
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}
+    The equation $\cos(x) = 0$ has a smallest positive solution.
+
+    \begin{proof}
+        \[
+        \cos(2) = \underbrace{1 - 2 + \frac{16}{24}}_{-\frac{2}{3}} + \underbrace{\infsum[k = 3]\frac{(-1) ^ k}{(2k)!}2 ^ {2k}}_{-+-\dotsc} < 0
+        \]
+        by alternating series test.
+        \[
+        \cos(0) = 1 > 0
+        \]
+        by IVT there exists a zero at $\frac{\pi}{2}$.
+    \end{proof}
+\end{theorem}
+
+\begin{definition}
+    We denote twice the smallest positive root of cosine by $\pi$,
+    that is,
+    \[
+    \cos\left(\frac{\pi}{2}\right) = 0.
+    \]
+\end{definition}
+
+\begin{theorem}
+    \[
+    \sin\left(\frac{\pi}{2}\right) = 1.
+    \]
+\end{theorem}
+
+\subsection{Taylor series}
+\[
+f(x) = \infsumo a_k(x - c) ^ k
+\]
+everything works as before.
+\begin{remark}
+    \begin{enumerate}[label = (\roman*)]
+        \item Radius of convergence $R \geq 0$.
+
+        \item We can term-wise differentiate or take antiderivatives.
+
+        \item $f ^ {(k)}(c) = k!a_k$
+    \end{enumerate}
+\end{remark}
+
+Take $f(x)$ to be a smooth\footnote{Infinitely often differentiable} function on an interval $I \ni c$.
+Taylor Series
+\[
+T_{f, c}(x) = \infsumo\frac{f ^ {(k)}(c)}{k!}(x - c) ^ k
+\]
+
+\[
+T_{f, c}(x) = \liminfty T_{f, c}^{(n)}(x) = \sum_{k = 0}^{n}\frac{f ^ {(k)}(c)}{k!}(x - c) ^ k.
+\]
+
+Clearly a function given as a power series at $c$ is equal to its Taylor series at $c$.
+
+\textbf{Questions}
+\begin{enumerate}[label = (\roman*)]
+    \item Where does $T_{f, c}(x)$ converge?
+    (apart from $x = c$)
+
+    \item Is $T_{f, c}(x) = f(x)$?
+    If so,
+    in what region?
+    If a function can be represented by its Taylor series then it is analytic.
+\end{enumerate}
+
+\begin{example}
+    \[
+    f(x) = \begin{cases}
+        e ^ {-\frac{1}{x ^ 2}} & x \neq 0 \\
+        0 & x = 0.
+    \end{cases}
+    \]
+    Problem sheet $2$ says $f$ is infinitely often differentiable at $x = 0$ with $f ^ {(k)} = 0$.
+
+    \begin{solution}
+        \[
+        T_{f, 0}(x) = 0 + 0 \cdot x + \dotsc = 0 \neq f(x)\quad\text{(only at $x = 0$)}.
+        \]
+    \end{solution}
+\end{example}
+
+\begin{example}[Bump function]
+    \[
+    f(x) = \begin{cases}
+        e ^ {-\frac{1}{(1 - x) ^ 2}} & |x| \leq 1 \\
+        0 & |x| \geq 1
+    \end{cases}
+    \]
+\end{example}
+
+\begin{example}
+    \[
+    \infsumo k!x ^ k
+    \]
+    has $R = 0$.
+
+    \begin{solution}
+        There exists a smooth function $g(x)$ such that $g ^ {(k)}(0) = (k!) ^ 2$.
+    \end{solution}
+\end{example}
+\textit{The power series approach yields the previous for the following differential equation $(x - 1)y + xy' + 1 = 0$}.
+
+\begin{example}
+    \[
+    f(x) = \frac{1}{1 + x ^ 2}
+    \]
+    $x \in \R$.
+    \begin{solution}
+        \begin{align*}
+            f(x) &= \frac{1}{1 + x ^ 2} \\
+            &= \frac{1}{1 - (-x ^ 2)} \\
+            &= \infsum(-x ^ 2) ^ k & (|x| < 1) \\
+            &= \infsumo(-1) ^ kx ^ {2k}.
+        \end{align*}
+        This is the Taylor series at $c = 0$.
+        So the Taylor series represents the function not everywhere but only "locally" $(-1, 1)$.
+    \end{solution}
+\end{example}
+
+The question of representability is equivalent to:
+the remainder in Taylor's theorem vanishes at $n \to \infty$.
+\begin{align*}
+    |f(x) - T_{f, c}^{(n)}(x)| &= \text{remainder} \\
+    &= \left|\frac{f ^ {(n + 1)}(\xi_n)}{(n + 1)!}(x - c) ^ {n + 1}\right|
+\end{align*}
+with $\xi$ between $c$ and $x$.
+
+\begin{example}
+    \[
+    f(x) = p(x)
+    \]
+    a polynomial of degree $N$.
+
+    \begin{solution}
+        Then $f ^ {(n)}(x) = 0$ for all $n \geq N + 1$ Lagrange remainder vanishes,
+        for all $n \geq N$,
+        so
+        \[
+        f(x) = T_{f, c}^{(N)}(x) = \sum_{k = 0}^{N}\frac{f ^ {(k)}(c)}{k!}(x - c) ^ k.
+        \]
+    \end{solution}
+\end{example}
+
+\begin{example}
+    \[
+    f(x) = \sin(x), \cos(x)
+    \]
+
+    \begin{solution}
+        Then,
+        \[
+        f ^ {(k)} = \pm\sin(x), \cos(x)
+        \]
+        so $|f ^ {(n + 1)}(\xi)| \leq 1$ so the Lagrange remainder
+        \[
+        \left|\frac{f ^ {(n + 1)}(\xi)}{(n + 1)!}(x - c) ^ {n + 1}\right| \leq \frac{\left|(x - c) ^ {n + 1}\right|}{(n + 1)!} \xrightarrow[n \to \infty]{} 0.
+        \]
+    \end{solution}
+\end{example}
+
+\begin{proposition}
+    Assume $f(x) = \infsumo a_kx ^ k$ is given by a power series converging in $(-R, R)$,
+    ($R > 0$).
+
+    Let $c \in (-R, R)$.
+    Then $T_{f, c}(x)$ converges with radius of convergence
+    \[
+    ||c| - R|
+    \]
+    and is equal to $f(x)$.
+
+    \begin{proof}
+        Skipped.
+        More naturally explained in the context of complex analysis.
+    \end{proof}
+\end{proposition}
+
+\begin{example}
+    \begin{enumerate}[label = (\roman*)]
+        \item $\sin(x), \cos(x)$.
+
+        \item $f(x) = e ^ x$.
+
+        \item $f(x) = \frac{1}{1 - x} = \infsumo x ^ k$.
+
+        \item $e ^ {x ^ 2}$.
+
+        \item $\frac{\sin{x}}{x}$.
+
+        \item $f(x) = \log(1 + x)$.
+    \end{enumerate}
+
+    \begin{solution}
+        \begin{enumerate}[label = (\roman*)]
+            \item Done.
+
+            \item Remainder
+            \[
+            |R_n(x)| = \left|\frac{e ^ {\xi}}{(n + 1)!}(x - c) ^ {n + 1}\right| \leq \frac{e ^ {y}|x - c| ^ {n + 1}}{(n + 1)!} \xrightarrow[n \to \infty]{} 0
+            \]
+            $y = \max{\{|x|, |c|\}}$,
+            hence $e ^ x$ is equal to its Taylor series at any point $c$.
+
+            \item
+            \begin{align*}
+                f(x) &= \frac{1}{1 - x} \\
+                &= \frac{1}{(1 - c) - (x - c)} \\
+                &= \frac{\frac{1}{1 - c}}{1 - \left(\frac{x - c}{1 - c}\right)} \\
+                &= \frac{1}{1 - c}\infsumo\left(\frac{x - c}{1 - c}\right) ^ k \\
+                &= \infsumo\left(\frac{1}{1 - c}\right) ^ {k + 1}(x - c) ^ k.
+            \end{align*}
+            Valid if
+            \[
+            \left|\frac{x - c}{1 - c}\right| < 1 \iff |x - c| < |1 - c|.
+            \]
+
+            \item
+            \[
+            e ^ {x ^ 2} = \infsumo\frac{(x ^ 2) ^ k}{k!} = \infsumo\frac{x ^ {2k}}{k!}.
+            \]
+
+            \item
+            \[
+            \frac{\sin{x}}{x} = \frac{1}{x}\infsumo(-1) ^ k\frac{x ^ {2k + 1}}{(2k + 1)!} = \infsumo\frac{(-1) ^ kx ^ {2k}}{(2k + 1)!} = 1 - \frac{x ^ 2}{6} + \frac{x ^ 4}{120} + \dotsc.
+            \]
+
+            \item
+            Recall $\frac{1}{1 + x} = \frac{1}{1 - (-x)} = \infsumo (-1) ^ kx ^ k$ for $|x| < 1$.
+            Also $\log(1 + x)' = \frac{1}{1 + x}$.
+            So
+            \[
+            \log(1 + x) = \infsumo\frac{(-1) ^ k}{k}x ^ {k + 1} + C
+            \]
+            with $C = \log(1 + x)|_{x = 0} = \log(1) = 0$.
+            So
+            \[
+            \log(1 + x) = \infsum\frac{(-1) ^ {k + 1}}{k}x ^ k
+            \]
+            for $|x| < 1$.
+        \end{enumerate}
+    \end{solution}
+\end{example}
+
+\newpage
+
+\section{Sequences of Functions}
+$f_n(x) : I \to \R$ a sequence of functions.
+
+Pointwise limit
+
+\begin{definition}[Pointwise limit]
+    We say $f(x) : I \to \R$ is the pointwise limit of $(f_n(x))$ if for all $x \in \R$ we have $\liminfty f_n(x) = f(x)$.
+    I,e,
+    \[
+    \forall x \in I, \forall \varepsilon > 0, \exists N > 0, \forall n \geq N, |f_n(x) - f(x)| < \varepsilon.
+    \]
+\end{definition}
+\textit{Note that $N$ depends on $x$
+(and $\varepsilon$)}.
+
+\begin{example}
+    $f_n(x) = x ^ n$ on $I = [0, 1]$.
+    \[
+    \liminfty x ^ n = f(x)  = \begin{cases}
+        0 & \text{if } x \in [0, 1)] \\
+        1 & \text{if } x = 1.
+    \end{cases}
+    \]
+\end{example}
+
+\begin{definition}[Uniform convergence]
+    $f_n \to f$ uniformly on $I$.
+    \[
+    \forall \varepsilon > 0, \exists N > 0, \forall x \in I, \forall n \geq N, |f_n(x) - f(x)| < \varepsilon.
+    \]
+\end{definition}
+\textit{Note that $N$ is independent of $x \in I$}.
+
+\begin{example}
+    $x ^ n \to f(x)$ not uniformly on $[0, 1]$.
+    \begin{solution}
+        \[
+        \exists \varepsilon > 0, \forall N < 0, \exists n \geq N, \exists x \in I, |f_n(x) - f(x)| \geq \varepsilon.
+        \]
+        Pick $x_n = \sqrt[n]{\frac{1}{2}}$
+        (note $\limas{x_n}{1}$).
+        Then $f_n(x_n) = \left(\sqrt[n]{\frac{1}{2}}\right) ^ n = \frac{1}{2}$,
+        so
+        \begin{align*}
+            |f(x_n) - f_n(x_n)| &= \left|0 - \frac{1}{2}\right| \\
+            &= \frac{1}{2} \\
+            \intertext{Pick $\varepsilon = \frac{1}{2}$}
+            &\geq \varepsilon.
+        \end{align*}
+    \end{solution}
+\end{example}
+
+\begin{example}
+    \[
+    f_n(x) = 3x ^ 3 + \frac{\cos(nx)}{n}
+    \]
+    
+    \begin{solution}
+        Pointwise limit $f(x) = 3x ^ 3$ since $0 \leq \left|\frac{\cos(nx)}{n}\right| \leq \frac{1}{n}$ so $\liminfty\frac{\cos(nx)}{n} = 0$.
+
+        Uniform on $\R$?
+        \begin{align*}
+            |f_n(x) - f(x)| &= \left|\frac{\cos(nx)}{n}\right| \\
+            &\leq \limas{\frac{1}{n}}{0}
+        \end{align*}
+        $\frac{1}{n}$ independent of $x \in \R$.
+
+        Pick $\varepsilon > 0$,
+        take $N = \frac{1}{\varepsilon}$.
+        Then,
+        \begin{align*}
+            |f_n(x) - f(x)| &< \frac{1}{n} \\
+            &\leq \frac{1}{N} &(\text{for all $n \geq N$})\\
+            &= \varepsilon.
+        \end{align*}
+    \end{solution}
+\end{example}
+
+\begin{example}
+    \[
+    f_n(x) = x ^ n.
+    \]
+
+    \begin{solution}
+        Claim:
+        $f_n(x) = x ^ n \to 0 = f(x)$ uniformly on $[0, r]$ for any $r < 1$.
+
+        Indeed,
+        \[
+        |f_n(x) - f(x)| = |x ^ n - 0| = |x ^ n| \leq r ^ n
+        \]
+        for all $x \in [0, r]$.
+        $\limas{r ^ n}{0}$ independent of $x$.
+
+        Given $\varepsilon > 0$,
+        find $N$ such that $r ^ n < \varepsilon$ for all $n \geq N$.
+    \end{solution}
+\end{example}
+
+\begin{definition}[Uniform Convergence on Compact Subsets Subintervals.]
+    $f_n : I \to \R$,
+    $f_n \to f$ uniformly in compact subintervals.
+    If $f_n \to f$ uniformly on all $[a, b] \subset I$.
+\end{definition}
+
+We had shown $f_n(x) = x ^ n \to 0$ uniformly on all compact subintervals $[a, b] \subset [0, r]$ of $(0, 1)$.
+
+\begin{example}
+    \[
+    f(x) = \infsumo x ^ k\qquad|x| < 1
+    \]
+    ($= \frac{1}{1 - x}$).
+    Is this uniformly converging?
+
+    \begin{solution}
+        \[
+        \liminfty\underbrace{\left(\sum_{k = 0}^{n}x ^ k\right)}_{=f_n(x)}
+        \]
+        \begin{align*}
+            |f(x) - f_n(x)| &= \left|\infsum[k = n + 1]x ^ k\right| \\
+            &= \left|\frac{x ^ {n + 1}}{1 - x}\right|
+        \end{align*}
+        Non-uniform on $(-1, 1)$.
+        Pick $x_n = \sqrt[n + 1]{\frac{1}{2}}\quad(\xrightarrow[n \to \infty]{} 1)$.
+        So
+        \[
+        |f(x_n) - f(x_n)| = \left|\frac{x_n ^ {n + 1}}{1 - x_n}\right| = \frac{\left(\sqrt[n + 1]{\frac{1}{2}}\phantom{1}\right) ^ {n + 1}}{1 - \sqrt[n + 1]{\frac{1}{2}}} = \frac{\frac{1}{2}}{1 - \sqrt[n + 1]{\frac{1}{2}}}
+        \]
+        hence unbounded as $n \to \infty$.
+        Pick $\varepsilon = 1$.
+        Then for large $n$ we have
+        \[
+        |f_n(x_n) - f(x_n)| \geq 1 = \varepsilon.
+        \]
+        But we are uniform on all compact subsets $[a, b]$ in $(-1, 1)$.
+        For convenience take $r$ with $0 < r < 1$ such that $[a, b] \subseteq [-r, r] \subset (-1, 1)$.
+        Then
+        \[
+        |f(x) - f_n(x)| = \frac{|x ^ {n + 1}|}{|1 - x|} \leq \frac{r ^ {n + 1}}{1 - r} \xrightarrow[n \to \infty]{} 0.
+        \]
+        Pick $\varepsilon > 0$.
+        Find $N$ such that for all $n \geq N$,
+        $\frac{r ^ {n + 1}}{1 - r} < \varepsilon$.
+        But $|f_n(x) - f(x)| \leq \frac{r + ^ {n + 1}}{1 - r}$.
+    \end{solution}
+\end{example}
+
+\begin{lemma}[Criterion]
+    \begin{enumerate}[label = (\roman*)]
+        \item If $|f(x) - f_n(x)| \leq a_n$ for all $x \in I$ with $\liminfty a_n = 0$ then we have uniform convergence on $I$.
+
+        \item if there exists $\varepsilon > 0$ and a sequence $x_n \in I$ such that for all $n$ sufficiently large.
+        \[
+        |f(x_n) - f_n(x_n)| \geq \varepsilon
+        \]
+        then convergence is not uniform on $I$.
+    \end{enumerate}
+\end{lemma}
+
+\begin{example}
+    \[
+    f_n(x) = \left(1 + \frac{x}{n}\right) ^ n \to e ^ x = f(x)\quad x \in \R
+    \]
+
+    Is this uniform?
+
+    \begin{solution}
+        On $\R$:
+        No.
+
+        Pick $x_n = n$.
+        Then
+        \[
+        |f_n(x_n) - f(x_n)| = |2 ^ n - e ^ n| = e ^ n - 2 ^ n = e ^ n\left(1 - \left(\frac{2}{e}\right) ^ n\right)
+        \]
+        is unbounded.
+
+        But it is uniform on compact subsets:
+        proof:
+        challenge.
+    \end{solution}
+\end{example}
+
+\subsection{Uniform Convergence and Continuity}
+
+\begin{theorem}
+    Assume $f_n \to f$ uniformly on $I$,
+    continuous on $I$.
+    Then $f(x)$ is continuous on $I$.
+
+    \begin{proof}
+        ($\frac{\varepsilon}{3}$-trick).
+
+        Have $f_n \to f$ uniformly,
+        i.e. there exists an $N$ such that for all $n \geq N$ and for all $x \in I$,
+        \[
+        |f(x) - f_n(x)| < \varepsilon.
+        \]
+        Take that $N$,
+        then $f_N(x)$ is continuous.
+        Given $c \in I$.
+        Find $\delta > 0$,
+        such that $|f_N(x) - f_N(c)| < \varepsilon$ for all $x$ with $|x - c| < \delta$
+        \begin{align*}
+            |f(x) - f(c)| &= |f(x) - f_N(x) + f_N(x) - f_N(c) + f_N(c) - f(c)| \\
+            &\leq |f(x) - f_N(x)| + |f_N(x) - f_N(c)| + |f_N(c) - f(c)| &(\text{for $|x - c| < \delta$})\\
+            &< \varepsilon + \varepsilon + \varepsilon \\
+            &= 3\varepsilon.
+        \end{align*}
+
+        \textit{Note:
+        could change all $\varepsilon$ to $\varepsilon / 3$ to get $<\varepsilon$.}
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}
+    $f_n : I \to \R$ continuous,
+    $f_n \to f$ uniformly on compact subsets of $I$.
+    Then $f(x)$ is continuous.
+
+    \begin{proof}
+        Take $c \in I$,
+        find an $I$ interval $[a, b]$ containing $c$.
+        One $[a, b]$ we have uniform convergence which implies continuity of $f$ in $[a, b] \ni c$.
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}
+    $f_n : I \to \R$ differentiable with $f_n'$ continuous.
+    Assume $f_n \to f$ pointwise,
+    $f_n'$ converges uniformly
+    (in compact subsets)
+    to $g(x)$
+    (for some function $g(x)$).
+
+    Then $f(x)$ is differentiable on $I$ with $f'(x) = g(x) = \liminfty f_n'(x)$
+\end{theorem}
+
+\begin{example}
+    $f_n(x) = \frac{\sin(nx)}{n} \to 0 = f(x)$.
+    In fact uniformly on $\R$.
+
+    \[
+    |f_n(x) - f(x)| = \left|\frac{\sin(nx)}{n}\right| \leq \frac{1}{n} \xrightarrow[n \to \infty]{} 0.
+    \]
+    For all $x \in \R$ independent of $x$.
+
+    But $f_n'(x) = n\frac{\cos(nx)}{n} = \cos(nx)$,
+    which doesn't converge
+    (not even pointwise,
+    for most points).
+\end{example}
+
+\begin{theorem}[Weierstrass $M$-test]
+    $\infsumo f_k(x)$ on $I$.
+    Assume
+    \[
+    |f_k(x)| \leq M_k
+    \]
+    independent of $x$.
+    \[
+    \infsumo M_k < \infty
+    \]
+    converges.
+    Then $\infsumo f_k(x)$ uniformly on $I$.
+
+    \begin{proof}
+        By comparison
+        \[
+        \sum|f_k(x)| \leq \sum M_k < \infty
+        \]
+        so $\sum f_k(x)$ converges absolutely to a function $f(x)$.
+
+        Set $L = \infsumo M_k = \liminfty\left(\sum_{k = 0}^{n}M_k\right)$.
+        So given $\varepsilon > 0$,
+        there exists an $N$ such that
+        \[
+        \left|L - \sum_{k = 0}^{n}M_k\right| = \infsum[k = n + 1]M_k < \varepsilon
+        \]
+        for all $n \geq N$.
+
+        Will show
+        \[
+        \left|f(x) - \infsumo f_k(x)\right| < \varepsilon.
+        \]
+        for all $n \geq N$.
+
+        Indeed:
+        \[
+        \left|f(x) - \sum_{k = 0}^{n}f_k(x)\right| = \left|\infsum[k = n + 1]f_k(x)\right| \leq \infsum[k = n + 1]|f_k(x)| \leq \infsum[k = n + 1]M_k < \varepsilon.
+        \]
+    \end{proof}
+\end{theorem}
+
+To show continuity of $\sum f_k(x)$ use $M$-test on compact subsets of $I$.
+
+\begin{example}[Weierstrass Monster]
+    \[
+    f(x) = \infsumo\frac{1}{2 ^ k}\cos(15 ^ k\pi x)
+    \]
+    is continuous on $\R$,
+    since it is uniformly convergent on $\R$.
+
+    \begin{solution}
+        Indeed,
+        \[
+        \left|\frac{1}{2 ^ k}\cos(15 ^ k\pi x)\right| \leq \frac{1}{2 ^ k} = M_k
+        \]
+        and
+        \[
+        \infsumo\frac{1}{2 ^ k} = \frac{1}{1 - \frac{1}{2}} = 2 < \infty.
+        \]
+        By the $M$-test,
+        uniform convergence on $\R$,
+        and by $\R$ uniform convergence implies continuous.
+    \end{solution}
+\end{example}
+
+\begin{theorem}
+    Power series $\infsumo a_kx ^ k$ are continuous in $(-R, R)$.
+
+    Since they converge uniformly on compact subsets of $(-R, R)$.
+
+    \begin{proof}
+        Take $[a, b] \subset [-r, r] \subset (-R, R)$,
+        $r \in \R$.
+
+        Take $x \in [-r, r]$.
+        Then
+        \[
+        \infsumo|\underbrace{a_kx ^ k}_{= f_k(x)}| \leq \sum\underbrace{|a_k|r ^ k}_{= M_k} < \infty
+        \]
+        since $r < R$ by $M$-test and the previous theorem.
+    \end{proof}
+\end{theorem}
+
+\newpage
+
+\section{Regulated Functions}
+
+\begin{definition}[Step function]
+    $f : [a, b] \to \R$.
+    Exists a partition
+    \[
+    x_0 = a < x_1 < x_2 < \dotsc < x_N = b
+    \]
+    of $[a, b]$ such that on each open subinterval $(x_k, x_{k + 1})$ the function $f(x)$ is constant.
+\end{definition}
+
+\begin{proposition}
+    Let $f, g$ be step functions.
+    Then
+    \begin{enumerate}[label = (\roman*)]
+        \item $af(x) + bg(x)$ is a step function.
+
+        \item $f(x)g(x)$ is a step function.
+
+        \item $|f(x)|$ is a step function.
+
+        \item $\max(f, g) = \frac{1}{2}(f + g) + \frac{1}{2}|f - g|$ is a step function.
+
+        \item $\min(f, g)$ is a step function.
+    \end{enumerate}
+\end{proposition}
+
+\begin{definition}[Regulated functions]
+    $f : [a, b] \to \R$ is called regulated if there exists a sequence $f_n(x) : [a, b] \to \R$ of step functions such that $f_n \to f$ uniformly.
+\end{definition}
+
+\begin{lemma}[Sequence-free characterisation]
+    $f$ is regulated if and only if,
+    for all $\varepsilon > 0$ there exists a step function $g(x)$ such that
+    \[
+    |f(x) - g(x)| < \varepsilon
+    \]
+    for all $x \in [a, b]$.
+
+    \begin{proof}
+        \textit{Note:
+        by the definition of a regulated function we need uniform convergence.}
+        
+        Uniform convergence:
+        \[
+        \forall \varepsilon > 0, \exists N, \forall n \geq N, \forall x \in [a, b], |f(x) - f_N(x)| < \varepsilon.
+        \]
+        
+        "$\implies$".
+        Given $\varepsilon > 0$.
+        Take $N$.
+        Then $|f_N(x) - f(x)| < \varepsilon$ for all $x$.
+
+        "$\impliedby$".
+        Take $\varepsilon = 1 / n$.
+        Find by hypothesis a step function $f_n(x)$ with $|f(x) - f_n(x)| < \frac{1}{n}$,
+        for all $x \in [a, b]$.
+        Since $\liminfty\frac{1}{n} = 0$ hence $f_n \to f$ uniformly.
+    \end{proof}
+\end{lemma}
+
+\begin{theorem}
+    Continuous functions on $[a, b]$ are regulated.
+
+    \begin{proof}
+        We will use that $f(x)$ is uniformly continuous on $[a, b]$.
+        \begin{equation}\label{analy:eq:4}\tag{*}
+            \forall \varepsilon > 0, \exists \delta > 0, \forall x, y \in [a, b], |x - y| < \delta \implies |f(x) - f(y)| < \varepsilon.
+        \end{equation}
+
+        Given $\varepsilon > 0$,
+        need a step function $g(x)$ on $[a, b]$ such that $|f(x) - g(x)| < \varepsilon$ for all $x \in [a, b]$.
+        We have $\delta > 0$ such that \eqref{analy:eq:4} holds.
+        Take a partition $a = x_0, x_1, x_2, \dotsc x_{N + 1}, x_N = b$ such that
+        \[
+        |x_{k + 1} - x_k| < \delta.
+        \]
+        To define the step function $g(x)$,
+        take any point $x_k ^ {*} \in [x_k, x_{k + 1}]$,
+        then
+        \[
+        g(x) = \begin{cases}
+            f(x_k ^ {*}), &\text{if } x \in [x_k, x_{k + 1}) \\
+            f(b), &\text{if } x = b = x_N.
+        \end{cases}
+        \]
+        Then take $x \in [a, b]$,
+        so $x$ lies in one of the subintervals,
+        say $x \in [x_k, x_{k + 1})$.
+        Then
+        \begin{align*}
+            |f(x) - g(x)| &= |f(x) - f(x_k ^ {*})| &(\text{$x, x_k ^ {*} \in [x_k, x_{k + 1})$}) \\
+            &< \varepsilon &(\text{since $|x - x_k ^ {*}| < \delta$}).
+        \end{align*}
+    \end{proof}
+\end{theorem}
+
+
+\begin{example}
+    \begin{enumerate}[label = (\arabic*)]
+        \item How to get $f_n \to f$?
+        Assume $f$ is Lipschitz
+        \[
+        |f(x) - f(y)| \leq M|x - y|
+        \]
+        for all $x, y \in [a, b]$.
+        Equidistant partition:
+        \[
+        x_k = a + k \cdot \frac{b - a}{n}, \quad k = 0, \dotsc, n.
+        \]A
+        Take any $x_k ^ {*} \in [x_k, x_{k - 1})$.
+        Say $x_k ^ {*} = x_k$.
+        Set
+        \[
+        f_n(x) = \begin{cases}
+            f(x_k) &\text{if } x \in [x_k, x_{k + 1}) \\
+            f(b) &\text{if } x = b.
+        \end{cases}
+        \]
+        $x \in [x_k, x_{k + 1})$ for some $k$
+        \begin{align*}
+            |f(x) - f_n(x)| &= |f(x) - f(x_k ^ {*})| \\
+            &\leq M|x - x_k ^ {*}| \\
+            &\leq M\cdot\frac{b - a}{n}
+        \end{align*}
+        both lie in $[x_k, x_{k + 1}]$ of length $\frac{b - a}{n}$.
+        Uniform convergence since $M\cdot\frac{b - a}{n} \to 0$ as $n \to \infty$.
+
+        \item Not all functions are regulated.
+        \[
+        d(x) \coloneqq \begin{cases}
+            1 &\text{if } x \in \Q \\
+            0 &\text{otherwise}.
+        \end{cases}
+        \]
+        Note any open set or interval contains infinitely many rational and irrational numbers.
+
+        Assume $d(x)$ was regulated.
+        Given $\varepsilon = 1 / 4$,
+        take the step function $g(x)$ such that $|g(x) - d(x)| < 1 / 4$ for all $x \in [0, 1]$.
+        As a step function $g(x)$ is constant on some interval,
+        $g(x) = c$ for all $x \in I$.
+        But $I$ contains $r \in \Q$ and $s \in \R \setminus \Q$,
+        $d(r) = 1$,
+        $d(s) = 0$,
+        \[
+        |d(r) - g(r)| = |1 - c| < \frac{1}{4}
+        \]
+        \[
+        |d(s) - g(s)| = c < \frac{1}{4}
+        \]
+        contradiction.
+
+        \item Regulated functions can have infinitely many discontinuities.
+
+        Take a sequence $(a_k)$ with limit $\liminfty[k]a_k = 0$.
+        Set
+        \[
+        f(x) = \begin{cases}
+            a & x = 0 \\
+            a_k & x \in \left(\frac{1}{k + 1}, \frac{1}{k}\right] \\
+            a_0 & x = 1.
+        \end{cases}
+        \]
+        on $[0, 1]$.
+        Not a step function,
+        but set
+        \[
+        f_n(x) = \begin{cases}
+            a &\text{if } x \in \left[0, \frac{1}{n + 1}\right] \\
+            f(x) &\text{if } x > \frac{1}{n + 1}.
+        \end{cases}
+        \]
+        Then
+        \[
+        |f_n(x) - f(x)| = \begin{cases}
+            0 &\text{if } x > \frac{1}{n + 1} \\
+            |a_k - a| & k > n
+        \end{cases}
+        \]
+        for $x \in \left[0, \frac{1}{n + 1}\right]$.
+
+        \item Every monotone function is regulated.
+    \end{enumerate}
+\end{example}
+
+\begin{lemma}
+    $f_n \to f$ uniformly,
+    $f_n$ step functions.
+    Then $f_n(x)$,
+    $f(x)$ are uniformly bounded.
+    I.e. $|f_n(x)|, |f(x)| < C$ for all $x \in [a, b]$.
+
+    \begin{proof}
+        Take $\varepsilon = 1$.
+        Exists $N$ such that $|f_n(x) - f(x)| < \varepsilon = 1$ for all $x \in [a, b]$ and for all $n \geq N$.
+        So $|f(x) - f_N(x)| < \varepsilon = 1$ for all $x$,
+        so $|f(x)| < |f_N(x)| + 1$,
+        $f_N(x)$ bounded since $f_N(x)$ takes only finitely many values.
+        Same for $f_n(x)$,
+        $n \geq N$.
+        $f_1, \dotsc, f_{N - 1}$ are universally bounded.
+    \end{proof}
+\end{lemma}
+
+\begin{proposition}[Regulated COLT]
+    $f_n \to f$,
+    $g_n \to g$,
+    $f, g$ regulated.
+    Then
+    \begin{enumerate}[label = (\roman*)]
+        \item $af + bg$ regulated.
+
+        \item $fg$ regulated.
+
+        \item $|f|$ regulated.
+        
+        \item $\max\{f, g\}$ regulated.
+        
+        \item $\min\{f, g\}$ regulated.
+    \end{enumerate}
+
+    \begin{proof}
+        \begin{enumerate}[label = (\roman*)]
+            \item $af_n + bg_n \to af + bg$.
+
+            \item $f_ng_n \to fg$.
+
+            \item $|f_n| \to f$.
+        \end{enumerate}
+    \end{proof}
+\end{proposition}
+
+\newpage
+
+\section{Integration}
+
+The integral $I(f)$ is the signed area of the rectangles
+\[
+I(f) = \sum_{k = 0}^{N - 1}(x_{k + 1} - x_k)f(x_k ^ {*})
+\]
+$x_k ^ {*}$ is any element in $(x_k, x_{k + 1})$,
+this is the Riemann sum.
+This is independent of the choice of the underlying partition,
+nor does it depend on the values at the $x_0, \dotsc, x_N$.
+
+\begin{definition}[Regulated integral]
+    $f : [a, b] \to \R$ regulated,
+    say $f_n \to f$,
+    $f_n$ step functions.
+    Define the integral by
+    \[
+    I(f) = \liminfty I(f_n).
+    \]
+\end{definition}
+
+Need to check two things
+\begin{enumerate}[label = (\alph*)]
+    \item The limit exists.
+
+    \item Independent of the choice of $f_n \to f$.
+\end{enumerate}
+\begin{proof}
+    \begin{enumerate}[label = (\alph*)]
+        \item Show that the sequence $I(f_n) \eqqcolon a_n$ forms a Cauchy sequence.
+
+        Take $\varepsilon > 0$.
+        Need to find an $N$ such that for all $n, m \geq N$,
+        \[
+        |a_n - a_m| < \varepsilon
+        \]
+        we have $|I(f_n) - I(f_m)| = |a_n - a_m|$.
+        Take $N$ as in the definition of the regulated function,
+        and let $n, m \geq N$.
+        For the step functions $f_n(x)$ and $f_m(x)$.
+        Take a common refinement of the two underlying partitions,
+        $a = x_0, x_1, \dotsc, x_N = b$.
+        Then
+        \begin{align*}
+            |I(f_n) - I(f_m)| &= \sum_{k = 0}^{N}|(x_{k + 1} - x_k)f_m(x_k ^ {*}) - (x_{k + 1} - x_k)f_n(x_k ^ {*})| \\
+            &= \sum_{k = 0}^{N}(x_{k + 1} - x_k) \cdot |f_m(x_k) - f_n(x_k ^ {*})| \\
+            &= \sum_{k}^{N}(x_{k + 1} - x_k)|f_m(x_k ^ {*}) - f(x_k ^ {*}) + f(x_k ^ {*}) - f_n(x_k ^ {*})| \\
+            &\leq \sum_{k}^{N}(x_{k + 1} - x_k)\left[|f_m(x_k ^ {*}) - f(x_k ^ {*})| + |f(x_k ^ {*}) - f_n(x_k ^ {*})|\right] \\
+            &< 2\varepsilon\sum_{k = 0}^{N}(x_{k + 1} - x_k) = 2(b - a)\varepsilon
+        \end{align*}
+    
+        \item
+        Take $f_n \to f$,
+        $g_n \to f$ uniformly
+        ($f_n, g_n$ step functions).
+        Need $\liminfty I(f_n) = \liminfty I(g_n)$.
+        Take $\varepsilon > 0$.
+        Need to find an $N$ such that
+        \[
+        |I(f_n) - I(g_n)| < \varepsilon
+        \]
+        Take $N$ as in the definition of the regulated function,
+        for both $f_n, g_n$.
+        \begin{align*}
+            |I(f_n) - I(g_n)| &= \sum_{k = 0}^{N}|(x_{k + 1} - x_k)g_n(x_k ^ {*}) - (x_{k + 1} - x_k)f_n(x_k ^ {*})| \\
+            &= \sum_{k = 0}^{N}(x_{k + 1} - x_k) \cdot |g_n(x_k) - f_n(x_k ^ {*})| \\
+            &= \sum_{k}^{N}(x_{k + 1} - x_k)|g_n(x_k ^ {*}) - f(x_k ^ {*}) + f(x_k ^ {*}) - f_n(x_k ^ {*})| \\
+            &\leq \sum_{k}^{N}(x_{k + 1} - x_k)\left[|g_n(x_k ^ {*}) - f(x_k ^ {*})| + |f(x_k ^ {*}) - f_n(x_k ^ {*})|\right] \\
+            &< 2\varepsilon\sum_{k = 0}^{N}(x_{k + 1} - x_k) = 2(b - a)\varepsilon
+        \end{align*}
+    \end{enumerate}
+\end{proof}
+
+\begin{example}
+    $f(x) = x$ on $[a, b]$.
+    
+    To define the $f_n(x)$,
+    take the equidistant partition $x_k = a + k\frac{b - a}{n}$,
+    $k = 0, \dotsc, n$.
+
+    For the $x_k ^ {*}$ take $x_k$.
+    Set $f(x) = f(x_k ^ {*}) = f(x_k)$ for $x \in (x_k, x_{k + 1})$.
+    Since $f$ Lipschitz $f_n \to f$ uniformly.
+
+    Take $a = 0, b = 1$.
+    \[
+    I(f_n) = \sum_{k = 0}^{n}(x_{k + 1} - x_k)f(x_k ^ {*}) = \frac{x_k ^ {*}}{n} = \frac{x_k}{n ^ 2} = \frac{1}{n ^ 2}\sum_{k = 0}^{N}k = \frac{1}{n ^ 2}\frac{n(n + 1)}{2} = \frac{n + 1}{2n} \to \frac{1}{2}.
+    \]
+\end{example}
+
+\subsection{Properties of the integral}
+
+\begin{theorem}[Properties of the integral]\phantom{}
+    \begin{enumerate}[label = (\roman*)]
+        \item Linearity
+        \begin{align*}
+            \int_{a}^{b}f(t) + g(t)\,dt &= \int_{a}^{b}f(t)\,dt + \int_{a}^{b}g(t)\,dt. \\
+            c\int_{a}^{b}f(t)\,dt &= c\int_{a}^{b}f(t)\,dt.
+        \end{align*}
+
+        \item Monotonicity
+
+        \begin{itemize}
+            \item 
+            if $f(t) \leq g(t)$ for all $t \in [a, b]$ then
+            \[
+            \int_{a}^{b}f(t)\,dt \leq \int_{a}^{b}g(t)\,dt.
+            \]
+
+            \item
+            In particular,
+            if $m = \inf_{t \in [a, b]}{f(t)}$,
+            $M = \sup_{t \in [a, b]}{f(t)}$ then
+            \[
+            m(b - a) \leq \int_{a}^{b}f(t)\,dt \leq M(b - a).
+            \]
+
+            \item
+            \[
+            \left|\int_{a}^{b}f(t)\,dt\right| \leq \int_{a}^{b}|f(t)|\,dt.
+            \]
+        \end{itemize}
+        \item Additivity
+        \[
+        \int_{a}^{b}f(t)\,dt + \int_{b}^{c}f(t)\,dt = \int_{a}^{c}f(t)\,dt.
+        \]
+    \end{enumerate}
+
+    \begin{proof}
+        \begin{enumerate}[label = (\roman*)]
+            \item \phantom{}
+            
+            \item
+            By linearity,
+            it is enough to consider $f(t) \geq 0$,
+            and show $\int_{a}^{b}f(t)\,dt \geq 0$.
+            (Consider $g(t) - f(t)$).
+
+            So take $f_n \to f$ uniformly.
+            Given $\varepsilon > 0$,
+            find $f_n(x)$ such that $|f(x) - f_n(x)| < \varepsilon$ for all $x \in [a, b]$.
+            By $f(t) \geq 0$,
+            we get $f_n(x) > -\varepsilon$ for all $x \in [a, b]$.
+            This implies $I(f_n) > -\varepsilon(b - a)$ this implies $\liminfty I(f_n)$ is bigger than any negative number,
+            shows that $I(f) \geq 0$.
+
+            $|f(t)| = \pm f(t)$,
+            $f(t) \leq |f(t)|$.
+        \end{enumerate}
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}[Mean Value Theorem for Intervals]
+    Let $f(x)$ be continuous on $[a, b]$.
+    Then there exists $c \in [a, b]$ such that
+    \[
+    \int_{a}^{b}f(t)\,dt = f(c)(b - a).
+    \]
+    
+    \begin{proof}
+        $f$ continuous hence takes minimum,
+        $m$,
+        and maximum,
+        $M$,
+        on $[a, b]$.
+        By monotonicity there exists $C$ such that
+        \[
+        C = \int_{a}^{b}f(x)\,dx / (b - a)
+        \]
+        with $m \leq C \leq M$.
+        By the intermediate value theorem there exists $c \in [a, b]$ such that $f(c) = C$,
+        so
+        \[
+        f(c)(b - a) = C(b - a) = \int_{a}^{b}f(x)\,dx.
+        \]
+    \end{proof}
+\end{theorem}
+
+\begin{theorem}
+    $f : [a, b]$ continuous.
+    Assume $f(x) \geq 0$ and exists a point $c \in [a, b]$ such that $f(c) > 0$.
+    Then
+    \[
+    \int_{a}^{b}f(t)\,dt > 0.
+    \]
+    
+    \begin{proof}
+        Set $C = f(c)$.
+        By continuity there exists a $\delta > 0$ such that $f(x) \geq \frac{c}{2}$ for all $x \in (c - \delta, c + \delta)$.
+        With this
+        \begin{align*}
+            \int_{a}^{b}f(t)\,dt &= \int_{a}^{c - \delta}f(t)\,dt + \int_{c - \delta}^{c + \delta}f(t)\,dt + \int_{c + \delta}^{b}f(t)\,dt \\
+            &\geq 0 + \frac{C}{2}\cdot 2\cdot \delta + 0 \\
+            &= C\delta \\
+            &> 0.
+        \end{align*}
+    \end{proof}
+\end{theorem}
+
+
+The continuity hypothesis is needed in the previous theorem:
+consider
+\[
+f(x) = \begin{cases}
+    0 & \text{on } [0, 1 / 2] \\
+    1 & \text{on } [1 / 2, 1]
+\end{cases}
+\]
+\[
+\int_{0}^{1}f(x)\,dx = \frac{1}{2} = \frac{1}{2}(1 - 0).
+\]
+But $\frac{1}{2}$ is not a value of $f$.
+
+Also
+\[
+f(x) = \begin{cases}
+    0 & x \neq 0 \\
+    1 & x = 0
+\end{cases}
+\]
+not continuous at $x = 0$,
+$f(x) \geq 0$.
+But $\int_{-1}^{1}f(x)\,dx = 0$.
+
+\begin{definition}
+    For $a \geq b$ set
+    \[
+    \int_{a}^{b}f(x)\,dx \coloneqq -\int_{b}^{a}f(x)\,dx.
+    \]
+\end{definition}
+
+\subsection{Fundamental Theorem of Calculus}
+$f$ regulated on some interval $I = [a, b]$.
+Set $F(x) = \int_{a}^{x}f(t)\,dt$.
+
+\begin{proposition}
+    $f$ is regulated on $[a, b]$.
+    $F(x) = \int_{a}^{x}f(t)\,dt$ is Lipschitz continuous on $[a, b]$ with $M = \sup_{x \in [a, b]}|f(x)|$.
+    In particular,
+    $f$ is continuous on $[a, b]$.
+
+    \begin{proof}
+        \begin{align*}
+            |F(x) - F(y)| &= \left|\int_{a}^{x}f(t)\,dt - \int_{a}^{y}f(t)\,dt\right| \\
+            &= \left|\int_{y}^{x}f(t)\,dt\right| \\
+            &\leq \left|\int_{y}^{x}|f(t)|\,dt\right| \\
+            &\leq \left|\int_{y}^{x}M\,dt\right| \\
+            &= M|x - y|
+        \end{align*}
+        hence Lipschitz.
+    \end{proof}
+\end{proposition}
+
+\begin{theorem}[Fundamental Theorem of Calculus]
+    $f$ continuous on $[a, b]$.
+    Then $F(x) = \int_{a}^{x}f(t)\,dt$ is differentiable on $[a, b]$ with
+    \[
+    F'(x) = f(x).
+    \]
+
+    \begin{proof}
+        Let $c \in (a, b)$.
+        Need to show
+        \[
+        \lim_{x \to c}\frac{F(x) - F(c)}{x - c}
+        \]
+        exists and is equal to $f(c)$.
+        For $x \neq c$
+        \begin{align*}
+            \frac{1}{x - c}\left(\int_{a}^{x}f(t)\,dt - \int_{a}^{c}f(t)\,dt\right) &= \frac{1}{x - c}\int_{c}^{x}f(t)\,dt \\
+            \intertext{Assume $x > c$
+            ($c > x$ goes the same).
+            By mean value theorem for integrals}
+            &= \frac{1}{x - c}\cdot (x - c)f(\xi_x) \\
+            \intertext{with $\xi_x \in (c, x)$}
+            &= f(\xi_x) \to f(c)
+        \end{align*}
+        since $x \to c$ so does $\xi_x \to c$ by continuity.
+    \end{proof}
+\end{theorem}
+
+\subsection{Functions via integrals}
+Given $f(x)$ continuous,
+define $F(x) = \int_{a}^{x}f(t)\,dt$.
+
+\begin{example}
+    \[
+    f(x) = \frac{1}{x}
+    \]
+    on $(0, \infty)$.
+
+    Set
+    \[
+    L(x) = \int_{1}^{x}\frac{1}{t}\,dt.
+    \]
+
+    Then
+    \[
+    L(1) = 0,
+    \]
+    trivially.
+    
+    \[
+    L'(x) = \frac{1}{x}
+    \]
+    by fundamental theorem of calculus.
+
+    $L(x)$ is increasing
+    (since $L'(x) > 0$).
+
+    \[
+    L(xy) = L(x) + L(y)
+    \]
+    true for $y = 1$.
+    Take derivatives in $x$:
+    \[
+    L'(xy) = y \cdot \frac{1}{xy} = \frac{1}{x} = L'(x).
+    \]
+    \[
+    L\left(\frac{1}{x}\right) = -L(x)
+    \]
+    with $y = \frac{1}{x}$.
+    \[
+    L(2) > \frac{1}{2}
+    \]
+    \[
+    \int_{1}^{2}\frac{1}{t}\,dt > \int_{1}^{2}\frac{1}{2}\,dt = \frac{1}{2},
+    \]
+    \[
+    L(2 ^ n) > \frac{n}{2}
+    \]
+    $nL'(2)$.
+    \[
+    L(2 ^ n) > \frac{n}{2} \implies L(x) \to \infty \text{ as } x \to \infty.
+    \]
+\end{example}
+
+\subsection{Limit Theorems}
+
+\begin{theorem}
+    $f_n : [a, b] \to \R$ sequence of regulated functions such that $f_n \to f$ uniformly.
+    Then
+    \begin{enumerate}[label = (\roman*)]
+        \item $f$ is regulated.
+        
+        \item
+        \[
+        \int_{a}^{b}f(t)\,dt = \liminfty\int_{a}^{b}f_n(t)\,dt.
+        \]
+    \end{enumerate}
+
+    \begin{proof}
+        \begin{enumerate}[label = (\roman*)]
+            \item
+            $f_n \to f$ uniformly.
+            So,
+            given $\varepsilon > 0$.
+            \[
+            |f_n(x) - f(x)| < \varepsilon
+            \]
+            for all $x \in [a, b]$ and for all $n \geq N$.
+            $f_n$ regulated.
+            There exists step functions $g_n(x)$ such that
+            \[
+            |f_n(x) - g_n(x)| < \varepsilon
+            \]
+            for all $x \in [a, b]$.
+            Claim $g_n \to f$ uniformly.
+            So $f$ is regulated.
+            \begin{align*}
+                |f(x) - g_n(x)| &= |f(x) - f_n(x) + f_n(x) - g_n(x)| \\
+                &\leq |f(x) - f_n(x)| + |f_n(x) - g_n(x)| \\
+                &< \varepsilon + \varepsilon = 2\varepsilon
+            \end{align*}
+            for all $x \in [a, b]$ and for all $n \geq N$.
+
+            \item
+            \begin{align*}
+                \left|\int_{a}^{b}f(t)\,dt - \int_{a}^{b}f_n(t)\,dt\right| &= \left|\int_{a}^{b}|f(t) - f_n(t)|\,dt\right| \\
+                &\leq \int_{a}^{b}|f(t) - f_n(t)|\,dt \\
+                &\leq \int_{a}^{b}\varepsilon\,dt &(n \geq N) \\
+                &= (b - a)\varepsilon.
+            \end{align*}
+        \end{enumerate}
+    \end{proof}
+\end{theorem}
+
+\[
+f(x) = \infsumo\frac{1}{2 ^ k}\cos(15 ^ k\pi x)
+\]
+converges uniformly by Weierstrass $M$-test
+($|\cos(15 ^ k\pi x)| \leq 1$)
+hence continuous thus regulated the $\int_{0}^{1 / 2}f(t)\,dt$ exists and is $\infsumo\left(\int_{0}^{1 / 2}\frac{1}{2 ^ k}\cos(15 ^ k\pi t)\,dt\right)$
+\begin{align*}
+    \infsumo\left(\int_{0}^{1 / 2}\frac{1}{2 ^ k}\cos(15 ^ k\pi t)\,dt\right) &= \infsumo\frac{1}{2 ^ k}\frac{1}{15 ^ k\pi}\sin\left(15 ^ k\pi\frac{1}{2}\right) \\
+    &= \frac{1}{\pi}\infsumo\frac{1}{30 ^ k}\cdot (-1) ^ k \\
+    &= \frac{1}{\pi}\frac{1}{1 + \frac{1}{30}} \\
+    &= \frac{1}{\pi}\cdot\frac{30}{31}.
+\end{align*}
+
+\begin{theorem}
+    Let $f_n(x)$ sequence of functions with continuous derivatives $f_n'(x)$.
+    Assume $f_n \to f$ pointwise,
+    $f_n' \to g$ uniformly for some function $g(x)$.
+
+    Then $f(x)$ is differentiable and $f'(x) = g(x) = \liminfty f_n'(x)$.
+
+    \begin{proof}
+        Have
+        \[
+        f_n(x) = f_n(a) + \int_{a}^{x}f_n'(t)\,dt,
+        \]
+        by the fundamental theorem of calculus,
+        as $n \to \infty$
+        \[
+        f(x) = f(a) + \liminfty\int_{a}^{x}g(t)\,dt\footnotemark
+        \]
+        \footnotetext{By the previous theorem.}
+        by the fundamental theorem of calculus $\int_{a}^{x}g(t)\,dt$ is differentiable with derivative $g(x)$.
+    \end{proof}
+\end{theorem}
+
+\subsection{Pointwise Convergence and Integration}
+
+\begin{example}
+    \[
+    f_n(x) = \begin{cases}
+        n - n ^ 2x & 0 < \frac{1}{n} \\
+        0 & x \geq \frac{1}{n}
+    \end{cases}
+    \]
+    \[
+    \int_{0}^{1}f_n(x)\,dx = \frac{1}{2}.
+    \]
+    But $\liminfty f_n(x) = 0$ and $\int_{0}^{1}f(x)\,dx = 0$.
+    Not uniformly
+    (pick $x_n = \frac{1}{2n}$).
+\end{example}
+
+\begin{example}
+    \[
+    f_n(x) = x ^ n\quad x \in [0, 1]
+    \]
+    as $n \to \infty$,
+    \[
+    f(x) = \begin{cases}
+        0 & x \in [0, 1) \\
+        1 & x = 1.
+    \end{cases}
+    \]
+    Not uniform on $[0, 1]$ but uniform on compact subsets of $(0, 1)$.
+
+    \[
+    \int_{0}^{1}f(x)\,dx = 0.
+    \]
+    \[
+    \int_{0}^{1}f_n(x)\,dx = \frac{1}{n + 1} \to 0.
+    \]
+\end{example}
+
+\subsection{Improper Integrals}
+
+$f : (a, b) \to \R$ continuous,
+$a = -\infty$,
+$b = \infty$ are allowed.
+
+\[
+\int_{a}^{b}f(t)\,dt = \lim_{c \to b ^ {-}}\int_{a}^{c}f(t)\,dt
+\]
+(if $f(x)$ is defined at $a$)
+\[
+\int_{a}^{b}f(t)\,dt = \lim_{c \to a ^ {+}}\int_{c}^{b}f(t)\,dt
+\]
+if the limit exists we call the integral convergent.
+\begin{align*}
+    \int_{1}^{\infty}x ^ {\alpha}\,dx &= \liminfty[c]\int_{1}^{c}x ^ {\alpha}\,d\alpha \\
+    &= \liminfty[c]\frac{1}{\alpha + 1}x ^ {\alpha + 1}|_{1}^{c} \\
+    &= \liminfty[c]\frac{1}{\alpha + 1}\left(c ^ {\alpha + 1} - 1\right) \\
+    &= \begin{cases}
+        -\frac{1}{\alpha + 1} & \alpha < -1 \\
+        \infty & \alpha \geq 1.
+    \end{cases}
+\end{align*}
+
+\[
+\int_{0}^{1}x ^ {\alpha}\,dx
+\]
+no issue if $\alpha \geq 0$.
+\begin{align*}
+    \int_{0}^{1}x ^ {\alpha}\,dx &= \lim_{c \to 0 ^ {+}}\int_{c}^{1}x ^ {\alpha}\,dx \\
+    &= \lim_{c \to 0 ^ {+}}\frac{1}{\alpha + 1}x ^ {\alpha + 1}|_{c}^{1} \\
+    &= \begin{cases}
+        \frac{1}{\alpha + 1} & \alpha > 1 \\
+        \infty & \alpha < -1 \\
+        \infty & \alpha = -1.
+    \end{cases}
+\end{align*}
+
+\[
+\int_{0}^{\infty}e ^ {-x}\,dx = \liminfty[c]-e ^ x|_{0}^{c} = 1.
+\]
+\[
+\int_{0}^{\infty}\frac{1}{1 + e ^ x}\,dx
+\]
+\[
+\int_{0}^{\infty}e ^ {-x ^ 2}\,dx
+\]
+Comparison test.
+
+If $0 \leq f(x) \leq g(x)$ on $(a, b)$ with $\int_{a}^{b}g(x)\,dx$ converges then $\int_{a}^{b}f(x)\,dx$ converges.
+
+If $\int f(x)\,dx$ diverges then $\int g(x)\,dx$ diverges
+
+\begin{proof}
+    \[
+    0 \leq \int_{a}^{c}f(x)\,dx \leq \int_{a}^{c}g(x)\,dx.
+    \]
+    Now squeeze
+\end{proof}
+\[
+\int_{0}^{\infty}\frac{1}{1 + e ^ x}\,dx \leq \int_{0}^{\infty}\frac{1}{e ^ x}\,dx < \infty.
+\]
+\[
+\int_{0}^{\infty}e ^ {-x ^ 2}\,dx = \int_{0}^{1}e ^ {-x ^ 2}\,dx + \int_{1}^{\infty}e ^ {-x ^ 2}\,dx \leq \int_{1}^{\infty}e ^ {-x}\,dx < \infty.
+\]
+\[
+\int_{1}^{\infty}\frac{\cos(x)}{x ^ 2}\,dx\quad\text{and}\quad\int_{1}^{\infty}\frac{1}{x ^ 2}\,dx = 1 < \infty
+\]
+\[
+\left|\frac{\cos(x)}{x ^ 2}\right| \leq \frac{1}{x ^ 2}
+\]
+then
+\[
+\int_{1}^{\infty}\frac{\cos(x)}{x ^ 2}\,dx
+\]
+converges absolutely.
+
+\[
+\mathrm{Si}(x) = \int_{0}^{x}\frac{\sin(t)}{t}\,dt
+\]
+is conditionally convergent.
+
+\begin{theorem}[Integral test]
+    $f : (N, \infty) \to (0, \infty)$ continuous and decreasing.
+    Set $a_k = f(k)$.
+    \[
+    \infsum[k = N]a_k\text{ converges} \iff \int_{N}^{\infty}f(t)\,dt\text{ converges}.
+    \]
+
+    \begin{proof}
+        \[
+        \sum_{k = N + 1}^{x}a_k \leq \int_{N}^{x}f(t)\,dt \leq \sum_{k = N}^{x - 1}a_k \leq \int_{N + 1}^{x + 1}f(t)\,dt
+        \]
+        converging by comparison and squeeze.
+    \end{proof}
+\end{theorem}
+
+\begin{corollary}
+    \[
+    \infsum[n = 1]n ^ {\alpha}
+    \]
+    converges if and only if $\alpha < -1$.
+\end{corollary}
+
+$\alpha = -1$:
+\[
+\sum_{k = 2}^{n}\frac{1}{k} < \int_{1}^{n}\frac{1}{x}\,dx = \log(n) < \sum_{k = 1}^{n - 1}\frac{1}{k} < \sum_{k = 1}^{n}\frac{1}{k} < \log(n + 1) + 1
+\]
+\[
+0 < \sum_{k = 1}^{n}\frac{1}{k} - \log(n) < \log(n + 1) - \log(n) + 1 = 1 + \log\left(\frac{n + 1}{n}\right) = 1 + \log\left(1 + \frac{1}{n}\right)
+\]
+as $n \to \infty$ goes to $1$.
+Increasing and bounded hence it converges.
+
+'Euler-Mascherini constant'
+\[
+\liminfty\left(\sum_{k = 1}^{n}\frac{1}{k} - \log(n)\right).
+\]
+
+\end{document}
