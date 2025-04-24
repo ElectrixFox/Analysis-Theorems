@@ -8,14 +8,8 @@ open Finset
 def seq_partial_sums (a : ℕ → ℝ) : ℕ → ℝ :=
   fun n => (∑ i ∈ Icc 0 n, a i)
 
-lemma sum_start' (a : ℕ → ℝ) (N : ℕ := 0) {n : ℕ}  : ∑ i ∈ Icc N n, a i = ∑ i ∈ Icc 0 n, a i - ∑ i ∈ Icc 0 (N - 1), a i := by
-  rw [←sum_Ico_add_eq_sum_Icc]
-
 lemma sum_add (a : ℕ → ℝ) {n : ℕ} : ∑ i ∈ Icc 0 (n + 1), a i = (∑ i ∈ Icc 0 n, a i) + a (n + 1) := by
   simp [sum_Icc_succ_top]
-
--- lemma sum_add' (a : ℕ → ℝ) (N : ℕ := 0) {n : ℕ} : ∑ i ∈ Icc N (n + 1), a i = (∑ i ∈ Icc N n, a i) + a (n + 1) := by
---   rw [sum_Icc]
 
 def sum_is_limit (x : ℕ → ℝ) (l : ℝ) : Prop :=
   seq_is_limit (seq_partial_sums x) l
@@ -106,3 +100,20 @@ lemma sum_conv_if_seq_convto_zero (a : ℕ → ℝ) : (∃ l, sum_is_limit a l) 
 
   rw [seq_convto_general_iff' a 0 1]  -- sorting out the limit
   apply h2
+
+theorem sum_COLT_add (a b : ℕ → ℝ) (l m : ℝ) (ha : sum_is_limit a l) (hb : sum_is_limit b m) : sum_is_limit (fun k => a k + b k) (l + m) := by
+  unfold sum_is_limit seq_partial_sums at * -- unfold the definitions
+  conv_lhs => ext n; simp [sum_add_distrib] -- do some manipulations
+  exact seq_COLT_addition _ _ _ _ ha hb -- apply normal COLT
+
+theorem sum_COLT_scalarmult (a : ℕ → ℝ) (l : ℝ) (c : ℝ) (ha : sum_is_limit a l) : sum_is_limit (fun k => c * a k) (c * l) := by
+  unfold sum_is_limit seq_partial_sums at * -- unfold the definitions
+  conv_lhs =>
+    ext n
+    simp
+    conv => rhs; ext x; rw [mul_comm]
+    rw [←sum_mul, mul_comm]
+
+  -- do some conversions to show what we need
+  conv_lhs => ext n; rw [show ((c * ∑ i ∈ Icc 0 n, a i) = c * (∑ i ∈ Icc 0 n, a i)) by rfl]
+  exact seq_COLT_scalarmult _ _ ha _ -- apply normal COLT
