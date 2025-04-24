@@ -26,8 +26,23 @@ def sum_is_limit' (a : ℕ → ℝ) (l : ℝ) (N : ℕ) : Prop :=
 def seq_partial_sums' (a : ℕ → ℝ) (N : ℕ := 1) : ℕ → ℝ :=
   fun n => (∑ i ∈ Icc N n, a i)
 
-lemma sum_tail_conv (x : ℕ → ℝ) : (∃ l, sum_is_limit x l) ↔ (∃ m, ∀ N, sum_is_limit' x m N) := by
-  sorry
+lemma sum_tail_conv (x : ℕ → ℝ) (n0 : ℕ) : (∃ l, sum_is_limit x l) ↔ (∃ m, sum_is_limit' x m n0) := by
+  constructor
+  .
+    intro hl
+    obtain ⟨l, hx⟩ := hl
+    dsimp [sum_is_limit']
+    set m := ∑ i ∈ Icc 0 (n0 - 1), x i
+    use (l + m)
+    simp
+    rw [sum_is_limit] at hx
+    apply hx
+  .
+    intro hx'
+    obtain ⟨m, hm⟩ := hx'
+    dsimp [sum_is_limit'] at hm
+    set l := ∑ i ∈ Icc 0 (n0 - 1), x i
+    use (m - l)
 
 lemma seq_convto_general (x : ℕ → ℝ) (l : ℝ) (hx : seq_is_limit x l) (s : ℕ) : seq_is_limit (fun n => x (n + s)) l := by
   -- get all the usual stuff
@@ -75,12 +90,12 @@ lemma sum_conv_if_seq_convto_zero (a : ℕ → ℝ) : (∃ l, sum_is_limit a l) 
   intro h
   obtain ⟨l, hl⟩ := h
   set s : ℕ → ℝ := seq_partial_sums a
-  /-
-  have h1 : ∀ k, a k = s k - s (k - 1) := by
-    sorry
-  -/
+
   have h1 : ∀ k, a (k + 1) = s (k + 1) - s k := by
-    sorry
+    intro k
+    dsimp [s, seq_partial_sums]
+    simp [sum_add]
+
   have h2 : seq_is_limit (fun n => a (n + 1)) 0 := by
     conv_lhs => ext n; apply h1
     have := seq_COLT_scalarmult s l hl (-1) -- getting the first colt
@@ -89,10 +104,5 @@ lemma sum_conv_if_seq_convto_zero (a : ℕ → ℝ) : (∃ l, sum_is_limit a l) 
     conv_rhs => rw [←sub_self l, sub_eq_add_neg]
     apply seq_COLT_addition _ _ l (-l) (by apply seq_convto_general s l hl) this
 
-  rw [seq_convto_general_iff a 0] at h2
-  conv =>
-    lhs
-    rw [show a = (fun n => a (n + 0)) by rfl]
-  rw [←seq_convto_general_iff a 0]
-
-  have h3 := seq_convto_general_iff a 0
+  rw [seq_convto_general_iff' a 0 1]  -- sorting out the limit
+  apply h2
