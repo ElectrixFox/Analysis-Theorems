@@ -73,7 +73,6 @@ theorem seq_cauchy_is_bounded (x : ℕ → ℝ) (hx : seq_cauchy x) : seq_bounde
 
 
 theorem seq_conv_is_cauchy (x : ℕ → ℝ) (hx : ∃ l, seq_is_limit x l) : seq_cauchy x := by
-
   sorry
 
 theorem seq_cauchy_is_conv (x : ℕ → ℝ) (hx : seq_cauchy x) : ∃ l, seq_is_limit x l := by

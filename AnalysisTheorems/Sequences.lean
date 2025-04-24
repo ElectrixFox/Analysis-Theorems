@@ -281,7 +281,7 @@ theorem inv_seq_conv : ∀ a ≥ 1, seq_is_limit (fun (n : ℕ) => 1 / (n ^ a)) 
   apply seq_squeeze_zero f (fun (n : ℕ) => 1 / (n : ℝ)) harmonic_seq_conv
   intro n
   simp [f]
-  rw [le_inv']
+  -- rw [le_inv']
   sorry
 
 -- COLT theorem for axₙ → ax as n → ∞
