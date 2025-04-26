@@ -1,17 +1,35 @@
-\chapter*{realnumbers}
+\chapter{realnumbers}
 \label{cha:realnums}
 
-\begin{theorem}[Smale 1958]
-  \label{thm:sphere_eversion}
-  \lean{sphere_eversion}
+\begin{definition}[Bounded above]\label{def:boundabove}
+  \lean{bound_above}
   \leanok
-  \uses{def:immersion}
-  There is a homotopy of immersions of $𝕊^2$ into $ℝ^3$ from the inclusion map to
-  the antipodal map $a : q ↦ -q$.
-\end{theorem}
-  
-\begin{proof}
+  Given a set $X$,
+  $X$ is bounded above if there exists a $C$ such that for all $x \in X$ $x \leq C$.
+\end{definition}
+
+\begin{definition}[Supremum]\label{def:supremum}
+  \lean{supremum}
   \leanok
-  \uses{thm:open_ample, lem:open_ample_immersion}
-  This obviously follows from what we did so far.
-\end
+  Let $X \subset \R$ be bounded above.
+  A number $C \in \R$ is called a supremum of $X$ if $C$ is an upper bound of $X$ and whenever $B$ is an upper bound of $X$,
+  then $C \leq B$.
+\end{definition}
+
+axiom completeness_axiom (X : Set ℝ) [Nonempty X] : bound_above X → ∃ C, supremum X C
+\begin{axiom}[Completeness axiom]\label{ax:complax}
+  \leanok
+  \lean{completeness_axiom}
+  \uses{def:supremum, def:boundabove}
+  For any nonempty set $X$ bounded above there exists a supremum $C$ of $X$.
+\end{axiom}
+
+\begin{lemma}[Subset of bounded set is bounded]
+  \label{lem:subsetboundbounded}
+  \lean{subset_bound_bounded}
+  \leanok
+  \uses{def:boundabove}
+  Given a set $X$ bounded above.
+  For all subsets $Y \subset X$,
+  $Y$ is bounded above.
+\end{lemma}
