@@ -199,7 +199,7 @@ graphContainer.graphviz({useWorker: true})
     .width(width)
     .height(height)
     .fit(true)
-    .renderDot(`strict digraph "" {	graph [bgcolor=transparent];	node [label="\N",		penwidth=1.8	];	edge [arrowhead=vee];	"def:boundabove"	[color=green,		fillcolor="#B0ECA3",		label=boundabove,		shape=box,		style=filled];	"lem:subsetboundbounded"	[color=green,		label=subsetboundbounded,		shape=ellipse];	"def:boundabove" -> "lem:subsetboundbounded"	[style=dashed];	"thm:archimedes"	[color=blue,		fillcolor="#A3D6FF",		label=archimedes,		shape=ellipse,		style=filled];	"def:boundabove" -> "thm:archimedes";	"def:supremum"	[color=green,		fillcolor="#B0ECA3",		label=supremum,		shape=box,		style=filled];	"def:supremum" -> "thm:archimedes";}`)
+    .renderDot(`strict digraph "" {	graph [bgcolor=transparent];	node [label="\N",		penwidth=1.8	];	edge [arrowhead=vee];	"def:boundabove"	[color=green,		fillcolor="#B0ECA3",		label=boundabove,		shape=box,		style=filled];	"thm:archimedes"	[color=blue,		fillcolor="#A3D6FF",		label=archimedes,		shape=ellipse,		style=filled];	"def:boundabove" -> "thm:archimedes";	"lem:subsetboundbounded"	[color=green,		label=subsetboundbounded,		shape=ellipse];	"def:boundabove" -> "lem:subsetboundbounded"	[style=dashed];	"def:supremum"	[color=green,		fillcolor="#B0ECA3",		label=supremum,		shape=box,		style=filled];	"def:supremum" -> "thm:archimedes";}`)
     .on("end", interactive);
 
 latexLabelEscaper = function(label) {
