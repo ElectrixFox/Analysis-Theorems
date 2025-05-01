@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023) (preloaded format=xelatex 2023.9.1)  1 MAY 2025 10:54
+This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023) (preloaded format=xelatex 2023.9.1)  1 MAY 2025 14:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -502,11 +502,12 @@ Package color Info: Driver file: xetex.def on input line 149.
 
 (c:/texlive/2023/texmf-dist/tex/latex/graphics/mathcolor.ltx))
 Package hyperref Info: Link coloring ON on input line 33.
-
-(C:/Users/lukec/Documents/Lean/Analysis-Theorems/blueprint/print/print.out)
-(C:/Users/lukec/Documents/Lean/Analysis-Theorems/blueprint/print/print.out)
 \@outlinefile=\write3
 \openout3 = `print.out'.
+
+
+
+Package hyperref Warning: Rerun to get /PageLabels entry.
 
 LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `normal'
 (Font)                  OT1/cmr/m/n --> TU/lmr/m/n on input line 33.
@@ -727,7 +728,6 @@ LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
 (Font)              scaled to size 5.99936pt on input line 35.
 LaTeX Font Info:    Trying to load font information for U+msa on input line 35.
 
-
 (c:/texlive/2023/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
@@ -755,31 +755,274 @@ LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
 (Font)              scaled to size 6.99925pt on input line 5.
 LaTeX Font Info:    Font shape `TU/latinmodern-math.otf(3)/m/n' will be
 (Font)              scaled to size 4.99947pt on input line 5.
+
+LaTeX Warning: Reference `def:boundabove' on page 1 undefined on input line 17.
+
+
+
+LaTeX Warning: Reference `def:boundbelow' on page 1 undefined on input line 17.
+
+
 Package hyperref Info: bookmark level for unknown axiom defaults to 0 on input 
-line 16.
+line 52.
+
+LaTeX Warning: Reference `def:supremum' on page 1 undefined on input line 54.
+
+
+LaTeX Warning: Reference `def:boundabove' on page 1 undefined on input line 54.
+
+
 Package hyperref Info: bookmark level for unknown lemma defaults to 0 on input 
-line 22.
+line 58.
+
+LaTeX Warning: Reference `def:boundabove' on page 1 undefined on input line 60.
+
+
 Package hyperref Info: bookmark level for unknown theorem defaults to 0 on inpu
-t line 30.
-)) [1
+t line 66.
+
+LaTeX Warning: Reference `ax:complax' on page 1 undefined on input line 72.
+
+
+LaTeX Warning: Reference `def:boundabove' on page 1 undefined on input line 72.
+
+
+
+LaTeX Warning: Reference `def:supremum' on page 1 undefined on input line 72.
+
+
+LaTeX Warning: Reference `def:boundabove' on page 1 undefined on input line 81.
+
+
+
+LaTeX Warning: Reference `def:boundbelow' on page 1 undefined on input line 81.
+
+
+) (./chapters/sequences.tex [1
 
 ]
-(C:/Users/lukec/Documents/Lean/Analysis-Theorems/blueprint/print/print.aux)
- ***********
-LaTeX2e <2023-06-01> patch level 1
-L3 programming layer <2023-08-29>
- ***********
-Package rerunfilecheck Info: File `print.out' has not changed.
-(rerunfilecheck)             Checksum: B48F017BD86951112F5C2AA3D394983E;98.
- ) 
-Here is how much of TeX's memory you used:
- 17398 strings out of 475591
- 319889 string characters out of 5777375
- 1916432 words of memory out of 5000000
- 38502 multiletter control sequences out of 15000+600000
- 563408 words of font info for 81 fonts, out of 8000000 for 9000
- 1348 hyphenation exceptions out of 8191
- 90i,6n,114p,542b,448s stack positions out of 10000i,1000n,20000p,200000b,200000s
+Chapter 2.
 
-Output written on C:/Users/lukec/Documents/Lean/Analysis-Theorems/blueprint/pri
-nt/print.pdf (2 pages).
+LaTeX Warning: Reference `def:seqlimit' on page 2 undefined on input line 17.
+
+
+LaTeX Warning: Reference `def:seqboundabove' on page 2 undefined on input line 
+33.
+
+
+LaTeX Warning: Reference `def:seqboundbelow' on page 2 undefined on input line 
+33.
+
+
+LaTeX Warning: Reference `def:seqlimit' on page 2 undefined on input line 44.
+
+
+LaTeX Warning: Reference `def:seqboundbelow' on page 2 undefined on input line 
+44.
+
+
+LaTeX Warning: Reference `def:seqlimit' on page 2 undefined on input line 55.
+
+
+LaTeX Warning: Reference `def:seqboundabove' on page 2 undefined on input line 
+55.
+
+
+LaTeX Warning: Reference `def:seqlimit' on page 2 undefined on input line 64.
+
+
+LaTeX Warning: Reference `thm:archimedes' on page 2 undefined on input line 64.
+
+
+
+LaTeX Warning: Reference `def:seqlimit' on page 2 undefined on input line 74.
+
+
+LaTeX Warning: Reference `def:seqbound' on page 2 undefined on input line 74.
+
+Package hyperref Info: bookmark level for unknown corollary defaults to 0 on in
+put line 78.
+
+LaTeX Warning: Reference `thm:seq_conv_bound' on page 2 undefined on input line
+ 84.
+
+[2
+
+]
+
+LaTeX Warning: Reference `def:seqlimit' on page 3 undefined on input line 97.
+
+
+LaTeX Warning: Reference `def:seqlimit' on page 3 undefined on input line 106.
+
+
+LaTeX Warning: Reference `thm:seq_harmonic_conv' on page 3 undefined on input l
+ine 106.
+
+
+LaTeX Warning: Reference `thm:squeeze_zero' on page 3 undefined on input line 1
+06.
+
+
+LaTeX Warning: Reference `def:seqlimit' on page 3 undefined on input line 119.
+
+
+LaTeX Warning: Reference `def:seqlimit' on page 3 undefined on input line 132.
+
+
+LaTeX Warning: Reference `thm:seq_COLT_add' on page 3 undefined on input line 1
+45.
+
+
+LaTeX Warning: Reference `thm:seq_COLT_scalar_mult' on page 3 undefined on inpu
+t line 145.
+
+
+LaTeX Warning: Reference `def:seqlimit' on page 3 undefined on input line 158.
+
+
+LaTeX Warning: Reference `lem:seqboundabove_limboundabove' on page 3 undefined 
+on input line 158.
+
+
+LaTeX Warning: Reference `cor:seq_conv_abs_bound' on page 3 undefined on input 
+line 158.
+
+
+LaTeX Warning: Reference `def:seqlimit' on page 3 undefined on input line 173.
+
+
+LaTeX Warning: Reference `thm:seq_COLT_mult' on page 3 undefined on input line 
+173.
+
+
+LaTeX Warning: Reference `thm:seq_COLT_scalar_mult' on page 3 undefined on inpu
+t line 173.
+
+
+LaTeX Warning: Reference `def:seqlimit' on page 3 undefined on input line 184.
+
+
+LaTeX Warning: Reference `lem:seqboundabove_limboundabove' on page 3 undefined 
+on input line 184.
+
+
+LaTeX Warning: Reference `lem:seqboundbelow_limboundbelow' on page 3 undefined 
+on input line 184.
+
+
+LaTeX Warning: Reference `def:seqlimit' on page 3 undefined on input line 195.
+
+
+LaTeX Warning: Reference `def:seqlimit' on page 3 undefined on input line 209.
+
+
+LaTeX Warning: Reference `thm:seq_COLT_scalar_mult' on page 3 undefined on inpu
+t line 209.
+
+
+LaTeX Warning: Reference `thm:seq_COLT_mult' on page 3 undefined on input line 
+209.
+
+[3]
+
+LaTeX Warning: Reference `def:seqlimit' on page 4 undefined on input line 234.
+
+
+LaTeX Warning: Reference `def:seqmonoinc' on page 4 undefined on input line 234
+.
+
+
+LaTeX Warning: Reference `def:seqbound' on page 4 undefined on input line 234.
+
+
+LaTeX Warning: Reference `def:seqlimit' on page 4 undefined on input line 243.
+
+
+LaTeX Warning: Reference `def:seqmonodec' on page 4 undefined on input line 243
+.
+
+
+LaTeX Warning: Reference `def:seqbound' on page 4 undefined on input line 243.
+
+
+LaTeX Warning: Reference `def:seqlimit' on page 4 undefined on input line 253.
+
+
+LaTeX Warning: Reference `def:seqmonoinc' on page 4 undefined on input line 253
+.
+
+
+LaTeX Warning: Reference `def:seqmonodec' on page 4 undefined on input line 253
+.
+
+
+LaTeX Warning: Reference `def:seqbound' on page 4 undefined on input line 253.
+
+) (./chapters/subsequences.tex [4]
+Chapter 3.
+
+LaTeX Warning: Reference `def:boundabove' on page 5 undefined on input line 26.
+
+
+
+LaTeX Warning: Reference `def:boundbelow' on page 5 undefined on input line 26.
+
+
+
+LaTeX Warning: Reference `def:seqboundabove' on page 5 undefined on input line 
+32.
+
+
+LaTeX Warning: Reference `def:seqboundbelow' on page 5 undefined on input line 
+32.
+
+
+LaTeX Warning: Reference `def:seqbound' on page 5 undefined on input line 32.
+
+
+LaTeX Warning: Reference `def:extraction' on page 5 undefined on input line 46.
+
+
+
+LaTeX Warning: Reference `def:seqlimit' on page 5 undefined on input line 57.
+
+
+LaTeX Warning: Reference `lem:subseq_ge_indx' on page 5 undefined on input line
+ 57.
+
+
+LaTeX Warning: Reference `lem:subseqmonoincordec' on page 5 undefined on input 
+line 76.
+
+
+LaTeX Warning: Reference `def:seqlimit' on page 5 undefined on input line 76.
+
+
+LaTeX Warning: Reference `thm:seq_mono_conv' on page 5 undefined on input line 
+76.
+
+
+LaTeX Warning: Reference `lem:seqboundsubseqbound' on page 5 undefined on input
+ line 76.
+
+[5
+
+]
+
+LaTeX Warning: Reference `def:seqmonodec' on page 6 undefined on input line 101
+.
+
+
+LaTeX Warning: Reference `def:seqmonoinc' on page 6 undefined on input line 101
+.
+
+
+LaTeX Warning: Reference `def:seqbound' on page 6 undefined on input line 101.
+
+! Missing number, treated as zero.
+<to be read again> 
+                   \c@* 
+l.136     \begin{enumerate}[label = \alph*
+                                          )]
+? 

@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+  MathJax = { 
+    tex: {
+		    inlineMath: [['$','$'], ['\\(','\\)']]
+	} }
+</script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
+</script>
+<meta name="generator" content="plasTeX" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Subsequences</title>
+<link rel="next" href="cha-series.html" title="Series" />
+<link rel="prev" href="cha-sequences.html" title="Sequences" />
+<link rel="up" href="index.html" title="AnalysisTheorems" />
+<link rel="stylesheet" href="styles/theme-white.css" />
+<link rel="stylesheet" href="styles/amsthm.css" />
+<link rel="stylesheet" href="styles/showmore.css" />
+<link rel="stylesheet" href="styles/blueprint.css" />
+<link rel="stylesheet" href="styles/extra_styles.css" />
+</head>
+
+<body>
+<header>
+<svg  id="toc-toggle" class="icon icon-list-numbered "><use xlink:href="symbol-defs.svg#icon-list-numbered"></use></svg>
+<h1 id="doc_title"><a href="index.html">AnalysisTheorems</a></h1>
+</header>
+
+<div class="wrapper">
+<nav class="toc">
+<ul class="sub-toc-0">
+<li class="">
+  <a href="cha-realnums.html"><span class="toc_ref">1</span> <span class="toc_entry">Real Numbers</span></a>
+ </li>
+<li class="">
+  <a href="cha-sequences.html"><span class="toc_ref">2</span> <span class="toc_entry">Sequences</span></a>
+ </li>
+<li class=" active current">
+  <a href="cha-subsequences.html"><span class="toc_ref">3</span> <span class="toc_entry">Subsequences</span></a>
+  <span class="expand-toc">▼</span>
+  <ul class="sub-toc-1 active">
+     <li class="">
+  <a href="cha-subsequences.html#a0000000004"><span class="toc_ref">1</span> <span class="toc_entry">The exponential function</span></a>
+ </li>
+<li class="">
+  <a href="cha-subsequences.html#a0000000005"><span class="toc_ref">2</span> <span class="toc_entry">Limsup and Liminf</span></a>
+ </li>
+<li class="">
+  <a href="cha-subsequences.html#a0000000006"><span class="toc_ref">3</span> <span class="toc_entry">Cauchy sequences</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="cha-series.html"><span class="toc_ref">4</span> <span class="toc_entry">Series</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="cha-series.html#a0000000007"><span class="toc_ref">1</span> <span class="toc_entry">Definitions and Basic Properties</span></a>
+ </li>
+<li class="">
+  <a href="cha-series.html#a0000000008"><span class="toc_ref">2</span> <span class="toc_entry">Convergence Criteria</span></a>
+ </li>
+<li class="">
+  <a href="cha-series.html#a0000000009"><span class="toc_ref">3</span> <span class="toc_entry">Absolute Convergence</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="cha-continuity.html"><span class="toc_ref">5</span> <span class="toc_entry">Continuity</span></a>
+  <span class="expand-toc">▶</span>
+  <ul class="sub-toc-1">
+     <li class="">
+  <a href="cha-continuity.html#a0000000010"><span class="toc_ref">1</span> <span class="toc_entry">Limits of functions</span></a>
+ </li>
+<li class="">
+  <a href="cha-continuity.html#a0000000011"><span class="toc_ref">2</span> <span class="toc_entry">Continuous functions</span></a>
+ </li>
+<li class="">
+  <a href="cha-continuity.html#a0000000012"><span class="toc_ref">3</span> <span class="toc_entry">Great Theorems</span></a>
+ </li>
+<li class="">
+  <a href="cha-continuity.html#a0000000013"><span class="toc_ref">4</span> <span class="toc_entry">Inverse functions</span></a>
+ </li>
+
+  </ul>
+ </li>
+<li class="">
+  <a href="cha-differentiability.html"><span class="toc_ref">6</span> <span class="toc_entry">Differentiability</span></a>
+ </li>
+<li ><a href="dep_graph_document.html">Dependency graph</a></li>
+</ul>
+</nav>
+
+<div class="content">
+<div class="content-wrapper">
+
+
+<div class="main-text">
+<h1 id="cha:subsequences">3 Subsequences</h1>
+
+<div class="definition_thmwrapper theorem-style-plain" id="def:extraction">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">3.1</span>
+    <span class="definition_thmtitle">Extraction</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="cha-subsequences.html#def:extraction">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://ElectrixFox.github.io/Analysis-Theorems/docs/find/#doc/extraction" class="lean_decl">extraction</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>  Let \(\phi : \mathbb {N}\to \mathbb {N}\) be a strictly increasing sequence. \(\phi _n\) is the extraction of \(x_n\). </p>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-plain" id="def:seqdec">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">3.2</span>
+    <span class="definition_thmtitle">Sequence decreasing</span>
+    <div class="thm_header_extras">
+
+    
+    ✓
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="cha-subsequences.html#def:seqdec">#</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://ElectrixFox.github.io/Analysis-Theorems/docs/find/#doc/seq_dec" class="lean_decl">seq_dec</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p>  A sequence \(x_n\) is decreasing if \(\forall n \in \mathbb {N}\), </p>
+<div class="displaymath" id="a0000000043">
+  \[  x_{n + 1} \leq x_n.  \]
+</div>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-plain" id="def:seqinc">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">3.3</span>
+    <span class="definition_thmtitle">Sequence increasing</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="cha-subsequences.html#def:seqinc">#</a>
+    
+    
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p> A sequence \(x_n\) is increasing if \(\forall n \in \mathbb {N}\), </p>
+<div class="displaymath" id="a0000000044">
+  \[  x_{n + 1} \geq x_n.  \]
+</div>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:seqboundsubseqbound">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">3.4</span>
+    <span class="lemma_thmtitle">Subsequence of bounded sequence is bounded</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="cha-subsequences.html#lem:seqboundsubseqbound">#</a>
+    
+    <a class="icon proof" href="cha-subsequences.html#a0000000045"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    <button class="modal"><svg  class="icon icon-mindmap "><use xlink:href="symbol-defs.svg#icon-mindmap"></use></svg>
+</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Uses</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="cha-realnums.html#def:boundabove">Definition 1.1</a></li>
+          
+          <li><a href="cha-realnums.html#def:boundbelow">Definition 1.2</a></li>
+          
+          <li><a href="cha-sequences.html#def:seqboundabove">Definition 2.3</a></li>
+          
+          <li><a href="cha-sequences.html#def:seqboundbelow">Definition 2.4</a></li>
+          
+          <li><a href="cha-sequences.html#def:seqbound">Definition 2.5</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://ElectrixFox.github.io/Analysis-Theorems/docs/find/#doc/seq_bound_imp_subseq_bound" class="lean_decl">seq_bound_imp_subseq_bound</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>   Let \(x_n\) be a bounded sequence. Then for any extraction \(a\) of \(x_n\), \(x_{a_n}\) is also bounded. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000045">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> To-Do. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:subseq_ge_indx">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">3.5</span>
+    <span class="lemma_thmtitle">Subsequence greater than its index</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="cha-subsequences.html#lem:subseq_ge_indx">#</a>
+    
+    <a class="icon proof" href="cha-subsequences.html#a0000000046"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://ElectrixFox.github.io/Analysis-Theorems/docs/find/#doc/subseq_ge_index" class="lean_decl">subseq_ge_index</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>  Let \(x_n\) be a sequence. Let \(a_n\) be an extraction of \(x_n\). Then </p>
+<div class="displaymath" id="a0000000047">
+  \[  \forall j \in \mathbb {N}, a_j \geq j.  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000046">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> To-Do. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:subseqconvtoseqlim">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">3.6</span>
+    <span class="lemma_thmtitle">All subsequences of a convergent sequence converge to its limit</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="cha-subsequences.html#lem:subseqconvtoseqlim">#</a>
+    
+    <a class="icon proof" href="cha-subsequences.html#a0000000048"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://ElectrixFox.github.io/Analysis-Theorems/docs/find/#doc/subseq_conv_to_seq_limit" class="lean_decl">subseq_conv_to_seq_limit</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>  Let \(x_n\) be a convergent sequence with limit \(l\). Then for any extraction \(a_n\) of \(x_n\), the subsequence \(x_{a_n}\) converges to \(l\). </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000048">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> To-Do. </p>
+
+  </div>
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:subseqmonoincordec">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">3.7</span>
+    <span class="lemma_thmtitle">Every sequence has a monotonic subsequence</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="cha-subsequences.html#lem:subseqmonoincordec">#</a>
+    
+    <a class="icon proof" href="cha-subsequences.html#a0000000049"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://ElectrixFox.github.io/Analysis-Theorems/docs/find/#doc/seq_contsub_inc_or_dec" class="lean_decl">seq_contsub_inc_or_dec</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p>  Let \(x_n\) be a sequence. For any subsequence \(a_n\) of \(x_n\), \(x_{a_n}\) is either increasing or decreasing. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000049">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p>To-Do. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:seq_bolzanoweierstrass">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">3.8</span>
+    <span class="theorem_thmtitle">Bolzano-Weierstrass</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="cha-subsequences.html#thm:seq_bolzanoweierstrass">#</a>
+    
+    <a class="icon proof" href="cha-subsequences.html#a0000000050"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    
+    <button class="modal lean">L∃∀N</button>
+        <div class="modal-container">
+      <div class="modal-content">
+        <header>
+          <h1>Lean declarations</h1>
+          <button class="closebtn"><svg  class="icon icon-cross "><use xlink:href="symbol-defs.svg#icon-cross"></use></svg>
+</button>
+        </header>
+        
+        <ul class="uses">
+          
+          <li><a href="https://ElectrixFox.github.io/Analysis-Theorems/docs/find/#doc/subseq_BolzanoWeierstrass" class="lean_decl">subseq_BolzanoWeierstrass</a></li>
+          
+        </ul>
+    
+      </div>
+    </div>
+
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p>  Every bounded sequence has a convergent subsequence. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000050">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> To-Do. </p>
+
+  </div>
+</div>
+<h1 id="a0000000004">1 The exponential function</h1>
+<h1 id="a0000000005">2 Limsup and Liminf</h1>
+<p> Given a bounded sequence \((x_n)_{n \in \mathbb {N}}\) define two (related) sequences \((\overline{x}_n)_{n \in \mathbb {N}}\) and \((\underline{x}_n)_{n \in \mathbb {N}}\) as follows let </p>
+<div class="displaymath" id="a0000000051">
+  \begin{align*}  \overline{x_n} & = \sup \{ x_m \in \mathbb {R}\, |\, m \geq n\}  \\ \underline{x_n} & = \inf \{ x_m \in \mathbb {R}\, |\, m \geq n\}  \end{align*}
+</div>
+<div class="lemma_thmwrapper theorem-style-plain" id="lem:limsup_liminf">
+  <div class="lemma_thmheading">
+    <span class="lemma_thmcaption">
+    Lemma
+    </span>
+    <span class="lemma_thmlabel">3.9</span>
+    <span class="lemma_thmtitle">Limsup and Liminf</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="cha-subsequences.html#lem:limsup_liminf">#</a>
+    
+    <a class="icon proof" href="cha-subsequences.html#a0000000052"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    
+        </div>
+  </div>
+  <div class="lemma_thmcontent">
+  <p> Let \((x_n)_{n \in \mathbb {N}}\) be a bounded sequence. Then \((\overline{x}_n)_{n \in \mathbb {N}}\) is monotonically decreasing and bounded, and \((\underline{x}_n)_{n \in \mathbb {N}}\) is monotonically increasing and bounded. Furthermore </p>
+<div class="displaymath" id="a0000000053">
+  \[  \lim _{n \to \infty }\underline{x_n} \leq \lim _{n \to \infty }\overline{x_n}.  \]
+</div>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000052">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> \((x_n)_{n \in \mathbb {N}}\) is bounded, so there is \(C \in \mathbb {R}\) with \(-C \leq x_n \leq C\) for all \(n \in \mathbb {N}\). Define \(X_n = \{ x_m \in \mathbb {R}\, |\,  m \geq n\}  \subseteq [-C, C]\) bounded, non-empty set. Infimum and supremum exist, and \(-C \leq \underline{x_n} \leq \overline{x_n} \leq C\). both sequences are bounded. \(X_{n + 1} \subset X_n \implies \overline{x_n}\) is an upper bound for \(X_{n + 1} \implies \overline{x_{n + 1}} \leq \overline{x_n}\) for all \(n \in \mathbb {N}\). Similarly, \(\underline{x_n}\) is a lower bound for \(X_{n + 1} \implies \underline{x_n} \leq \underline{x_{n + 1}}\) for all \(n \in \mathbb {N}\) which implies \(\overline{x_n} - \underline{x_n} \geq 0\). Taking limits gives </p>
+<div class="displaymath" id="a0000000054">
+  \[  \lim \overline{x_n} - \lim \underline{x_n} \geq 0.  \]
+</div>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-plain" id="def:limsup">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">3.10</span>
+    <span class="definition_thmtitle">Limsup</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="cha-subsequences.html#def:limsup">#</a>
+    
+    
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p> Let \((x_n)_{n \in \mathbb {N}}\) be a bounded sequence. The limes superior of \((x_n)_{n \in \mathbb {N}}\) is defined as </p>
+<div class="displaymath" id="a0000000055">
+  \[  \limsup _{n \to \infty }{x_n} = \lim _{n \to \infty }\overline{x}_n = \inf _{n \geq 1}\{ \sup {\{ x_m\, |\,  m \geq n\} }\} .  \]
+</div>
+
+  </div>
+</div>
+<div class="definition_thmwrapper theorem-style-plain" id="def:liminf">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">3.11</span>
+    <span class="definition_thmtitle">Liminf</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="cha-subsequences.html#def:liminf">#</a>
+    
+    
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p> Let \((x_n)_{n \in \mathbb {N}}\) be a bounded sequence. The limes inferior of \((x_n)_{n \in \mathbb {N}}\) is defined as </p>
+<div class="displaymath" id="a0000000056">
+  \[  \liminf _{n \to \infty }{x_n} = \lim _{n \to \infty }{\underline{x}_n} = \sup _{n \geq 1}{\{ \inf {\{ x_m\, |\,  m \geq n\} }\} }.  \]
+</div>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:limsupliminfproperties">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">3.12</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="cha-subsequences.html#thm:limsupliminfproperties">#</a>
+    
+    <a class="icon proof" href="cha-subsequences.html#a0000000057"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p> Let \((x_n)_{n \in \mathbb {N}}\) be a bounded sequence. </p>
+<ol class="enumerate">
+  <li><p>There is a subsequence \((x_{n_j})_{j \in \mathbb {N}}\) with </p>
+<div class="displaymath" id="a0000000058">
+  \[  \lim _{j \to \infty }x_{n_j} = \limsup _{n \to \infty }{x_n}.  \]
+</div>
+</li>
+  <li><p>There is a subsequence \((x_{n_k})_{k \in \mathbb {N}}\) with </p>
+<div class="displaymath" id="a0000000059">
+  \[  \lim _{k \to \infty }x_{n_k} = \liminf _{n \to \infty }{x_n}.  \]
+</div>
+</li>
+  <li><p>If \((x_{n_j})_{j \in \mathbb {N}}\) is a convergent subsequence, then </p>
+<div class="displaymath" id="a0000000060">
+  \[  \liminf _{n \to \infty }{x_n} \leq \lim _{j \to \infty }{x_{n_j}} \leq \limsup _{n \to \infty }{x_n}  \]
+</div>
+</li>
+</ol>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000057">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> To-Do. </p>
+
+  </div>
+</div>
+<h1 id="a0000000006">3 Cauchy sequences</h1>
+<div class="definition_thmwrapper theorem-style-plain" id="def:cauchyseq">
+  <div class="definition_thmheading">
+    <span class="definition_thmcaption">
+    Definition
+    </span>
+    <span class="definition_thmlabel">3.13</span>
+    <span class="definition_thmtitle">Cauchy sequence</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="cha-subsequences.html#def:cauchyseq">#</a>
+    
+    
+    
+        </div>
+  </div>
+  <div class="definition_thmcontent">
+  <p> A sequence \((x_n)_{n \in \mathbb {N}}\) is called a Cauchy sequence, if for every \(\varepsilon {\gt} 0\) there exists \(n_0 \in \mathbb {N}\) such that </p>
+<div class="displaymath" id="a0000000061">
+  \[  |x_m - x_n| {\lt} \varepsilon \qquad \forall n, m \geq n_0.  \]
+</div>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:cauchyisbounded">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">3.14</span>
+    <span class="theorem_thmtitle">Cauchy is bounded</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="cha-subsequences.html#thm:cauchyisbounded">#</a>
+    
+    <a class="icon proof" href="cha-subsequences.html#a0000000062"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p> Let \((x_n)_{n \in \mathbb {N}}\) be a Cauchy sequence. Then \((x_n)_{n \in \mathbb {N}}\) is bounded. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000062">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> To-Do. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:cauchyconverges">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">3.15</span>
+    <span class="theorem_thmtitle">Cauchy sequence converges</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="cha-subsequences.html#thm:cauchyconverges">#</a>
+    
+    <a class="icon proof" href="cha-subsequences.html#a0000000063"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p> Let \((x_n)_{n \in \mathbb {N}}\) be a convergent sequence. Then \((x_n)_{n \in \mathbb {N}}\) is a Cauchy sequence. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000063">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> To-Do. </p>
+
+  </div>
+</div>
+<div class="theorem_thmwrapper theorem-style-plain" id="thm:cauchyconvergent">
+  <div class="theorem_thmheading">
+    <span class="theorem_thmcaption">
+    Theorem
+    </span>
+    <span class="theorem_thmlabel">3.16</span>
+    <div class="thm_header_extras">
+
+        </div>
+    <div class="thm_header_hidden_extras">
+
+    <a class="icon proof" href="cha-subsequences.html#thm:cauchyconvergent">#</a>
+    
+    <a class="icon proof" href="cha-subsequences.html#a0000000064"><svg  class="icon icon-cogs "><use xlink:href="symbol-defs.svg#icon-cogs"></use></svg>
+</a>
+    
+    
+    
+        </div>
+  </div>
+  <div class="theorem_thmcontent">
+  <p> Let \((x_n)_{n \in \mathbb {N}}\) be a Cauchy sequence. Then \((x_n)_{n \in \mathbb {N}}\) is a convergent sequence. </p>
+
+  </div>
+</div>
+<div class="proof_wrapper" id="a0000000064">
+  <div class="proof_heading">
+    <span class="proof_caption">
+    Proof
+    </span>
+    <span class="expand-proof">▶</span>
+  </div>
+  <div class="proof_content">
+  <p> By <a href="cha-subsequences.html#thm:cauchyisbounded" >Theorem 3.14</a> \((x_n)_{n \in \mathbb {N}}\) is a bounded sequence. By <a href="cha-subsequences.html#thm:seq_bolzanoweierstrass" >Theorem 3.8</a>, there is a convergent subsequence \((x_{n_j})_{j \in \mathbb {N}}\). Let \(x = \lim _{j \to \infty }x_{n_j}\). So given \(\varepsilon {\gt} 0\), there is a \(j_0 \in \mathbb {N}\) with </p>
+<div class="displaymath" id="a0000000065">
+  \[  |x_{n_j} - x| {\lt} \frac{\varepsilon }{2}\qquad \forall j \geq j_0.  \]
+</div>
+<p> Since \((x_n)_{n \in \mathbb {N}}\) is a Cauchy sequence, there is an \(n_0 \in \mathbb {N}\) with </p>
+<div class="displaymath" id="a0000000066">
+  \[  |x_n - x_m| {\lt} \frac{\varepsilon }{2}\qquad \forall n, m \geq n_0.  \]
+</div>
+<p> Now </p>
+<div class="displaymath" id="a0000000067">
+  \begin{align*}  |x_n - x| & = |x_n - x_{n_j} + x_{n_j} - x| \\ & \leq |x_n - x_{n_j}| + |x_{n_j} - x|. \end{align*}
+</div>
+<p> Need \(j \geq j_0\) and \(n_j \geq n_0\) (just choose \(j\) large enough). Then \(|x_n - x| {\lt} \frac{\varepsilon }{2} + \frac{\varepsilon }{2} = \varepsilon \) for all \(n \geq n_0\). </p>
+
+  </div>
+</div>
+
+</div> <!--main-text -->
+</div> <!-- content-wrapper -->
+</div> <!-- content -->
+</div> <!-- wrapper -->
+
+<nav class="prev_up_next">
+  <svg  id="showmore-minus" class="icon icon-eye-minus showmore"><use xlink:href="symbol-defs.svg#icon-eye-minus"></use></svg>
+
+  <svg  id="showmore-plus" class="icon icon-eye-plus showmore"><use xlink:href="symbol-defs.svg#icon-eye-plus"></use></svg>
+
+  <a href="cha-sequences.html" title="Sequences"><svg  class="icon icon-arrow-left "><use xlink:href="symbol-defs.svg#icon-arrow-left"></use></svg>
+</a>
+  <a href="index.html" title="AnalysisTheorems"><svg  class="icon icon-arrow-up "><use xlink:href="symbol-defs.svg#icon-arrow-up"></use></svg>
+</a>
+  <a href="cha-series.html" title="Series"><svg  class="icon icon-arrow-right "><use xlink:href="symbol-defs.svg#icon-arrow-right"></use></svg>
+</a>
+</nav>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/plastex.js"></script>
+<script type="text/javascript" src="js/svgxuse.js"></script>
+<script type="text/javascript" src="js/js.cookie.min.js"></script>
+<script type="text/javascript" src="js/showmore.js"></script>
+</body>
+</html>

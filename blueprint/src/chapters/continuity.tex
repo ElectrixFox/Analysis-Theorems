@@ -1,0 +1,427 @@
+\chapter{Continuity}\label{cha:continuity}
+
+\begin{definition}[Open interval]\label{def:openinterval}
+    \[
+    x \in (a, b) \iff a < x < b
+    \]
+    \textit{$a = -\infty, b = \infty$ is fine}.
+\end{definition}
+
+\begin{definition}[Open set]\label{def:openset}
+    Given $X \subseteq \R$. For all $c \in X$ there exists an open interval in $X$ containing $c$.
+    
+    That is,
+    there exists $\delta > 0$,
+    such that
+    \[
+    (c - \delta, c + \delta) \subseteq X.
+    \]
+\end{definition}
+
+\begin{definition}[Interior point]\label{def:interiorpoint}
+    An interior point $c \in X$ if there exists $(c - \delta, c + \delta) \subset X$.
+\end{definition}
+
+\begin{definition}[Closed interval]\label{def:closedinterval}
+    \[
+    x \in [a, b] \iff a \leq x \leq b
+    \]
+    ($a, b \in \R$).
+\end{definition}
+
+\begin{lemma}\label{lem:limitliesinab}
+    $(x_n) \in [a, b]$ converging with $\liminfty x_n = L$.
+    Then $L \in [a, b]$.
+\end{lemma}
+\begin{proof}
+    Assume $L \notin [a, b]$;
+    take $\varepsilon = \min\{|L - b|, |L - a|\}$.
+    Say $L > b$.
+    For all $x_n$ we have
+    \begin{align*}
+        |x_n - L| &= |x_n - b + b - L| \\
+        &= (b - x_n) + (L - b) \\
+        &> \varepsilon.
+    \end{align*}
+    Contradiction to $\liminfty x_n = L$.
+\end{proof}
+
+\begin{theorem}[Bolzano-Weierstrass]\label{thm:cont_bolzanoweierstrass}
+    $(x_n) \in [a, b]$,
+    with $a, b \in \R$,
+    has a converging subsequence converging in $[a, b]$.
+\end{theorem}
+\begin{proof}
+    $(x_n)$ are bounded which by \autoref{thm:seq_bolzanoweierstrass} has a convergent subsequence and by \autoref{lem:limitliesinab}.
+\end{proof}
+
+\begin{definition}[Compact interval]\label{def:compactinterval}
+    Call $[a, b]$
+    ($a, b \in \R$)
+    a compact interval if the interval is bounded and closed.
+\end{definition}
+
+\section{Limits of functions}
+
+\begin{definition}[Limit of a function]\label{def:limitfunction}
+    Let $f : (a, b) \to \R$ be a function.
+    Let $c \in (a, b)$ and $f$ is possibly not defined at $c$.
+    We say
+    \[
+    \lim_{x \to c}f(x) = L
+    \]
+    if for all $\varepsilon > 0$ there exists a $\delta > 0$ such that
+    \[
+    |f(x) - L| < \varepsilon
+    \]
+    for all $x \neq c$ with
+    \[
+    |x - c| < \delta.
+    \]
+    We also write $f(x) \to L$ as $x \to c$.
+\end{definition}
+
+\begin{definition}[Limit from the right]\label{def:limitfromright}
+    \[
+    \lim_{x \to c ^ {+}}f(x) \text{ same but all } x > c.
+    \]
+\end{definition}
+
+
+\begin{definition}[Limit from the left]\label{def:limitfromleft}
+    \[
+    \lim_{x \to c ^ {-}}f(x) \text{ same but all } x < c.
+    \]
+\end{definition}
+
+\begin{definition}[Infinite limit]\label{def:infinlimit}
+    $\liminfty[x] f(x) = L$:
+    for all $\varepsilon > 0$ there exists a $k \in \R$ such that
+    \[
+    |f(x) - L| < \varepsilon\qquad\text{for all } x > k.
+    \]
+\end{definition}
+
+\begin{proposition}[Limit of a function and sequences]\label{prop:limitfunctionandseq}
+    \[
+    \lim_{x \to c}f(x) = L
+    \]
+    \[
+    \iff
+    \]
+    for all sequences $(x_n)$ with $\liminfty x_n = c$ have $\liminfty f(x_n) = L$.
+\end{proposition}
+\begin{proof}
+    \uses{def:limitfunction, def:seqlimit}
+    "$\implies$".
+    Assume $\lim_{x \to c}f(x) = L$.
+    Take $(x_n) \in (a, b)$ $(x_n \neq c)$ with $\liminfty x_n = c$.
+    Take $\varepsilon > 0$.
+    Need an $N$ such that
+    \[
+    |f(x_n) - L| < \varepsilon
+    \]
+    for all $n \geq N$.
+    We know there exists a $\delta > 0$ such that
+    \begin{equation}\label{eq:1}
+        |f(x) - L| < \varepsilon
+    \end{equation}
+    for all $|x - c| < \delta$ $(x \neq c)$.
+    Since $\liminfty x_n = c$ there exists an $N$ such that $|x_n - c| < \delta$ for all $n \geq N$.
+    By \eqref{eq:1} $|f(x_n) - L| < \varepsilon$ for all $n \geq N$.
+
+    "$\impliedby$".
+    By contrapositive.
+    Assume $\lim_{x \to c}f(x) \neq L$
+    (or does not exist).
+    Need to find a sequence $x_n$ where $\liminfty x_n = c$ but $\liminfty f(x_n) \neq L$
+    (or does not exist).
+    Hence there exists a $\varepsilon > 0$ such that for all $\delta > 0$ such that there exists an $x$ with $|x - c| < \delta$ but $|f(x) - L| \geq \varepsilon$.
+    Take the "bad" $\varepsilon > 0$.
+    Take $\delta = 1 / n$,
+    get an $x = x_n$ with $|x_n - c| < \delta = \frac{1}{n}$ but $|f(x_n) - L| \geq \varepsilon$.
+    \[
+    \liminfty x_n = c
+    \]
+    but
+    \[
+    \liminfty f(x_n) \neq L.
+    \]
+    This completes the proof by the contrapositive.
+\end{proof}
+
+\begin{lemma}[Linear combination of limits]\label{lem:linearcombinationlimits}
+    We have $\lim_{x \to c}f(x) = L_1$ and $\lim_{x \to c}g(x) = L_2$. Then
+    \[
+    \lim_{x \to c}(af(x) + bg(x)) = aL_1 + bL_2.
+    \]
+\end{lemma}
+\begin{proof}
+    Using the previous proposition and applying COLT for sequences.
+\end{proof}
+
+\begin{lemma}[Product of limits]\label{lem:productlimits}
+    We have $\lim_{x \to c}f(x) = L_1$ and $\lim_{x \to c}g(x) = L_2$. Then
+    \[
+    \lim_{x \to c}(f(x)g(x)) = L_1L_2.
+    \]
+\end{lemma}
+\begin{proof}
+    Take $x_n \to c$. By COLT for sequences,
+    \[
+    \liminfty\left[f(x_n)g(x_n)\right] = \lim_{x \to c}f(x_n) \cdot \liminfty g(x_n) = L_1L_2.
+    \]
+\end{proof}
+
+\begin{lemma}[Quotient of limits]\label{lem:quotientlimits}
+    We have $\lim_{x \to c}f(x) = L_1$ and $\lim_{x \to c}g(x) = L_2$ with $L_2 \neq 0$. Then
+    \[
+    \lim_{x \to c}\left(\frac{f(x)}{g(x)}\right) = \frac{L_1}{L_2}.
+    \]
+\end{lemma}
+\begin{proof}
+    Using the previous proposition and applying COLT for sequences.
+\end{proof}
+
+\begin{proposition}[Squeezing]\label{prop:fun_squeeze}
+    Assume $f(x) \leq g(x) \leq h(x)$.
+    For all $x$ in a neighbourhood\footnote{Close to $c$.} of $c$ with
+    \[
+    \lim_{x \to c}f(x) = \lim_{x \to c}h(x) = L.
+    \]
+    Then
+    \[
+    \lim_{x \to c}g(x) = L.
+    \]
+\end{proposition}
+
+\section{Continuous functions}
+
+\begin{definition}[Continuity at a point]\label{def:continuityatpoint}
+    $f : X \to \R$,
+    $X = (a, b)$
+    $c \in (a, b)$.
+    Call $f(x)$ continuous at $x = c$ if
+    \[
+    \lim_{x \to c}f(x) = f(c).
+    \]
+    For all $\varepsilon > 0$,
+    there exists $\delta > 0$ such that
+    \[
+    |f(x) - f(c)| < \varepsilon
+    \]
+    for all $x$ with
+    \[
+    |x - c| < \delta.
+    \]
+\end{definition}
+
+\begin{proposition}[Continuity and limits]\label{prop:continuityandlimits}
+    $f(x)$ is continuous at $x = c$ if and only if
+    \[
+    \liminfty f(x_n) = f\left(\liminfty x_n\right).
+    \]
+\end{proposition}
+\begin{proof}
+    \uses{def:continuityatpoint, def:seqlimit}
+    To-do.
+\end{proof}
+
+\begin{proposition}[Continuity of composition]\label{prop:continuityofcomposition}
+    Assume $f$ is continuous at $c \in X$ and $g$ is continuous at $f(c) \in Y$.
+    Then $g \circ f(x)$ is continuous at $x = c$.
+\end{proposition}
+\begin{proof}
+    Use the sequence criterion:
+    take $x_n \in X$ with $\liminfty x_n = c$.
+    Need $\liminfty g \circ f(x_n) = g(f(c))$.
+    
+    Set $y_n = f(x_n)$ since $f$ is continuous at $c$ we have that $\liminfty f(x_n) = \liminfty y_n = f(c)$,
+    this sequence,
+    $f(x_n)$,
+    is in $Y$.
+    Since $g$ is continuous at $f(c)$ we have $\liminfty g(y_n) = \liminfty g(f(c)) = \liminfty g(f(x_n))$.
+\end{proof}
+
+\section{Great Theorems}
+\begin{theorem}[Intermediate Value Theorem]\label{thm:IVT}
+    $f : [a, b] \to \R$ continuous.
+    with $f(a) < f(b)$
+    (say).
+    Pick $d \in [f(a), f(b)]$;
+    $f(a) \leq d \leq f(b)$.
+    Then there exists a $c \in [a, b]$
+    (not necessarily unique)
+    such that $f(c) = d$.
+\end{theorem}
+\begin{proof}
+    Pick $d$,
+    assume $d < f(b)$
+    (otherwise can pick $c = b$).
+    
+    Define the set
+    \[
+    X \coloneqq \{x \in [a, b]; f(x) \leq d\}.
+    \]
+    $X \neq \emptyset$,
+    since $a \in X$ and bounded as a subset of $[a, b]$.
+    Hence has a supremum,
+    $c$.
+    (By term $1$)
+    exists a sequence $x_n \in X$ such that $\liminfty x_n = c$.
+    $x_n \in X \subseteq [a, b]$ hence $c = \liminfty x_n \in [a, b]$.
+    By continuity $\liminfty f(x_n) = f\left(\liminfty x_n\right) = f(c)$.
+
+    Claim:
+    $f(c) = d$.
+
+    Assume not,
+    i.e. $f(c) < d$\footnote{Since $f(c) = \liminfty f(x_n) \in X$ hence $\liminfty f(x_n) \leq d$}.
+    Then by problem sheet $1$
+    (this term)
+    Q7,
+    there exists a
+    (small)
+    neighbourhood $(c - \delta, c + \delta) \in (a, b)$ such that $f(x) < d$ for all $x \in (c - \delta, c + \delta)$.
+
+    In particular, $f(c + \delta / 2) < d$ so $c + \delta / 2 \in X$
+    but $c < c + \delta / 2$ but $c = \sup{X}$ contradiction!
+
+    So $f(c) =  d$.
+\end{proof}
+
+\begin{corollary}\label{cor:IVT_imagecont}
+    $f : I \to \R$ continuous on an interval $I$.
+    Then the image $f(I)$ is also an interval.
+\end{corollary}
+\begin{proof}
+    An interval $J$ is a set such that whenever $x < y \in J$,
+    then all numbers in between are also in $J$.
+    Now apply Intermediate Value Theorem.
+
+    \textit{Use $x = f(a), y = f(b)$ and apply IVT.}
+\end{proof}
+
+\begin{theorem}\label{thm:IVT_maxmin}
+    $f : [a, b] \to \R$ is continuous.
+    Then $f$ takes minimum and maximum on $[a, b]$.
+\end{theorem}
+\begin{proof}
+    Only do maximum.
+
+    Step $1$.
+    
+    $f$ is bounded above,
+    on $[a, b]$.
+
+    Say it did,
+    then given $n \in \N$,
+    exists $x_n \in [a, b]$ such that $f(x_n) > n$ by Bolzano-Weierstrass there exists a convergent subsequence $x_{n_i}$ with limit $c \in [a, b]$,
+    here we use closed interval.
+    So $f(n_i) \to f(c) \in \R$ with $f(n_i) > n_i$,
+    at some point $n_i > c$.
+
+    Hence $\sup\{f(a, b)\}$ exists in $\R$,
+    $M = \sup\{f(a, b)\}$.
+    (By term $1$)
+    there exists a sequence $y_n \in f([a, b])$ such that $\liminfty y_n = M$,
+    but $y_n = f(x_n)$ by continuity $\liminfty f(x_n) = M$.
+
+    $x_n$ might not converge but by Bolzano-Weierstrass will have a converging subsequence in $[a, b]$ so $\lim x_{n_i} = c \in [a, b]$.
+
+    Then $f(c) = f(\lim x_{n_i}) = \lim f(x_{n_i}) = \lim y_{n_i} = M$.
+
+    Together with the Intermediate Value theorem we get the image of a continuous function on a compact interval is again a compact interval.
+\end{proof}
+
+\begin{definition}[Continuity on a set]\label{def:continuityonset}
+    Continuity on a set $X$,
+    for all $c \in X$ and for all $\varepsilon > 0$,
+    there exists $\delta > 0$ for all $x \in X$ with
+    \[
+    |x - c| < \delta \implies |f(x) - f(c)| < \varepsilon.
+    \]
+\end{definition}
+
+\begin{definition}[Uniform continuity]\label{def:uniformcontinuity}
+    $f : X \to \R$ is uniform continuous if for all $\varepsilon > 0$ there exists $\delta > 0$ such that for all $x, y \in X$ with
+    \[
+    |x - y| < \delta \implies |f(x) - f(y)| < \varepsilon.
+    \]
+    \textit{In other words}
+    \[
+    \forall \varepsilon > 0, \exists \delta > 0 \text{ s.t. } \forall x, y \in X, |x - y| < \delta \implies |f(x) - f(y)| < \varepsilon.
+    \]
+\end{definition}
+
+\begin{theorem}\label{thm:contoncompactisuniform}
+    $f : [a, b] \to \R$ continuous on a compact interval.
+    Then $f$ is uniformly continuous.
+\end{theorem}
+\begin{proof}
+    Assume not.
+    There exists $\varepsilon > 0$ such that for all $\delta > 0$ there exists $x, y \in X$ with
+    \[
+    |x - y| < \delta
+    \]
+    but
+    \[
+    |f(x) - f(y)| \geq \varepsilon.
+    \]
+    Take such a "bad" $\varepsilon > 0$.
+    So for $\delta = \delta_n = \frac{1}{n}$,
+    has $x_n, y_n \in [a, b]$ with $|x_n - y_n| < \delta$ but $|f(x_n) - f(y_n)| \geq \delta$.
+    By Bolzano-Weierstrass for a converging subsequence $(x_{n_i})$ of the $(x_n)$
+    (since $x_n \in [a, b]$)
+    say $\lim x_{n_i} = x ^ {*} \in [a, b]$.
+
+    Claim:
+    also $\lim y_{n_i} = x ^ {*}$.
+    Indeed,
+    \begin{align*}
+        |x ^ {*} - y_{n_i}| &= |x ^ {*} - x_{n_i} + x_{n_i} - y_{n_i}| \\
+        &\leq |x ^ {*} - x_{n_i}| + |x ^ {*} - y_{n_i}| \\
+        &\to 0 + 0 = 0
+    \end{align*}
+    Squeezing gives the claim.
+
+    Claim:
+    \[
+    \lim f(x_{n_i}) - f(y_{n_i}) = 0.
+    \]
+    Indeed
+    \begin{align*}
+        |f(x_{n_i}) - f(y_{n_i})| &= |f(x_{n_i}) - f(x ^ {*}) + f(x ^ {*}) - f(y_{n_i})| \\
+        &\leq |f(x_{n_i}) - f(x ^ {*})| + |f(x ^ {*}) - f(y_{n_i})| \\
+        &\to 0 + 0 = 0
+    \end{align*}
+    by continuity of $f$ and $x_{n_i}, y_{n_i} \to x ^ {*}$.
+
+    So for $n_i$ sufficiently large
+    \[
+    |f(x_{n_i}) - f(y_{n_i})| < \varepsilon
+    \]
+    contradiction!
+\end{proof}
+
+\section{Inverse functions}
+Assume $f : X \to \R$ is injective so the inverse function $f ^ {-1} : f(x) \to \R$ exists,
+$f(x) = Y$.
+
+Principle question:
+
+if $f$ is "nice"
+(e.g. continuous)
+is the inverse also nice?
+
+\begin{theorem}\label{thm:inversefunction}
+    Let $f : I \to \R$ be a continuous function on an interval $I$,
+    and injective
+    (1-1)
+    so $f(I) = J$ is also an interval and the inverse function $f ^ {-1} : J \to I$ is also continuous.
+\end{theorem}
+\begin{proof}
+    One of the key steps:
+    if $f$ is continuous and 1-1.
+    Then $f$ is either strictly monotonically increasing or decreasing.
+\end{proof}

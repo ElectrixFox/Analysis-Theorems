@@ -68,7 +68,7 @@
     To-Do.
 \end{proof}
 
-\begin{theorem}[Bolzano-Weierstrass]\label{thm:bolzano-weierstrass}
+\begin{theorem}[Bolzano-Weierstrass]\label{thm:seq_bolzanoweierstrass}
     \lean{subseq_BolzanoWeierstrass} \leanok
     Every bounded sequence has a convergent subsequence.
 \end{theorem}
@@ -76,3 +76,139 @@
     \uses{lem:subseqmonoincordec, def:seqlimit, thm:seq_mono_conv, lem:seqboundsubseqbound}
     To-Do.
 \end{proof}
+
+\section{The exponential function}
+
+\section{Limsup and Liminf}
+Given a bounded sequence $\seq$ define two
+(related)
+sequences $\seq[\overline{x}]$ and $\seq[\underline{x}]$ as follows let
+\begin{align*}
+    \overline{x_n} &= \sup\{x_m \in \R\,|\,m \geq n\} \\
+    \underline{x_n} &= \inf\{x_m \in \R\,|\,m \geq n\}
+\end{align*}
+
+\begin{lemma}[Limsup and Liminf]\label{lem:limsup_liminf}
+    Let $\seq$ be a bounded sequence.
+    Then $\seq[\overline{x}]$ is monotonically decreasing and bounded,
+    and $\seq[\underline{x}]$ is monotonically increasing and bounded.
+    Furthermore
+    \[
+    \lim_{n \to \infty}\underline{x_n} \leq \lim_{n \to \infty}\overline{x_n}.
+    \]
+\end{lemma}
+\begin{proof}
+    \uses{def:seqmonodec, def:seqmonoinc, def:seqbound}
+    $\seq$ is bounded,
+    so there is $C \in \R$ with $-C \leq x_n \leq C$ for all $n \in \N$.
+    Define $X_n = \{x_m \in \R\,|\, m \geq n\} \subseteq [-C, C]$ bounded,
+    non-empty set.
+    Infimum and supremum exist,
+    and $-C \leq \underline{x_n} \leq \overline{x_n} \leq C$.
+    both sequences are bounded.
+    $X_{n + 1} \subset X_n \implies \overline{x_n}$ is an upper bound for $X_{n + 1} \implies \overline{x_{n + 1}} \leq \overline{x_n}$ for all $n \in \N$.
+    Similarly,
+    $\underline{x_n}$ is a lower bound for $X_{n + 1} \implies \underline{x_n} \leq \underline{x_{n + 1}}$ for all $n \in \N$ which implies $\overline{x_n} - \underline{x_n} \geq 0$.
+    Taking limits gives
+    \[
+    \lim\overline{x_n} - \lim\underline{x_n} \geq 0.
+    \]
+\end{proof}
+
+\begin{definition}[Limsup]\label{def:limsup}
+    Let $\seq$ be a bounded sequence.
+    The limes superior of $\seq$ is defined as
+    \[
+    \limsup_{n \to \infty}{x_n} = \lim_{n \to \infty}\overline{x}_n = \inf_{n \geq 1}\{\sup{\{x_m\,|\, m \geq n\}}\}.
+    \]
+\end{definition}
+
+\begin{definition}[Liminf]\label{def:liminf}
+    Let $\seq$ be a bounded sequence.
+    The limes inferior of $\seq$ is defined as
+    \[
+    \liminf_{n \to \infty}{x_n} = \lim_{n \to \infty}{\underline{x}_n} = \sup_{n \geq 1}{\{\inf{\{x_m\,|\, m \geq n\}}\}}.
+    \]
+\end{definition}
+
+\begin{theorem}\label{thm:limsupliminfproperties}
+    Let $\seq$ be a bounded sequence.
+    \begin{enumerate}[label = \alph*)]
+        \item There is a subsequence $(x_{n_j})_{j \in \N}$ with
+        \[
+        \lim_{j \to \infty}x_{n_j} = \limsup_{n \to \infty}{x_n}.
+        \]
+        \item There is a subsequence $(x_{n_k})_{k \in \N}$ with
+        \[
+        \lim_{k \to \infty}x_{n_k} = \liminf_{n \to \infty}{x_n}.
+        \]
+        \item If $(x_{n_j})_{j \in \N}$ is a convergent subsequence,
+        then
+        \[
+        \liminf_{n \to \infty}{x_n} \leq \lim_{j \to \infty}{x_{n_j}} \leq \limsup_{n \to \infty}{x_n}
+        \]
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    \uses{def:limsup, def:liminf, def:seqlimit, thm:seq_bound_monoinc_conv, thm:seq_bound_monodec_conv}
+    To-Do.
+\end{proof}
+
+\section{Cauchy sequences}
+
+\begin{definition}[Cauchy sequence]\label{def:cauchyseq}
+    A sequence $\seq$ is called a Cauchy sequence,
+    if for every $\varepsilon > 0$ there exists $n_0 \in \N$ such that
+    \[
+    |x_m - x_n| < \varepsilon\qquad\forall n, m \geq n_0.
+    \]
+\end{definition}
+
+\begin{theorem}[Cauchy is bounded]\label{thm:cauchyisbounded}
+    Let $\seq$ be a Cauchy sequence.
+    Then $\seq$ is bounded.
+\end{theorem}
+\begin{proof}
+    \uses{def:cauchyseq, def:seqbound}
+    To-Do.
+\end{proof}
+
+\begin{theorem}[Cauchy sequence converges]\label{thm:cauchyconverges}
+    Let $\seq$ be a convergent sequence.
+    Then $\seq$ is a Cauchy sequence.
+\end{theorem}
+\begin{proof}
+    \uses{def:seqlimit, def:cauchyseq}
+    To-Do.
+\end{proof}
+
+\begin{theorem}\label{thm:cauchyconvergent}
+    Let $\seq$ be a Cauchy sequence.
+    Then $\seq$ is a convergent sequence.
+\end{theorem}
+\begin{proof}
+    \uses{def:cauchyseq, def:seqlimit, thm:seq_bolzanoweierstrass}
+    By \autoref{thm:cauchyisbounded} $\seq$ is a bounded sequence.
+    By \autoref{thm:seq_bolzanoweierstrass},
+    there is a convergent subsequence $(x_{n_j})_{j \in \N}$.
+    Let $x = \lim_{j \to \infty}x_{n_j}$.
+    So given $\varepsilon > 0$,
+    there is a $j_0 \in \N$ with
+    \[
+    |x_{n_j} - x| < \frac{\varepsilon}{2}\qquad\forall j \geq j_0.
+    \]
+    Since $\seq$ is a Cauchy sequence,
+    there is an $n_0 \in \N$ with
+    \[
+    |x_n - x_m| < \frac{\varepsilon}{2}\qquad\forall n, m \geq n_0.
+    \]
+    Now
+    \begin{align*}
+        |x_n - x| &= |x_n - x_{n_j} + x_{n_j} - x| \\
+        &\leq |x_n - x_{n_j}| + |x_{n_j} - x|.
+    \end{align*}
+    Need $j \geq j_0$ and $n_j \geq n_0$
+    (just choose $j$ large enough).
+    Then $|x_n - x| < \frac{\varepsilon}{2} + \frac{\varepsilon}{2} = \varepsilon$ for all $n \geq n_0$.
+\end{proof}
+

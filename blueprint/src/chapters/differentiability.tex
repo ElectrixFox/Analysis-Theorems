@@ -1,0 +1,63 @@
+\chapter{Differentiability}\label{cha:differentiability}
+
+\begin{definition}[Derivative of a function]\label{def:differentiable}
+    $f : X \to \R$
+    ($X$ open).
+    We say that $f$ is differentiable at a point $c \in X$ if
+    \[
+    \lim_{x \to c}\frac{f(x) - f(c)}{x - c}
+    \]
+    exists.
+    If so,
+    we write $f'(c)$ for the limit.
+\end{definition}
+
+\begin{lemma}[First order Taylor]\label{lem:firstordertaylor}
+    $f : X \to \R$,
+    $f$ is differentiable at $c$ if and only if there exists a constant $n \in \R$ and a function $r(x)$ on $X$ such that
+    \begin{equation}\label{eq:2}
+        f(x) = f(c) + m(x - c) + r(x)(x - c)
+    \end{equation}
+    with $r(x)$ is continuous at $c$ and $\lim_{x \to c} r(x) = r(c) = 0$.
+    In that case $m = f'(c)$.
+\end{lemma}
+\begin{proof}
+    \uses{def:differentiable}
+    "$\implies$":
+    Set $m = f'(c)$ and
+    \[
+    r(x) \coloneqq \begin{cases}
+        \frac{f(x) - f(c) - m(x - c)}{x - c} & x \neq c, \\
+        0 & x = c.
+    \end{cases}
+    \]
+    \eqref{eq:2} holds by construction.
+    Need to show
+    \[
+    \lim_{x \to c}r(x) = 0 = r(c),
+    \]
+    \begin{align*}
+        \lim_{x \to c}\left(\frac{f(x) - f(c)}{x - c} - m\right) &= \lim_{x \to c}\left(\frac{f(x) - f(c)}{x - c} - f'(c)\right) = 0.
+    \end{align*}
+
+    "$\impliedby$":
+    \begin{align*}
+        0 &= r(c) \\
+        &= \lim_{x \to c}r(x) \\
+        &= \lim_{x \to c}\frac{f(x) - f(c) - m(x - c)}{x - c} \\
+        &= \lim_{x \to c}\left(\frac{f(x) - f(c)}{x - c} - m\right).
+    \end{align*}
+    Only way this is possible if $\lim_{x \to c}\frac{f(x) - f(c)}{x - c}$ exists and is equal to $m$.
+\end{proof}
+
+\begin{proposition}[Continuity of differentiable functions]\label{prop:diffcont}
+    $f : X \to \R$ as before.
+    Then if $f$ is differentiable at $x = c$,
+    then $f(x)$ is also continuous at $x = c$.
+\end{proposition}
+\begin{proof}
+    Assume $f$ is differentiable at $x = c$.
+    Then $f(x) - f(c) = (x - c) \frac{f(x) - f(c)}{x - c} \xrightarrow[x \to c]{} 0 \cdot f'(c) = 0$.
+    So $\lim_{x \to c}f(x) = f(c)$,
+    that is exactly continuity.
+\end{proof}
