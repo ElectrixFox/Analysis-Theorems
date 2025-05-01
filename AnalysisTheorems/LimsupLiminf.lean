@@ -31,6 +31,26 @@ def infseq (x : ℕ → ℝ) (hb : seq_bounded x) : ℕ → ℝ := fun n =>
 
   (bound_bel S hS2).choose
 
+lemma set_inf_le_sup (X : Set ℝ) [Nonempty X] (c C : ℝ) (hs : supremum X C) (hi : infimum X c) : c ≤ C := by
+  have : bounded X := by
+    dsimp [supremum] at hs
+    unfold bounded bound_above bound_below
+    constructor
+    . obtain ⟨hs1, hs2⟩ := hs
+      use C
+    . obtain ⟨hi1, hi2⟩ := hi
+      use c
+  have h : ∀ x ∈ X, (x ≤ C ∧ c ≤ x) := by
+    intro x hx
+    dsimp [supremum] at hs
+    constructor
+    . exact hs.left x hx
+    . exact hi.left x hx
+  rename_i hne
+  obtain ⟨a, ha⟩ := hne
+  specialize h a ha
+  linarith
+
 lemma boundseqmono (x : ℕ → ℝ) (hx : seq_bounded x) (hx1 : ∀ n m, n ≠ m → x n ≠ x m) : seq_mono_dec (supseq x hx) ∧ seq_bounded (supseq x hx) := by
   set a := (supseq x hx)
   set b := (infseq x hx)
@@ -85,26 +105,75 @@ lemma boundseqmono (x : ℕ → ℝ) (hx : seq_bounded x) (hx1 : ∀ n m, n ≠ 
 
   have h11 : ∀ n, ∃ w, supremum (X n) w := by
     intro n
-    have hXne : Nonempty (X n) := by sorry
+    have hXne : Nonempty (X n) := by use (x n), n
     have hXb : bounded (X n):= by
       constructor
-      use C
-      apply (h12 n)
-
+      . obtain ⟨B, hB⟩ := hx.left
+        use B
+        intro p hp
+        obtain ⟨m, ⟨hm1, hm2⟩⟩ := hp
+        specialize hB (x m) (by simp)
+        rw [←hm2]
+        exact hB
+      . obtain ⟨b, hb⟩ := hx.right
+        use b
+        intro p hp
+        obtain ⟨m, ⟨hm1, hm2⟩⟩ := hp
+        specialize hb (x m) (by simp)
+        rw [←hm2]
+        exact hb
     apply completeness_axiom (X n) hXb.left
 
 
-  have h4 : ∀ (n : ℕ), c ≤ b n ∧ a n ≤ C := by
+  have h4 : ∀ (n : ℕ), c ≤ b n ∧ b n ≤ a n ∧ a n ≤ C := by
     intro n
     constructor
     .
+
       sorry
     .
-
+      constructor
+      . sorry
       sorry
 
-  have h5 : seq_bounded b := by sorry
-  have h6 : seq_bounded a := by sorry
+  have h5 : seq_bounded b := by
+    constructor
+    . use C
+      intro p hp
+      simp at hp
+      obtain ⟨n, hn⟩ := hp
+      rw [←hn]
+      specialize h4 n
+      calc
+        b n ≤ a n := h4.right.left
+        _ ≤ C := h4.right.right
+    .
+      use c
+      intro p hp
+      simp at hp
+      obtain ⟨n, hn⟩ := hp
+      rw [←hn]
+      apply (h4 n).left
+
+  have h6 : seq_bounded a := by
+    constructor
+    . use C
+      intro p hp
+      simp at hp
+      obtain ⟨n, hn⟩ := hp
+      rw [←hn]
+      apply ((h4 n).right).right
+    .
+      use c
+      intro p hp
+      simp at hp
+      obtain ⟨n, hn⟩ := hp
+      rw [←hn]
+      specialize h4 n
+      calc
+        c ≤ b n := h4.left
+        _ ≤ a n := h4.right.left
+
   constructor
   .
     intro m n hm1

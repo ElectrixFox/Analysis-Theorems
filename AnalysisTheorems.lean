@@ -4,3 +4,4 @@ import AnalysisTheorems.Basic
 import AnalysisTheorems.Sets
 import AnalysisTheorems.Sequences
 import AnalysisTheorems.Subsequences
+import AnalysisTheorems.Series
