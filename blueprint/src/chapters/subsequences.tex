@@ -1,0 +1,79 @@
+\chapter{Subsequences}\label{cha:subsequences}
+
+\begin{definition}[Extraction]\label{def:extraction}
+    \lean{extraction} \leanok
+    Let $\phi : \N \to \N$ be a strictly increasing sequence.
+    $\phi_n$ is the extraction of $x_n$.
+\end{definition}
+
+\begin{definition}[Sequence decreasing]\label{def:seqdec}
+    \lean{seq_dec} \leanok
+    A sequence $x_n$ is decreasing if $\forall n \in \N$,
+    \[
+    x_{n + 1} \leq x_n.
+    \]
+\end{definition}
+
+\begin{definition}[Sequence increasing]\label{def:seqinc}
+    \lean{seq_inc}
+    A sequence $x_n$ is increasing if $\forall n \in \N$,
+    \[
+    x_{n + 1} \geq x_n.
+    \]
+\end{definition}
+
+\begin{lemma}[Subsequence of bounded sequence is bounded]\label{lem:seqboundsubseqbound}
+    \lean{seq_bound_imp_subseq_bound} \leanok
+    \uses{def:boundabove, def:boundbelow}
+    Let $x_n$ be a bounded sequence.
+    Then for any extraction $a$ of $x_n$,
+    $x_{a_n}$ is also bounded.
+\end{lemma}
+\begin{proof}
+    \uses{def:seqboundabove, def:seqboundbelow, def:seqbound}
+    To-Do.
+\end{proof}
+
+\begin{lemma}[Subsequence greater than its index]\label{lem:subseq_ge_indx}
+    \lean{subseq_ge_index} \leanok
+    Let $x_n$ be a sequence.
+    Let $a_n$ be an extraction of $x_n$.
+    Then
+    \[
+    \forall j \in \N, a_j \geq j.
+    \]
+\end{lemma}
+\begin{proof}
+    \uses{def:extraction}
+    To-Do.
+\end{proof}
+
+\begin{lemma}[All subsequences of a convergent sequence converge to its limit]\label{lem:subseqconvtoseqlim}
+    \lean{subseq_conv_to_seq_limit} \leanok
+    Let $x_n$ be a convergent sequence with limit $l$.
+    Then for any extraction $a_n$ of $x_n$,
+    the subsequence $x_{a_n}$ converges to $l$. 
+\end{lemma}
+\begin{proof}
+    \uses{def:seqlimit, lem:subseq_ge_indx}
+    To-Do.
+\end{proof}
+
+\begin{lemma}[Every sequence has a monotonic subsequence]\label{lem:subseqmonoincordec}
+    \lean{seq_contsub_inc_or_dec}
+    Let $x_n$ be a sequence.
+    For any subsequence $a_n$ of $x_n$,
+    $x_{a_n}$ is either increasing or decreasing.
+\end{lemma}
+\begin{proof}
+    To-Do.
+\end{proof}
+
+\begin{theorem}[Bolzano-Weierstrass]\label{thm:bolzano-weierstrass}
+    \lean{subseq_BolzanoWeierstrass} \leanok
+    Every bounded sequence has a convergent subsequence.
+\end{theorem}
+\begin{proof}
+    \uses{lem:subseqmonoincordec, def:seqlimit, thm:seq_mono_conv, lem:seqboundsubseqbound}
+    To-Do.
+\end{proof}

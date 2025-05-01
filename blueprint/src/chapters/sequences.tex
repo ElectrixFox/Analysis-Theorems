@@ -1,4 +1,4 @@
-\chapter{Sequences}
+\chapter{Sequences}\label{cha:sequences}
 
 \begin{definition}[Limit of a sequence]\label{def:seqlimit}
     \lean{seq_is_limit} \leanok
@@ -29,7 +29,7 @@
 \end{definition}
 
 \begin{definition}[Sequence bounded]\label{def:seqbound}
-    \lean{seq_bound} \leanok
+    \lean{seq_bounded} \leanok
     \uses{def:seqboundabove, def:seqboundbelow}
     A sequence $x_n$ is bounded if it is both bounded above and bounded below.
 \end{definition}
@@ -134,7 +134,7 @@
 \end{proof}
 
 \begin{lemma}[Linearity of convergent sequences (COLT)]\label{lem:seq_COLT_linear}
-    \lean{seq_COLT_linear} \leanok
+    \lean{seq_COLT_linearity} \leanok
     Let $x_n, y_n$ be real convergent sequences with limits $l, m$ respectively,
     then for all $a, b \in \R$,
     \[
@@ -227,7 +227,6 @@
 \end{definition}
 
 \begin{theorem}[Bounded monotonically increasing sequence converges]\label{thm:seq_bound_monoinc_conv}
-    \lean{seq_boundmonoinc_conv}
     If a sequence $x_n$ is monotonically increasing and bounded,
     then $x_n$ converges.
 \end{theorem}
@@ -237,7 +236,6 @@
 \end{proof}
 
 \begin{theorem}[Bounded monotonically decreasing sequence converges]\label{thm:seq_bound_monodec_conv}
-    \lean{seq_boundmonodec_conv}
     If a sequence $x_n$ is monotonically decreasing and bounded,
     then $x_n$ converges.
 \end{theorem}
@@ -246,8 +244,8 @@
     To-Do.
 \end{proof}
 
-\begin{theorem}[Monotonic sequence converges]\label{thm:seq_mono_conv}
-    \lean{seq_mono_conv}
+\begin{theorem}[Bounded monotonic sequence converges]\label{thm:seq_mono_conv}
+    \lean{seq_mono_bound_conv }
     If a sequence $x_n$ is monotonic and bounded,
     then $x_n$ converges.
 \end{theorem}
