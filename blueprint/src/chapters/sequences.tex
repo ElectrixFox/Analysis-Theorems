@@ -1,0 +1,257 @@
+\chapter{Sequences}
+
+\begin{definition}[Limit of a sequence]\label{def:seqlimit}
+    \lean{seq_is_limit} \leanok
+    The limit of a sequence $x_n$ as $n \to \infty$ is
+    \[
+    \forall \varepsilon > 0, \exists N \in \N, \forall n \geq N, |x_n - l| < \varepsilon.
+    \]
+\end{definition}
+
+\begin{theorem}[Limit of a sequence is unique]\label{thm:seqlimitunique}
+    \lean{seq_uniquelim} \leanok
+    If a sequence $x_n$ converges to $l$ and $m$,
+    then $l = m$.
+\end{theorem}
+\begin{proof}
+    \uses{def:seqlimit}
+    To-Do.
+\end{proof}
+
+\begin{definition}[Sequence bounded above]\label{def:seqboundabove}
+    \lean{seq_bound_above} \leanok
+    A sequence $x_n$ is bounded above if ${x_n \mid n \in \N}$ is bounded above.
+\end{definition}
+
+\begin{definition}[Sequence bounded below]\label{def:seqboundbelow}
+    \lean{seq_bound_below} \leanok
+    A sequence $x_n$ is bounded below if ${x_n \mid n \in \N}$ is bounded below.
+\end{definition}
+
+\begin{definition}[Sequence bounded]\label{def:seqbound}
+    \lean{seq_bound} \leanok
+    \uses{def:seqboundabove, def:seqboundbelow}
+    A sequence $x_n$ is bounded if it is both bounded above and bounded below.
+\end{definition}
+
+\begin{lemma}[Convergent sequence bounded below has limit bounded below]\label{lem:seqboundbelow_limboundbelow}
+    \lean{conv_seq_bound_below_imp_lim_bound_below} \leanok
+    Let $x_n$ be a real convergent sequence,
+    if $x_n$ is bounded below,
+    then the limit of $x_n$ is bounded below.
+\end{lemma}
+\begin{proof}
+    \uses{def:seqlimit, def:seqboundbelow}
+    To-Do.
+\end{proof}
+
+\begin{lemma}[Convergent sequence bounded above has limit bounded above]\label{lem:seqboundabove_limboundabove}
+    \lean{conv_seq_bound_above_imp_lim_bound_above} \leanok
+    Let $x_n$ be a real convergent sequence,
+    if $x_n$ is bounded above,
+    then the limit of $x_n$ is bounded above.
+\end{lemma}
+\begin{proof}
+    \uses{def:seqlimit, def:seqboundabove}
+    To-Do.
+\end{proof}
+
+\begin{theorem}[Harmonic sequence converges]\label{thm:seq_harmonic_conv}
+    \lean{harmonic_seq_conv} \leanok
+    The sequence $x_n = \frac{1}{n}$ converges to zero.
+\end{theorem}
+\begin{proof}
+    \uses{def:seqlimit, thm:archimedes}
+    To-Do.
+\end{proof}
+
+\begin{theorem}[Convergent sequence is bounded]\label{thm:seq_conv_bound}
+    \lean{conv_seq_is_bounded} \leanok
+    If a sequence $x_n$ converges to $x$,
+    then $x_n$ is bounded.
+\end{theorem}
+\begin{proof}
+    \uses{def:seqlimit, def:seqbound}
+    To-Do.
+\end{proof}
+
+\begin{corollary}[Convergent sequence is absolutely bounded]\label{cor:seq_conv_abs_bound}
+    \lean{conv_seq_is_bounded_abs} \leanok
+    If a sequence $x_n$ converges to $x$,
+    then $x_n$ there exists a $C > 0$ such that for all $n \in \N$ $|x_n| \leq C$.
+\end{corollary}
+\begin{proof}
+    \uses{thm:seq_conv_bound}
+    To-Do.
+\end{proof}
+
+\begin{theorem}[Squeeze theorem (to zero)]\label{thm:squeeze_zero}
+    \lean{seq_squeeze_zero} \leanok
+    Let $x_n, y_n$ be real convergent sequences with $y_n \to 0$ as $n \to \infty$,
+    and $\forall n \in \N, |x_n| \leq y_n$ then
+    \[
+    x_n \to 0 \text{ as } n \to \infty.
+    \]
+\end{theorem}
+\begin{proof}
+    \uses{def:seqlimit}
+    To-Do.
+\end{proof}
+
+\begin{theorem}[Inverse sequence converges]\label{thm:seq_inv_conv}
+    \lean{inv_seq_conv} \leanok
+    For all $a \geq 0$ the sequence $x_n = \frac{1}{n ^ a}$ converges to zero.
+\end{theorem}
+\begin{proof}
+    \uses{def:seqlimit, thm:seq_harmonic_conv, thm:squeeze_zero}
+    To-Do.
+\end{proof}
+
+\begin{theorem}[Scalar multiplication (COLT)]\label{thm:seq_COLT_scalar_mult}
+    \lean{seq_COLT_scalarmult} \leanok
+    Let $x_n$ be a real convergent sequence with limit $l$,
+    then for any $a \in \R$,
+    \[
+    a * x_n \to a * l \text{ as } n \to \infty.
+    \]
+\end{theorem}
+\begin{proof}
+    \uses{def:seqlimit}
+    To-Do.
+\end{proof}
+
+\begin{theorem}[Addition of convergent sequences (COLT)]\label{thm:seq_COLT_add}
+    \lean{seq_COLT_addition} \leanok
+    Let $x_n, y_n$ be real convergent sequences with limits $l, m$ respectively,
+    then
+    \[
+    x_n + y_n \to l + m \text{ as } n \to \infty.
+    \]
+\end{theorem}
+\begin{proof}
+    \uses{def:seqlimit}
+    To-Do.
+\end{proof}
+
+\begin{lemma}[Linearity of convergent sequences (COLT)]\label{lem:seq_COLT_linear}
+    \lean{seq_COLT_linear} \leanok
+    Let $x_n, y_n$ be real convergent sequences with limits $l, m$ respectively,
+    then for all $a, b \in \R$,
+    \[
+    a * x_n + b * y_n \to a * l + b * m \text{ as } n \to \infty.
+    \]
+\end{lemma}
+\begin{proof}
+    \uses{thm:seq_COLT_add, thm:seq_COLT_scalarmult}
+    This is a direct consequence of the previous two theorems.
+\end{proof}
+
+\begin{theorem}[Multiplication of convergent sequences (COLT)]\label{thm:seq_COLT_mult}
+    \lean{seq_COLT_mult} \leanok
+    Let $x_n, y_n$ be real convergent sequences with limits $l, m$ respectively,
+    then
+    \[
+    x_n * y_n \to l * m \text{ as } n \to \infty.
+    \]
+\end{theorem}
+\begin{proof}
+    \uses{def:seqlimit, lem:seqlimboundabove_limboundabove, cor:conv_seq_is_bounded_abs}
+    To-Do.
+\end{proof}
+
+\begin{theorem}[Division of convergent sequences (COLT)]\label{thm:seq_COLT_ratio}
+    \lean{seq_COLT_ratio}
+    Let $x_n, y_n$ be real convergent sequences with limits $l, m$ respectively,
+    then if $m \neq 0$,
+    and $\forall n \in \N, y_n \neq 0$,
+    then
+    \[
+    \frac{x_n}{y_n} \to \frac{l}{m} \text{ as } n \to \infty.
+    \]
+\end{theorem}
+\begin{proof}
+    \uses{def:seqlimit, thm:seq_COLT_mult, thm:seq_COLT_scalarmult}
+    To-Do.
+\end{proof}
+
+\begin{theorem}[Limit of bounded sequence is in the interval]\label{thm:seq_limit_in_interval}
+    \lean{seq_limininterval} \leanok
+    Let $x_n$ be a real convergent sequence with limit $l$,
+    if $x_n \in (a, b)$ for all $n \in \N$,
+    then $l \in (a, b)$.
+\end{theorem}
+\begin{proof}
+    \uses{def:seqlimit, lem:seqboundabove_limboundabove, lem:seqboundbelow_limboundbelow}
+    To-Do.
+\end{proof}
+
+\begin{lemma}[Inequality of two sequences implies limit inequality]\label{lem:seq_limineq}
+    \lean{seq_limineq}
+    Let $x_n, y_n$ be real convergent sequences with limits $x, y$ respectively,
+    if $\forall n \in \N, x_n \leq y_n$,
+    then $x \leq y$.
+\end{lemma}
+\begin{proof}
+    \uses{def:seqlimit}
+    To-Do.
+\end{proof}
+
+\begin{theorem}[Continuity of root]\label{thm:seq_cor}
+    \lean{seq_sqrtcont}
+    Let $x_n$ be a real convergent sequence,
+    converging to $x$,
+    with $x_n \geq 0$ for all $n \in \N$ then
+    \[
+    \lim_{n \to \infty} \sqrt{x_n} = \sqrt{x}.
+    \]
+\end{theorem}
+\begin{proof}
+    \uses{def:seqlimit, thm:seq_COLT_scalarmult, thm:seq_COLT_mult}
+    To-Do.
+\end{proof}
+
+\begin{definition}[Sequence monotonic increasing]\label{def:seqmonoinc}
+    \lean{seq_mono_inc} \leanok
+    A sequence $x_n$ is monotonic increasing if
+    \[
+    \forall m \leq n, x m \leq x n.
+    \]
+\end{definition}
+
+\begin{definition}[Sequence monotonic decreasing]\label{def:seqmonodec}
+    \lean{seq_mono_dec} \leanok
+    A sequence $x_n$ is monotonic decreasing if
+    \[
+    \forall m \leq n, x m \geq x n.
+    \]
+\end{definition}
+
+\begin{theorem}[Bounded monotonically increasing sequence converges]\label{thm:seq_bound_monoinc_conv}
+    \lean{seq_boundmonoinc_conv}
+    If a sequence $x_n$ is monotonically increasing and bounded,
+    then $x_n$ converges.
+\end{theorem}
+\begin{proof}
+    \uses{def:seqlimit, def:seqmonoinc, def:seqbound}
+    To-Do.
+\end{proof}
+
+\begin{theorem}[Bounded monotonically decreasing sequence converges]\label{thm:seq_bound_monodec_conv}
+    \lean{seq_boundmonodec_conv}
+    If a sequence $x_n$ is monotonically decreasing and bounded,
+    then $x_n$ converges.
+\end{theorem}
+\begin{proof}
+    \uses{def:seqlimit, def:seqmonodec, def:seqbound}
+    To-Do.
+\end{proof}
+
+\begin{theorem}[Monotonic sequence converges]\label{thm:seq_mono_conv}
+    \lean{seq_mono_conv}
+    If a sequence $x_n$ is monotonic and bounded,
+    then $x_n$ converges.
+\end{theorem}
+\begin{proof}
+    \uses{def:seqlimit, def:seqmonoinc, def:seqmonodec, def:seqbound}
+    To-Do.
+\end{proof}

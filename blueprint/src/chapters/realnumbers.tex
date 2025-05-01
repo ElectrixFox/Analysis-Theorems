@@ -1,4 +1,4 @@
-\chapter{realnumbers}\label{cha:realnums}
+\chapter{Real Numbers}\label{cha:realnums}
 
 \begin{definition}[Bounded above]\label{def:boundabove}
   \lean{bound_above} \leanok
@@ -6,11 +6,47 @@
   $X$ is bounded above if there exists a $C$ such that for all $x \in X$ $x \leq C$.
 \end{definition}
 
+\begin{definition}[Bounded below]\label{def:boundbelow}
+  \lean{bound_below} \leanok
+  Given a set $X$,
+  $X$ is bounded below if there exists a $C$ such that for all $x \in X$ $x \geq C$.
+\end{definition}
+
+\begin{definition}[Bounded]\label{def:bound}
+  \lean{bound} \leanok
+  \uses{def:boundabove, def:boundbelow}
+  Given a set $X$,
+  $X$ is bounded if it is both bounded above and bounded below.
+\end{definition}
+
+\begin{definition}[Maximum]\label{def:maximum}
+  \lean{maximum} \leanok
+  Let $X \subset \R$ be bounded above.
+  A number $C \in \R$ is called a maximum of $X$ if $C$ is an upper bound of $X$ and for all $x \in X$, $x \leq C$.
+  In other words,
+  $C$ is a maximum if $\forall x \in X, x \leq C$.
+\end{definition}
+
+\begin{definition}[Minimum]\label{def:minimum}
+  \lean{minimum} \leanok
+  Let $X \subset \R$ be bounded below.
+  A number $C \in \R$ is called a minimum of $X$ if $C$ is a lower bound of $X$ and for all $x \in X$, $x \geq C$.
+  In other words,
+  $C$ is a minimum if $\forall x \in X, x \geq C$.
+\end{definition}
+
 \begin{definition}[Supremum]\label{def:supremum}
   \lean{supremum} \leanok
   Let $X \subset \R$ be bounded above.
   A number $C \in \R$ is called a supremum of $X$ if $C$ is an upper bound of $X$ and whenever $B$ is an upper bound of $X$,
   then $C \leq B$.
+\end{definition}
+
+\begin{definition}[Infimum]\label{def:infimum}
+  \lean{infimum} \leanok
+  Let $X \subset \R$ be bounded below.
+  A number $C \in \R$ is called an infimum of $X$ if $C$ is a lower bound of $X$ and whenever $B$ is a lower bound of $X$,
+  then $C \geq B$.
 \end{definition}
 
 \begin{axiom}[Completeness axiom]\label{ax:complax}
