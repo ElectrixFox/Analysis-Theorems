@@ -1,7 +1,44 @@
 import AnalysisTheorems.Subsequences
 
+lemma inf_eq_neg_sup_of_neg (X : Set ℝ) (C : ℝ) [Nonempty X] (hX : bound_above X) (h : supremum X (-C)) :
+  infimum ({-x | x ∈ X}) C := by
+  unfold infimum
+  constructor
+  .
+    intro x hx
+    simp at hx
+    obtain ⟨y, ⟨hy, hxy⟩⟩ := hx
+    rw [←hxy]
+    rw [le_neg]
+    unfold supremum at h
+    obtain ⟨h1, h2⟩ := h
+    specialize h1 y hy
+    apply h1
+  .
+    simp
+    intro B hB
+    rename_i h1
+    unfold supremum at h
+    obtain ⟨h1, h2⟩ := h
+    specialize h2 B
+    sorry
+
 lemma bound_bel (X : Set ℝ) [Nonempty X] : bound_below X → ∃ c, infimum X c := by
-  sorry
+  intro h
+  unfold bound_below at h
+  unfold infimum
+  obtain ⟨c, hc⟩ := h
+  use c
+  constructor
+  . exact hc
+  .
+
+    intro B hB
+    rename_i h
+    obtain ⟨x, hx⟩ := h
+    specialize hc B
+    apply hc
+    sorry
 
 noncomputable
 def supseq (x : ℕ → ℝ) (hb : seq_bounded x) : ℕ → ℝ := fun n =>
