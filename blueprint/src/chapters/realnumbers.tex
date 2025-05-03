@@ -64,12 +64,13 @@
 \end{lemma}
 
 \begin{theorem}[Archimedes]\label{thm:archimedes}
-  \lean{archimedes}
+  \lean{archimedes} \leanok
   Given $a, b \in \R$ with $b > 0$,
   there exists an $n \in \N$ such that $n * b > a$.
 \end{theorem}
 \begin{proof}
   \uses{ax:complax, def:boundabove, def:supremum}
+  To-Do.
 \end{proof}
 
 \begin{lemma}[Bounded above set negative is bounded below]\label{lem:setboundabve_neg_boundbelow}
@@ -79,21 +80,34 @@
 \end{lemma}
 \begin{proof}
   \uses{def:boundabove, def:boundbelow}
-  To-Do.
+  Since $X$ is bounded above for all $x \in X$,
+  $x \leq C$.
+
+  Our goal is $\forall x \in -X, c \leq x$
+  \[
+  x \in -X \implies -x \in X
+  \]
+  we can apply our $-x$ to being bounded above,
+  \[
+  -x \in X, -x \leq C \implies -C \leq x
+  \]
+  this fits the hypothesis if we take $c = -C$.
 \end{proof}
 
 \begin{lemma}\label{lem:inf_eq_neg_sup}
-  Let $X$ be a nonempty set bounded above.
-  Then there exists a supremum and
-  \[
-  \inf(-X) = -\sup{X}.
-  \]
+    Let $X$ be a nonempty set bounded above.
+    Then
+    \[
+    \inf(-X) = -\sup{X}.
+    \]
 \end{lemma}
 \begin{proof}
-  To-Do.
+    We have the existence of the supremum by the completeness axiom
+    (\autoref{ax:complax}).
+    By \autoref{lem:setboundabve_neg_boundbelow} we have that $-X$ is bounded below.
 \end{proof}
 
-\begin{lemma}[Existance of infimum]\label{lem:existsinfimum}
+\begin{lemma}[Existence of infimum]\label{lem:existsinfimum}
   Given a nonempty set $X$ bounded below then there exists an infimum.
 \end{lemma}
 \begin{proof}
