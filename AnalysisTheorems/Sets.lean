@@ -1,11 +1,10 @@
 import Mathlib
 
 def bound_below (X : Set ℝ) : Prop := ∃ (c : ℝ), ∀ x, x ∈ X → c ≤ x
+def bound_below_by (X : Set ℝ) (c : ℝ) : Prop := ∀ x, x ∈ X → c ≤ x
 
 def bound_above (X : Set ℝ) : Prop := ∃ (c : ℝ), ∀ x, x ∈ X → c ≥ x
 def bound_above_by (X : Set ℝ) (c : ℝ) : Prop := ∀ x, x ∈ X → c ≥ x
-
-def bound_below_by (X : Set ℝ) (c : ℝ) : Prop := bound_below X → ∀ x, x ∈ X → c ≤ x
 
 def bounded (X : Set ℝ) : Prop := bound_above X ∧ bound_below X
 
@@ -18,6 +17,34 @@ def minimum (X : Set ℝ) (m : ℝ) : Prop := m ∈ X ∧ ∀ x ∈ X, m ≤ x
 def supremum (X : Set ℝ) (C : ℝ) := (∀ x ∈ X, x ≤ C) ∧ (∀ B, (∀ x ∈ X, x ≤ B) → C ≤ B)
 
 def infimum (X : Set ℝ) (C : ℝ) := (∀ x ∈ X, C ≤ x) ∧ (∀ B, (∀ x ∈ X, B ≤ x) → C ≤ B)
+
+
+lemma lt_add_imp_le (a b : ℝ) : (∀ ε > 0, a < b + ε) → a ≤ b := by
+  intro h
+  by_contra h1  -- assume a > b
+  push_neg at h1
+  rw [show b < a ↔ b - a < 0 by simp] at h1 -- show b - a < 0
+  specialize h (a - b)  -- so use ε = a - b
+  simp at h -- then this says b < a and a ≤ b which is clearly a contradiction
+  linarith
+
+lemma abs_sub_le_add (a b c : ℝ) : |a - b| < c → |a| ≤ |b| + c := by
+  intro h
+  have h1 := calc
+      |a| = |a - b + b| := by simp
+      _ ≤ |a - b| + |b| := by apply abs_add
+  linarith
+
+lemma abs_le_imp_le (a b : ℝ) : |a| ≤ b → a ≤ b := by
+  intro h
+  by_cases h1 : a ≤ 0
+  .
+    rw [abs_of_nonpos h1] at h
+    linarith
+  .
+    push_neg at h1
+    rw [abs_of_pos h1] at h
+    exact h
 
 axiom completeness_axiom (X : Set ℝ) [Nonempty X] : bound_above X → ∃ C, supremum X C
 
@@ -108,20 +135,99 @@ lemma inf_of_neg_eq_neg_sup' (X : Set ℝ) [Nonempty X] (hX : bound_above X)
     specialize hc (-x)
     sorry
 
-lemma inf_of_neg_eq_neg_sup (X : Set ℝ) (c : ℝ) [Nonempty X] (hX : bound_above X) (hS : supremum X (-c)) : infimum (-X) c := by
-  unfold infimum
+lemma inf_of_neg_eq_neg_sup (X : Set ℝ) [Nonempty X] (hX : bound_above X) :
+  ∃ C, (supremum X (-C) ↔ infimum (-X) C) := by
+  have h := completeness_axiom X hX
+  obtain ⟨C, hC⟩ := h
+  use (-C)
+  simp [hC]
+  set T := -X
+  have h0 : ∀ x ∈ T, -C ≤ x := by
+    intro x hx
+    obtain ⟨h1, h2⟩ := hC
+    specialize h1 (-x)
+    apply h1 at hx
+    rw [neg_le]
+    exact hx
+  constructor
+  exact h0
+  intro B
 
-  -- -X is clearly bounded below
-  have hBb : bound_below (-X) := by
-    rw [←set_bound_above_neg_bound_below]
-    exact hX
+  by_cases h : ¬∃ ε > 0, ∀ x ∈ T, B + ε ≤ x
+  .
+    push_neg at h
+    intro h1
+    apply lt_add_imp_le
+    intro ε hε
+    specialize h ε hε
+    obtain ⟨x, hx, hx1⟩ := h
+    specialize h1 x hx
+    specialize h0 x hx
+    calc
+      -C ≤ x := h0
+      _ < B + ε := hx1
+  .
+    push_neg at h
+    obtain ⟨ε, hε, h⟩ := h
+    intro h1
+    conv at h1 =>
+      intro x hx
+      rw [←neg_le_neg_iff]
 
+
+    have h2 : ∀ x ∈ X, x ≤ -B := by
+      intro x hx
+      specialize h1 (-x)
+      simp [T, hx] at h1
+      exact h1
+
+    have h3 : C ≥ -B := by
+      sorry
+
+    have h4 : C ≤ -B := (hC.right (-B)) h2
+
+    dsimp [supremum] at hC
+    obtain ⟨h3, h4⟩ := hC
+    specialize h4 (-B)
+    apply h4 at h2
+    rw [le_neg] at h2
+    simp [T] at *
+    sorry
+
+
+  /-have h := completeness_axiom X hX
+  obtain ⟨C, hC⟩ := h
+  use (-C)
+  simp [hC]
   constructor
   .
-    sorry
+    rw [show (∀ x ∈ -X, -C ≤ x) ↔ bound_below (-X) by
+      unfold bound_below
+      constructor
+      intro h
+      use (-C)
+      intro h x hx
+      unfold supremum at hC
+      simp at hx
+      rw [neg_le]
+      apply hC.left (-x) hx
+      ]
+    rw [set_bound_above_neg_bound_below] at hX
+    exact hX
   .
+    contrapose hC
+    unfold supremum
     simp
-    sorry
+    intro h
+    push_neg at hC
+    obtain ⟨B, ⟨h1, h2⟩⟩ := hC
+    use B
+    constructor
+    intro x hx
+    specialize h1 (-x)
+    simp at h1
+    specialize h (-x)
+    sorry-/
 
 def func_bound_above (X : Set ℝ) (f : ℝ → ℝ) : Prop := (∃ (c : ℝ), ∀ x ∈ X, f x ≤ c)
 
