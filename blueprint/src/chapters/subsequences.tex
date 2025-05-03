@@ -94,7 +94,7 @@ sequences $\seq[\overline{x}]$ and $\seq[\underline{x}]$ as follows let
     and $\seq[\underline{x}]$ is monotonically increasing and bounded.
     Furthermore
     \[
-    \lim_{n \to \infty}\underline{x_n} \leq \lim_{n \to \infty}\overline{x_n}.
+    \lim_{n \to \infty}\underline{x}_n \leq \lim_{n \to \infty}\bar{x}_n.
     \]
 \end{lemma}
 \begin{proof}
@@ -104,14 +104,14 @@ sequences $\seq[\overline{x}]$ and $\seq[\underline{x}]$ as follows let
     Define $X_n = \{x_m \in \R\,|\, m \geq n\} \subseteq [-C, C]$ bounded,
     non-empty set.
     Infimum and supremum exist,
-    and $-C \leq \underline{x_n} \leq \overline{x_n} \leq C$.
+    and $-C \leq \underline{x}_n \leq \bar{x}_n \leq C$.
     both sequences are bounded.
-    $X_{n + 1} \subset X_n \implies \overline{x_n}$ is an upper bound for $X_{n + 1} \implies \overline{x_{n + 1}} \leq \overline{x_n}$ for all $n \in \N$.
+    $X_{n + 1} \subset X_n \implies \bar{x}_n$ is an upper bound for $X_{n + 1} \implies \bar{x}_{n + 1} \leq \bar{x}_n$ for all $n \in \N$.
     Similarly,
-    $\underline{x_n}$ is a lower bound for $X_{n + 1} \implies \underline{x_n} \leq \underline{x_{n + 1}}$ for all $n \in \N$ which implies $\overline{x_n} - \underline{x_n} \geq 0$.
+    $\underline{x}_n$ is a lower bound for $X_{n + 1} \implies \underline{x}_n \leq \underline{x}_{n + 1}$ for all $n \in \N$ which implies $\bar{x}_n - \underline{x}_n \geq 0$.
     Taking limits gives
     \[
-    \lim\overline{x_n} - \lim\underline{x_n} \geq 0.
+    \lim\bar{x}_n - \lim\overline{x}_n \geq 0.
     \]
 \end{proof}
 
