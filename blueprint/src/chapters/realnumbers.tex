@@ -82,3 +82,34 @@
   To-Do.
 \end{proof}
 
+\begin{lemma}\label{lem:inf_eq_neg_sup}
+  Let $X$ be a nonempty set bounded above.
+  Then there exists a supremum and
+  \[
+  \inf(-X) = -\sup{X}.
+  \]
+\end{lemma}
+\begin{proof}
+  To-Do.
+\end{proof}
+
+\begin{lemma}[Existance of infimum]\label{lem:existsinfimum}
+  Given a nonempty set $X$ bounded below then there exists an infimum.
+\end{lemma}
+\begin{proof}
+  \uses{lem:inf_eq_neg_sup, lem:setboundabve_neg_boundbelow, ax:complax}
+  Since $X$ is bounded below then $-X$ is clearly bounded above
+  (by \autoref{lem:setboundabve_neg_boundbelow}).
+  By the completeness axiom
+  (\autoref{ax:complax})
+  we have the existence of the supremum of $-X$.
+  Rewriting the previous lemma
+  (\autoref{lem:inf_eq_neg_sup})
+  we have
+  \[
+  \inf(-X) = -\sup{X} \iff \inf{X} = -\sup(-X)
+  \]
+  applying this fact we get.
+  Thus,
+  we have the infimum of $X$.
+\end{proof}
