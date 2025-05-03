@@ -85,13 +85,3 @@ theorem subseq_BolzanoWeierstrass' (x : ℕ → ℝ) (hx : seq_bounded x) : ∃ 
   . apply seq_mono_bound_conv (x ∘ a) -- if the sequence is monotone and bounded then it converges
     apply seq_bound_imp_subseq_bound x a ha hx -- the sequence is bounded so the subsequence is bounded
     tauto -- show that it is true by True ∨ something is always true
-
-lemma set_bound_above_neg_bound_below (X : Set ℝ) : bound_above X ↔ bound_below (-X) := by
-  constructor
-  repeat' -- repeat this as the following works in both ways
-  . intro h
-    obtain ⟨c, hc⟩ := h -- get the upper (lower) bound
-    use (-c)  -- the lower (upper) bound is -c since c is positive
-    intro x
-    specialize hc (-x)  -- the x in X will be -x since x is -ve
-    simp_all [neg_le, le_neg] -- cleaning up the inequalities

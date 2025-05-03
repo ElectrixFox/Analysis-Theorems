@@ -82,6 +82,47 @@ theorem archimedes (a b : ℝ) (hb : b > 0) : ∃ (n : ℕ), n * b > a := by
   apply hBup at hnxtinX -- apply the contradition
   linarith  -- hence contradiction
 
+lemma set_bound_above_neg_bound_below (X : Set ℝ) : bound_above X ↔ bound_below (-X) := by
+  constructor
+  repeat' -- repeat this as the following works in both ways
+  . intro h
+    obtain ⟨c, hc⟩ := h -- get the upper (lower) bound
+    use (-c)  -- the lower (upper) bound is -c since c is positive
+    intro x
+    specialize hc (-x)  -- the x in X will be -x since x is -ve
+    simp_all [neg_le, le_neg] -- cleaning up the inequalities
+
+lemma inf_of_neg_eq_neg_sup' (X : Set ℝ) [Nonempty X] (hX : bound_above X)
+  : infimum (-X) ((-1) * (completeness_axiom X hX).choose) := by
+
+  set sup := (completeness_axiom X hX).choose
+  simp
+  constructor
+  .
+    sorry
+  .
+    intro x hx
+    simp at hx
+    unfold bound_above at hX
+    obtain ⟨c, hc⟩ := hX
+    specialize hc (-x)
+    sorry
+
+lemma inf_of_neg_eq_neg_sup (X : Set ℝ) (c : ℝ) [Nonempty X] (hX : bound_above X) (hS : supremum X (-c)) : infimum (-X) c := by
+  unfold infimum
+
+  -- -X is clearly bounded below
+  have hBb : bound_below (-X) := by
+    rw [←set_bound_above_neg_bound_below]
+    exact hX
+
+  constructor
+  .
+    sorry
+  .
+    simp
+    sorry
+
 def func_bound_above (X : Set ℝ) (f : ℝ → ℝ) : Prop := (∃ (c : ℝ), ∀ x ∈ X, f x ≤ c)
 
 def func_sup (X : Set ℝ) (f : ℝ → ℝ) (C : ℝ) : Prop := func_bound_above X f ∧ (∀ B, (∀ x ∈ X, f x ≤ B) → C ≤ B)
