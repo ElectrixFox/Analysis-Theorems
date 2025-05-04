@@ -119,22 +119,6 @@ lemma set_bound_above_neg_bound_below (X : Set ℝ) : bound_above X ↔ bound_be
     specialize hc (-x)  -- the x in X will be -x since x is -ve
     simp_all [neg_le, le_neg] -- cleaning up the inequalities
 
-lemma inf_of_neg_eq_neg_sup' (X : Set ℝ) [Nonempty X] (hX : bound_above X)
-  : infimum (-X) ((-1) * (completeness_axiom X hX).choose) := by
-
-  set sup := (completeness_axiom X hX).choose
-  simp
-  constructor
-  .
-    sorry
-  .
-    intro x hx
-    simp at hx
-    unfold bound_above at hX
-    obtain ⟨c, hc⟩ := hX
-    specialize hc (-x)
-    sorry
-
 lemma inf_of_neg_eq_neg_sup (X : Set ℝ) [Nonempty X] (hX : bound_above X) :
   ∃ C, (supremum X (-C) ↔ infimum (-X) C) := by
   have h := completeness_axiom X hX
@@ -194,7 +178,6 @@ lemma inf_of_neg_eq_neg_sup (X : Set ℝ) [Nonempty X] (hX : bound_above X) :
     simp [T] at *
     sorry
 
-
   /-have h := completeness_axiom X hX
   obtain ⟨C, hC⟩ := h
   use (-C)
@@ -228,6 +211,111 @@ lemma inf_of_neg_eq_neg_sup (X : Set ℝ) [Nonempty X] (hX : bound_above X) :
     simp at h1
     specialize h (-x)
     sorry-/
+
+lemma eq_iff_le_tric (a b : ℝ) : a ≤ b ∧ b ≤ a → a = b := by
+  norm_num
+  intro h1 h2
+  by_contra h
+  push_neg at h
+  rw [le_iff_eq_or_lt] at *
+  obtain h1 | h1 := h1
+  . exact h h1
+  obtain h2 | h2 := h2
+  . exact h h2.symm
+  . linarith
+
+lemma eq_iff_le_tric' (a b : ℝ) : a = b → a ≤ b → b ≤ a := by simp_all
+
+lemma neg_set_le_bound (X : Set ℝ) (C : ℝ) : (∀ x ∈ -X, x ≤ C) ↔ (∀ x ∈ X, -x ≤ C) := by
+  simp_all
+  constructor
+  . intro h x hx
+    specialize h (-x)
+    apply h
+    simp [hx]
+  . intro h x hx
+    specialize h (-x)
+    simp at h
+    exact h hx
+
+lemma neg_set_ge_bound (X : Set ℝ) (C : ℝ) : (∀ x ∈ -X, x ≥ C) ↔ (∀ x ∈ X, -x ≥ C) := by
+  simp_all
+  constructor
+  . intro h x hx
+    specialize h (-x)
+    apply h
+    simp [hx]
+  . intro h x hx
+    specialize h (-x)
+    simp at h
+    exact h hx
+
+
+lemma inf_of_neg_eq_neg_sup' (X : Set ℝ) (hX : bound_above X) (C : ℝ) (h : supremum X (-C)) :
+  supremum X (-C) ↔ infimum (-X) C := by
+  simp [h]
+  rename' C => p
+  rw [←neg_neg p]
+  set B := -p
+  rename' X => S
+  let T := -S
+  have h1 : ∀ x ∈ S, -x ≥ -B := by
+    intro x hx
+    rw [ge_iff_le, neg_le_neg_iff]
+    apply h.left x hx
+  have h2 : ∀ t ∈ T, -B ≤ t := by
+    simp [T, B, h1]
+    intro t ht
+    specialize h1 (-t)
+    simp [ht, B] at h1
+    exact h1
+
+  constructor
+  . intro s hs
+    specialize h1 (-s)
+    simp at hs
+    simp at h1
+    exact h1 hs
+  .
+    intro C hC
+    rw [eq_iff_le_tric C (-B)]
+    constructor
+    .
+      unfold T at h2
+      obtain ⟨h3, h4⟩ := h
+      simp at h1
+      specialize h4 (-C)
+      rw [le_neg]
+      apply h4
+      intro s hs
+      specialize hC (-s)
+      simp [le_neg] at hC
+      exact hC hs
+    .
+      sorry
+
+
+lemma completeness_bounded_below (X : Set ℝ) [Nonempty X] : bound_below X → ∃ c, infimum X c := by
+  intro h
+  rename_i inst
+  have hnempty : Nonempty (↑(-X)) := by
+    obtain ⟨a, ha⟩ := inst
+    use (-a)
+    simp [ha]
+
+  have hb := set_bound_above_neg_bound_below (-X)
+  simp [h] at hb
+  have hsup := completeness_axiom (-X) hb
+  obtain ⟨C, hsup⟩ := hsup
+  use (C)
+  have := inf_of_neg_eq_neg_sup (-X) hb
+  simp at this
+
+  sorry
+  /-
+  rw [inf_of_neg_eq_neg_sup (-X) hb (-C), neg_neg] at hsup
+  exact hsup
+  -/
 
 def func_bound_above (X : Set ℝ) (f : ℝ → ℝ) : Prop := (∃ (c : ℝ), ∀ x ∈ X, f x ≤ c)
 
