@@ -1,0 +1,311 @@
+\chapter{Power Series}\label{cha:powerseries}
+
+\begin{definition}\label{def:powerseries}
+    \[
+    \infsumo a_kx ^ k
+    \]
+    is a power series.
+    $a_k \in \R$ and $x \in \R$.
+\end{definition}
+
+\begin{theorem}[Cauchy-Hadamard]\label{thm:powseries_cauchyhadamard}
+    Given $\infsumo a_kx ^ k$,
+    there exists $R \geq 0$
+    (possibly $\infty$)
+    ($R$ is the radius of convergence)
+    such that
+    \begin{enumerate}[label = (\roman*)]
+        \item $\infsumo a_kx ^ k$ converges absolutely for $|x| < R$,
+
+        \item $\infsumo a_kx ^ k$ diverges for $|x| > R$.
+    \end{enumerate}
+    In fact.
+    If $c = \limsup\sqrt[k]{|a_k|}$ then $R = \frac{1}{c}$
+    (if $c = 0, \infty$,
+    $R = \infty, 0$).   
+\end{theorem}
+\begin{proof}
+    We apply the root test to
+    \[
+    \infsumo a_kx ^ k
+    \]
+    \begin{align*}
+        \limsup\sqrt[k]{|a_kx ^ k|} &= \limsup\sqrt[k]{|a_k|}|x| \\
+        &= |x|\limsup\sqrt[k]{|a_k|} \\
+        &= c|x| &= \begin{cases}
+            < 1 & \text{if } |x| < 1 / c \\
+            > 1 & \text{if } |x| > 1 / c
+        \end{cases}
+    \end{align*}
+    with absolute convergence in the first case and divergence in the second.
+\end{proof}
+
+\begin{corollary}\label{cor:convradius}
+    If $\infsumo a_kc ^ k$ converges for some $c \in \R$,
+    then $\sum a_kx ^ k$ converges for all $x \in (-|c|, |c|)$.
+\end{corollary}
+\begin{proof}
+    Must have $|c| \leq R \implies (-|c|, |c|) \subseteq (-R, R)$.
+\end{proof}
+
+\begin{proposition}\label{prop:powser_deriv_antideriv_same_radconv}
+    $\infsumo a_kx ^ k$ with radius $R > 0$.
+    Then the formal derivative
+    \[
+    \infsum ka_kx ^ {k - 1} = \frac{1}{x}\infsum ka_kx ^ k
+    \]
+    anti-derivative
+    \[
+    \infsumo \frac{1}{k + 1}a_kx ^ {k + 1}
+    \]
+    have the same radius of convergence $R$.
+\end{proposition}
+\begin{proof}
+    \begin{align*}
+        \limsup\sqrt[k]{k|a_k|} &= \lim\sqrt[k]{k}\limsup\sqrt[k]{|a_k|} \\
+        &= 1 \cdot \limsup\sqrt[k]{|a_k|}.
+    \end{align*}
+    Anti-derivative the same.
+\end{proof}
+
+\begin{theorem}\label{thm:powser_cont}
+    Power series are continuous in $(-R, R)$.
+    
+    In fact,
+    they are "locally" Lipschitz,
+    that is,
+    for any $0 < r < \R$ there exists a constant $M = M_r$ such that
+    \[
+    |f(x) - f(y)| \leq M_r|x - y|
+    \]
+    for all $x \in [-r, r]$.
+\end{theorem}
+\begin{proof}
+    \begin{align*}
+        0 &\leq |f_n(x) - f_n(y)| \\
+        &= \left|\sum_{k = 1}^{n}a_k(x ^ k - y ^ k)\right| \\
+        &= |x - y|\cdot\left|\sum_{k = 1}^{n}a_k(x ^ {k - 1} + x ^ {k - 2}y + \dotsc + xy ^ {k - 2} + y ^ {k - 1})\right|
+        \intertext{assume $|x|, |y| \leq r$}
+        &\leq |x - y|\cdot\sum_{k = 1}^{n}|a_k|\cdot k \cdot r ^ {k - 1} \\
+        &\xrightarrow[n \to \infty]{} |x - y|\cdot\sum_{k = 1}^{n}\underbrace{|a_k|\cdot k \cdot r ^ {k - 1}}_{= M_r}
+    \end{align*}
+    converges by \autoref{prop:powser_deriv_antideriv_same_radconv} which implies by squeezing
+    \[
+    |f(x) - f(y)| \leq |x - y|M_r.
+    \]
+\end{proof}
+
+\begin{theorem}\label{thm:powerser_diff}
+    The power series $f(x) = \infsumo a_kx ^ k$ is differentiable in $(-R, R)$ with term-wise derivative
+    \[
+    f'(x) = \infsum ka_kx ^ {k - 1}
+    \]
+    and $f ^ {(n)}(0) = n!a_n$.
+\end{theorem}
+\begin{proof}
+    Next section.
+    
+    Assuming the term-wise derivative,
+    we have
+    \begin{align*}
+        f'(0) &= \infsum ka_k0 ^ {k - 1} \underset{k = 0}{=} 1 \cdot a_1 \\
+        f''(0) &= \infsum[k = 2]k(k - 1)a_kx ^ {k - 2} = 2(2 - 1)a_2 = 2 \cdot a_2 \\
+        &\vdots \\
+        f ^ {(n)}(0) &= \infsum[k = n]k(k - 1) \dotsi (k - n + 1)a_kx ^ {k - n} \underset{x = 0}{=} n!a_n.
+    \end{align*}
+\end{proof}
+
+\begin{theorem}[Identity Theorem for Power Series]\label{thm:iden_pow_series}
+    Assume
+    \[
+    \infsumo a_kx ^ k = \infsumo b_kx ^ k
+    \]
+    in some
+    (small)
+    neighbourhood of $x = 0$.
+    Then $a_k = b_k$.
+\end{theorem}
+\begin{proof}
+    Call $f(x) = \infsumo a_kx ^ k$,
+    then $n!b_n = f ^ {(n)}(0) = n!a_n$ by \autoref{thm:powerser_diff}.
+    So $a_n = b_n$ for all $n$.
+\end{proof}
+
+\begin{theorem}\label{thm:pow_series_def_e}
+    \begin{enumerate}[label = (\roman*)]
+        \item $\exp(0) = 1$.
+
+        \item The exponential function is infinitely often differentiable on $\R$ with
+        \[
+        \exp'(x) = \exp(x).
+        \]
+
+        \item For all $x, y \in \R$ we have
+        \begin{align*}
+            \exp(x + y) &= \exp(x)\exp(y); \\
+            \exp(-x) &= \frac{1}{\exp(x)}.
+        \end{align*}
+
+        \item $\exp(x) > 0$ for all $x \in \R$.
+
+        \item $\exp(x)$ is strictly monotone increasing.
+
+        \item
+        \[
+        \liminfty[x]\exp(x) = \infty\qquad\text{and}\qquad\lim_{x \to -\infty}\exp(x) = 0.
+        \]
+    \end{enumerate}
+\end{theorem}
+\begin{proof}\phantom{}
+    \begin{enumerate}[label = (\roman*)]
+        \item Trivial by substitution.
+
+        \item
+        \begin{align*}
+            \left(\infsumo \frac{x ^ k}{k!}\right)' &= \infsum\frac{kx ^ {k - 1}}{k!} \\
+            &= \infsumo\frac{(k + 1)x ^ k}{(k + 1)!} \\
+            &= \infsumo\frac{x ^ k}{k!}.
+        \end{align*}
+
+        \item Two options:
+        for the first property we can use the Cauchy product for infinite series.
+
+        Set $f(t) = \exp(x + t)\cdot\exp(y - t)$.
+        \[
+        f(0) = \exp(x)\exp(y)
+        \]
+        \[
+        f(y) = \exp(x + y) \cdot 1 = \exp(x + y)
+        \]
+        \[
+        f'(t) = \exp(x + t)\exp(y - t) + \exp(x + t)(-1)\exp(y - t) = 0
+        \]
+        by the mean value theorem $f(t)$ is constant.
+
+        For $\exp(-x) = \frac{1}{\exp(x)}$.
+        Plug in $y = -x$.
+
+        \item True for $x > 0$,
+        for $x < 0$ use $\exp(x) = \frac{1}{\exp(-x)} > 0$.
+
+        \item $\exp'(x) = \exp(x) > 0$ hence is strictly increasing.
+
+        \item For $x > 0$ $\exp(x) > 1 + x$ $1 + x$ is unbounded so $\exp(x)$ is unbounded.
+        Then for $x < 0$ reuse $\exp(x) = \frac{1}{\exp(-x)}$.
+    \end{enumerate}
+\end{proof}
+
+\begin{definition}\label{def:pow_series_sin_cos}
+    We define the sine and cosine function by
+    \[
+    \sin(x) \coloneqq \infsumo\frac{(-1) ^ k}{(2k + 1)!}x ^ {2k + 1};\qquad\cos(x) \coloneqq \infsumo\frac{(-1) ^ k}{(2k)!}x ^ {2k}.
+    \]
+\end{definition}
+
+\begin{theorem}\label{thm:def_pow_series_sin_cos}
+    We have
+    \begin{enumerate}[label = (\roman*)]
+        \item $\sin(0) = 0$ and $\cos(0) = 1$.
+
+        \item The sine-function is odd;
+        cosine is even.
+
+        \item Sine and cosine are infinitely often differentiable on $\R$ with
+        \[
+        \sin'(x) = \cos(x)\qquad\text{and}\qquad\cos'(x) = -\sin(x).
+        \]
+
+        \item For all $x, y \in \R$ we have
+        \begin{align*}
+            \sin(x + y) &= \sin(x)\cos(y) + \cos(x)\sin(y) \\
+            \cos(x + y) &= \cos(x)\cos(y) + \sin(x)\sin(y)
+        \end{align*}
+
+        \item For all $x \in \R$ we have
+        \[
+        \sin ^ 2(x) + \cos ^ 2(x) = 1.
+        \]
+        In particular,
+        $|\sin(x)| \leq 1$;
+        $|\cos(x)| \leq 1$ for all $x \in \R$.
+    \end{enumerate}
+\end{theorem}
+\begin{proof}\phantom{}
+    \begin{enumerate}[label = (\roman*)]
+        \item By definition.
+        
+        \item By definition.
+
+        \item Differentiating term-wise.
+
+        \item
+        \[
+        f(t) \coloneqq \sin(x + t)\cos(y - t) + \cos(x + t)\sin(y - t).
+        \]
+        \begin{align*}
+            f(0) &= \sin(x)\cos(y) + \cos(x)\sin(y) \\
+            f(y) &= \sin(x + y)\cos(0) + \cos(x + y)\sin(0) = \sin(x + y) \\
+            f'(t) &= \dotsi = 0.
+        \end{align*}
+        Hence $f(t)$ is constant so $f(0) = f(y)$,
+        addition law for sine.
+
+        \item
+        \[
+        \sin ^ 2(x) + \cos ^ 2(x) = 1
+        \]
+        true for $x = 0$.
+        Differentiate
+        \[
+        2\sin(x)\cos(x) + 2\cos(x)(-\sin(x)) = 0
+        \]
+        by mean value theorem.
+    \end{enumerate}
+\end{proof}
+
+\begin{theorem}\label{thm:cos_smallest_pos}
+    The equation $\cos(x) = 0$ has a smallest positive solution.
+\end{theorem}
+\begin{proof}
+    \[
+    \cos(2) = \underbrace{1 - 2 + \frac{16}{24}}_{-\frac{2}{3}} + \underbrace{\infsum[k = 3]\frac{(-1) ^ k}{(2k)!}2 ^ {2k}}_{-+-\dotsc} < 0
+    \]
+    by alternating series test.
+    \[
+    \cos(0) = 1 > 0
+    \]
+    by IVT there exists a zero at $\frac{\pi}{2}$.
+\end{proof}
+
+\begin{definition}\label{def:pi_def}
+    We denote twice the smallest positive root of cosine by $\pi$,
+    that is,
+    \[
+    \cos\left(\frac{\pi}{2}\right) = 0.
+    \]
+\end{definition}
+
+\begin{theorem}\label{thm:sin_eq_one}
+    \[
+    \sin\left(\frac{\pi}{2}\right) = 1.
+    \]
+\end{theorem}
+\begin{proof}
+    To-Do.
+\end{proof}
+
+\begin{proposition}\label{prop:pow_series_radconv_taylor}
+    Assume $f(x) = \infsumo a_kx ^ k$ is given by a power series converging in $(-R, R)$,
+    ($R > 0$).
+
+    Let $c \in (-R, R)$.
+    Then $T_{f, c}(x)$ converges with radius of convergence
+    \[
+    ||c| - R|
+    \]
+    and is equal to $f(x)$.
+\end{proposition}
+\begin{proof}
+    Skipped.
+    More naturally explained in the context of complex analysis.
+\end{proof}

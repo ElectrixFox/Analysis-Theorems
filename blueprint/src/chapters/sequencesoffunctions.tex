@@ -1,0 +1,166 @@
+\chapter{Sequences of Functions}\label{cha:seqoffuncs}
+
+\begin{definition}[Pointwise limit]\label{def:pointwise_limit}
+    We say $f(x) : I \to \R$ is the pointwise limit of $(f_n(x))$ if for all $x \in \R$ we have $\liminfty f_n(x) = f(x)$.
+    I,e,
+    \[
+    \forall x \in I, \forall \varepsilon > 0, \exists N > 0, \forall n \geq N, |f_n(x) - f(x)| < \varepsilon.
+    \]
+\end{definition}
+
+\begin{definition}[Uniform convergence]\label{def:uni_conv}
+    $f_n \to f$ uniformly on $I$.
+    \[
+    \forall \varepsilon > 0, \exists N > 0, \forall x \in I, \forall n \geq N, |f_n(x) - f(x)| < \varepsilon.
+    \]
+\end{definition}
+
+\begin{definition}[Uniform Convergence on Compact Subsets Subintervals]\label{def:uni_conv_on_compact_subsets}
+    $f_n : I \to \R$,
+    $f_n \to f$ uniformly in compact subintervals.
+    If $f_n \to f$ uniformly on all $[a, b] \subset I$.
+\end{definition}
+
+\begin{lemma}[Criterion]\label{lem:seq_funcs_criterion}
+    \begin{enumerate}[label = (\roman*)]
+        \item If $|f(x) - f_n(x)| \leq a_n$ for all $x \in I$ with $\liminfty a_n = 0$ then we have uniform convergence on $I$.
+
+        \item if there exists $\varepsilon > 0$ and a sequence $x_n \in I$ such that for all $n$ sufficiently large.
+        \[
+        |f(x_n) - f_n(x_n)| \geq \varepsilon
+        \]
+        then convergence is not uniform on $I$.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    To-Do.
+\end{proof}
+
+\begin{theorem}\label{thm:uni_conv_imp_cont}
+    Assume $f_n \to f$ uniformly on $I$,
+    continuous on $I$.
+    Then $f(x)$ is continuous on $I$.
+\end{theorem}
+\begin{proof}
+    ($\frac{\varepsilon}{3}$-trick).
+
+    Have $f_n \to f$ uniformly,
+    i.e. there exists an $N$ such that for all $n \geq N$ and for all $x \in I$,
+    \[
+    |f(x) - f_n(x)| < \varepsilon.
+    \]
+    Take that $N$,
+    then $f_N(x)$ is continuous.
+    Given $c \in I$.
+    Find $\delta > 0$,
+    such that $|f_N(x) - f_N(c)| < \varepsilon$ for all $x$ with $|x - c| < \delta$
+    \begin{align*}
+        |f(x) - f(c)| &= |f(x) - f_N(x) + f_N(x) - f_N(c) + f_N(c) - f(c)| \\
+        &\leq |f(x) - f_N(x)| + |f_N(x) - f_N(c)| + |f_N(c) - f(c)| &(\text{for $|x - c| < \delta$})\\
+        &< \varepsilon + \varepsilon + \varepsilon \\
+        &= 3\varepsilon.
+    \end{align*}
+
+    \textit{Note:
+    could change all $\varepsilon$ to $\varepsilon / 3$ to get $<\varepsilon$.}
+\end{proof}
+
+\begin{theorem}\label{thm:uni_comp_imp_cont}
+    $f_n : I \to \R$ continuous,
+    $f_n \to f$ uniformly on compact subsets of $I$.
+    Then $f(x)$ is continuous.
+\end{theorem}
+\begin{proof}
+    Take $c \in I$,
+    find an $I$ interval $[a, b]$ containing $c$.
+    One $[a, b]$ we have uniform convergence which implies continuity of $f$ in $[a, b] \ni c$.
+\end{proof}
+
+\begin{theorem}\label{thm:diff_pointwise_then_diff}
+    $f_n : I \to \R$ differentiable with $f_n'$ continuous.
+    Assume $f_n \to f$ pointwise,
+    $f_n'$ converges uniformly
+    (in compact subsets)
+    to $g(x)$
+    (for some function $g(x)$).
+
+    Then $f(x)$ is differentiable on $I$ with $f'(x) = g(x) = \liminfty f_n'(x)$,
+\end{theorem}
+\begin{proof}
+    To-Do.
+\end{proof}
+
+\begin{theorem}[Weierstrass $M$-test]\label{thm:weierstrass_M_test}
+    $\infsumo f_k(x)$ on $I$.
+    Assume
+    \[
+    |f_k(x)| \leq M_k
+    \]
+    independent of $x$.
+    \[
+    \infsumo M_k < \infty
+    \]
+    converges.
+    Then $\infsumo f_k(x)$ uniformly on $I$.
+\end{theorem}
+\begin{proof}
+    By comparison
+    \[
+    \sum|f_k(x)| \leq \sum M_k < \infty
+    \]
+    so $\sum f_k(x)$ converges absolutely to a function $f(x)$.
+
+    Set $L = \infsumo M_k = \liminfty\left(\sum_{k = 0}^{n}M_k\right)$.
+    So given $\varepsilon > 0$,
+    there exists an $N$ such that
+    \[
+    \left|L - \sum_{k = 0}^{n}M_k\right| = \infsum[k = n + 1]M_k < \varepsilon
+    \]
+    for all $n \geq N$.
+
+    Will show
+    \[
+    \left|f(x) - \infsumo f_k(x)\right| < \varepsilon.
+    \]
+    for all $n \geq N$.
+
+    Indeed:
+    \[
+    \left|f(x) - \sum_{k = 0}^{n}f_k(x)\right| = \left|\infsum[k = n + 1]f_k(x)\right| \leq \infsum[k = n + 1]|f_k(x)| \leq \infsum[k = n + 1]M_k < \varepsilon.
+    \]
+\end{proof}
+
+\begin{theorem}\label{thm:pow_series_cont_then_conv_uni}
+    Power series $\infsumo a_kx ^ k$ are continuous in $(-R, R)$.
+
+    Since they converge uniformly on compact subsets of $(-R, R)$.
+\end{theorem}
+\begin{proof}
+    Take $[a, b] \subset [-r, r] \subset (-R, R)$,
+    $r \in \R$.
+
+    Take $x \in [-r, r]$.
+    Then
+    \[
+    \infsumo|\underbrace{a_kx ^ k}_{= f_k(x)}| \leq \sum\underbrace{|a_k|r ^ k}_{= M_k} < \infty
+    \]
+    since $r < R$ by $M$-test and the previous theorem.
+\end{proof}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

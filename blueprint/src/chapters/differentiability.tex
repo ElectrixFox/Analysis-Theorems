@@ -61,3 +61,344 @@
     So $\lim_{x \to c}f(x) = f(c)$,
     that is exactly continuity.
 \end{proof}
+
+\begin{theorem}\label{thm:sum_diff_atc}
+    $f, g$ are differentiable at $x = c$.
+    Then $f(x) + g(x)$ and $\alpha f(x)$ are differentiable at $x = c$.
+    With
+    \[
+    (f + g)'(c) = f'(c) + g'(c)
+    \]
+    and
+    \[
+    (\alpha f)'(c) = \alpha f'(c).
+    \]
+    Also the product $f(x)g(x)$ with
+    \[
+    (f(x)g(x))'(c) = f'(c)g(c) + f(c)g'(c).
+    \]
+    Assume $f(c) \neq 0$.
+    Then $\frac{1}{f(x)}$ is defined in a open neighbourhood around $x = c$ and is differentiable with
+    \[
+    \left(\frac{1}{f(c)}\right)' = \frac{-f'(c)}{f ^ 2(c)}
+    \]
+\end{theorem}
+\begin{proof}
+    For the product.
+    Write
+    \[
+    f(x) = f(c) + (x - c)f_1(x)
+    \]
+    \[
+    g(x) = g(c) + (x - c)g_1(x)
+    \]
+    with $f_1, g_1$ continuous at $x = c$ and $\lim_{x \to c}f_1(x) = f'(c)$ and $\lim_{x \to c}g_1(x) = g'(c)$.
+    Then
+    \begin{align*}
+        f(x)g(x) &= (f(c) + (x - c)f_1(x))(g(c) + (x - c)g_1(x)) \\
+        &= f(c)g(c) + (x - c)(f_1(x)g(c) + f(c)g_1(x) + (x - c)f_1(x)g_1(x)) \\
+        \intertext{with $x = c$}
+        &= f'(c)g'(c) + f(c)g'(c) + 0.
+    \end{align*}
+\end{proof}
+
+\begin{theorem}[Chain rule]\label{thm:chainrule}
+    $g : X \to Y \subseteq \R$,
+    $f : Y \to \R$,
+    $X, Y$ open,
+    $g$ is differentiable at $x = c$,
+    $f$ is differentiable at $y = d = g(c)$.
+
+    Then the composition
+    \[
+    f \circ g(x) : X \to \R
+    \]
+    is differentiable at $x = c$ and
+    \[
+    (f \circ g)'(c) = g'(c)f'(g(c)).
+    \]
+\end{theorem}
+\begin{proof}
+    $g$ differentiable at $c$:
+    \[
+    g(x) = g(c) + g_1(x)(x - c)
+    \]
+    continuous at $c$ and $g_1(c) = \lim_{x \to c}g_1(x) = g'(c)$.
+
+    $f$ differentiable at $g(c) = d$:
+    \[
+    f(y) = f(g(c)) + f_1(y)(y - g(c)).
+    \]
+    So
+    \begin{align*}
+        f \circ g(x) &= f(g(x)) \\
+        &= f(g(c)) + f_1(g(x))(g(x) - g(c)) \\
+        &= f(g(c)) + f_1(g(x))[g(c) + g_1(x)(x - c) - g(c) ^ 2] \\
+        &= f(g(c)) + f_1(g(x))g_1(x)(x - c)
+        \intertext{have $h(x) = f \circ g(x)$,
+        $h_1(x) = f_1(g(x))g_1(x)$}
+        &= h(c) + h_1(x)(x - c)
+    \end{align*}
+    since $f_1$ is continuous at $g(c)$ and $g_1$ is continuous at $c$,
+    \begin{align*}
+        \lim_{x \to c}h_1(x) &= f_1(g(c))g_1(c)
+        \intertext{by continuity}
+        &= f'(g(c))g'(c).
+    \end{align*}
+\end{proof}
+
+\begin{lemma}\label{lem:e_ineq}
+    \[
+    x \leq e ^ x - 1 \leq \frac{x}{1 - x}\qquad(x < 1).
+    \]
+\end{lemma}
+\begin{proof}
+    To-Do.
+\end{proof}
+
+\begin{theorem}\label{thm:diff_inv_func_rule}
+    $f : I \to \R$
+    ($I$ an interval)
+    continuous and differentiable at $x = c$,
+    and $f'(c) \neq 0$.
+    Assume $f$ is $1$-$1$
+    (invertible).
+    So
+    \[
+    f ^ {-1} = g : \underset{= f(I)}{Y} \to \R
+    \]
+    exists and is differentiable at $y = d = f(c)$ and
+    \[
+    (f ^ {-1})'(d) = \frac{1}{f'(f ^ {-1}(d))} = \frac{1}{f'(c)}.
+    \]
+\end{theorem}
+\begin{proof}
+    Simple case.
+    Assume you knew that the inverse function $f ^ {-1}$ is differentiable.
+    Then $f ^ {-1} \circ f(x) = x$ by the chain rule
+    \[
+    (f ^ {-1})'(f(x))f'(x) = 1
+    \]
+    \[
+    (f ^ {-1}(f(x)))' = \frac{1}{f'(x)}
+    \]
+    write $x = f ^ {-1}(y)$,
+    \[
+    (f ^ {-1})'(y) = \frac{1}{f'(f ^ {-1}(y))}.
+    \]
+\end{proof}
+
+\begin{proposition}\label{prop:diff_max_or_min}
+    If $f$ is differentiable at $c$ and it has a local maximum or a local minimum at $C$,
+    then $f'(c) = 0$.
+\end{proposition}
+\begin{proof}
+    $f'(c) = \lim_{x \to c}\frac{f(x) - f(c)}{x - c}$.
+    If $x > c$,
+    but $x$ is near $c$,
+    then $f(x) \leq f(c)$ since $c$ is a local maximum.
+    In particular $\frac{f(x) - f(c)}{x - c} \leq 0$.
+    Similarly,
+    for $x < c$,
+    $\frac{f(x) - f(c)}{x - c} \geq 0$ so $\lim_{x \to c ^ {+}}\frac{f(x) - f(c)}{x - c} \leq 0, \lim_{x \to c ^ {-}}\frac{f(x) - f(c)}{x - c} \geq 0 \implies f'(c) = 0$.
+\end{proof}
+
+\begin{theorem}[Rolle's Theorem]\label{thm:rolles}
+    Let $f : [a, b] \to \R$ be continuous and differentiable on $(a, b)$,
+    and suppose $f(a) = f(b)$.
+    Then there exists $c \in (a, b)$ with $f'(c) = 0$.
+\end{theorem}
+\begin{proof}
+    A continuous function on a closed interval attains a maximum and a minimum.
+    So there is a $c \in [a, b]$ with $f(c) \geq f(x)$ for all $x \in [a, b]$,
+    $d \in [a, b]$ with $f(d) \leq f(x)$ for all $x \in [a, b]$.
+    If $c \in (a, b)$,
+    we get $f'(c) = 0$ by last result.
+    If $c = a$ or $c = b$.
+    Then look at minimum $d$ if $f \in (a, b)$ we can use the last result again $f'(d) = 0$.
+    If $d = a$ or $d = b$,
+    then $f(d) = f(c)$ and the whole function is constant.
+    Then $f'(x) = 0$ for all $x \in (a, b)$.
+\end{proof}
+
+\begin{theorem}[Mean Value Theorem]\label{thm:mean_value_thm}
+    Let $f : [a, b] \to \R$ be continuous and differentiable on $(a, b)$.
+    Then there exists a $c \in (a, b)$ such that $f'(c) = \frac{f(b) - f(a)}{b - a}$.
+\end{theorem}
+\begin{proof}
+    $g(x) = f(x) - \frac{f(b) - f(a)}{b - a}(x - a)$.
+    Then $g$ is continuous on $[a, b]$ and differentiable on $(a, b)$.
+    \[
+    g(b) = f(b) - \frac{f(b) - f(a)}{b - a}(b - a) = f(b) - f(b) + f(a) = f(a).
+    \]
+    \[
+    g(a) = f(a).
+    \]
+    By Rolle,
+    there is a $c \in (a, b)$ with $g'(c) = 0$.
+    \[
+    g'(c) = f'(c) - \frac{f(b) - f(a)}{b - a} = 0.
+    \]
+\end{proof}
+
+\begin{theorem}\label{thm:diff_inc_or_dec}
+    Let $f : I \to \R$ be continuous on an interval $I$,
+    differentiable in its interior.
+    \begin{enumerate}[label = (\roman*)]
+        \item If $f'(x) = 0$ for all $x$,
+        then $f$ is constant.
+
+        \item If $f'(x) \geq 0$
+        ($\leq 0$)
+        for all $x$,
+        then $f$ is monotonically increasing
+        (decreasing).
+
+        \item If $f'(x) > 0$
+        ($< 0$)
+        for all $x$,
+        then $f$ is strictly monotonically increasing
+        (decreasing).
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    Let $c < d$ be two points in $I$.
+    By MVT there is an $\alpha \in (c, d)$ such that
+    \[
+    f(d) - f(c) = (d - c)f'(\alpha) = \begin{dcases*}
+        0 & in case (i) \\
+        \geq 0 & in case (ii) \\
+        > 0 & in case (iii).
+    \end{dcases*}
+    \]
+    In case (i) $f(d) = f(c)$,
+    in case (ii) $f(d) \geq f(c)$,
+    in case (iii) $f(d) > f(c)$.
+\end{proof}
+
+\begin{theorem}[Cauchy's Generalised Mean Value Theorem]\label{thm:genmvt}
+    Let $f, g : [a, b] \to \R$ continuous and differentiable on $(a, b)$.
+    Assume $g'(x) \neq 0$ for all $x \in (a, b)$.
+    Then there exists $c \in (a, b)$ such that
+    \[
+    \frac{f'(c)}{g'(c)} = \frac{f(b) - f(a)}{g(b) - g(a)}.
+    \]
+\end{theorem}
+\begin{proof}
+    Consider
+    \[
+    h(x) = (g(b) - g(a))f(x) - (f(b) - f(a))g(x)
+    \]
+    continuous on $[a, b]$,
+    differentiable on $(a, b)$.
+    By Rolle there is $c \in (a, b)$ with $h'(c) = 0$
+    \[
+    h'(c) = (g(b) - g(a))f'(c) - (f(b) - f(a))g'(c) = 0.
+    \]
+\end{proof}
+
+\begin{theorem}[L'H\^opital's Rule]\label{thm:lhopital}
+    Let $f$ and $g$ be two differentiable functions on $(a, b)$.
+    Assume that
+    \[
+    \lim_{x \to a ^ {+}}f(x) = 0
+    \]
+    and
+    \[
+    \lim_{x \to a ^ {+}}g(x) = 0
+    \]
+    and $g(x) \neq 0$,
+    $g'(x) \neq 0$ for all $x$ on $(a, b)$.
+    Then
+    If
+    \[
+    \lim_{x \to a ^ {+}}\frac{f'(x)}{g'(x)}
+    \]
+    exists then also
+    \[
+    \lim_{x \to a ^ {+}}\frac{f(x)}{g(x)}
+    \]
+    exists
+    and
+    \[
+    \lim_{x \to a ^ {+}}\frac{f(x)}{g(x)} = \lim_{x \to a ^ {+}}\frac{f'(x)}{g'(x)}.
+    \]
+\end{theorem}
+\begin{proof}
+    We can extend $f, g$ continuously to $x = a$ by setting $f(a) = g(a) = 0$.
+    Take any  sequence $x_n \in (a, b)$ with $\liminfty x_n = a$.
+
+    Need to show
+    \[
+    \liminfty \frac{f(x_n)}{g(x_n)} = L.
+    \]
+    Apply the generalised mean value theorem for $f$ and $g$ on the intervals $[a, x_n]$.
+    So exists a $y_n \in (a, x_n)$ such that $\frac{f'(y_n)}{g'(y_n)} = \frac{f(x_n) - f(a)}{g(x_n) - g(a)} = \frac{f(x_n)}{g(x_n)}$.
+
+    By squeezing $\liminfty y_n = a$
+    ($a < y_n < \underbrace{x_n}_{\to a}$)
+    so
+    \[
+    L = \liminfty\frac{f(y_n)}{g(y_n)} = \liminfty\frac{f(x_n)}{g(x_n)}.
+    \]
+\end{proof}
+
+\begin{theorem}[Taylor's Theorem
+(Peano remainder)]\label{thm:taylors_peano}
+    $f : I \to \R$ $n$-times differentiable.
+    Then there exists a function $r_n(x)$ with $\lim_{x \to c}r_n(x) = 0$ such that
+    \begin{equation}\label{eq:3}
+        f(x) = T_{f, c} ^ {(n)}(x) + r_n(x)(x - c) ^ n.
+    \end{equation}
+\end{theorem}
+\begin{proof}
+    Solve for $r_n(x)$ in \eqref{eq:3}.
+    \[
+    r_n(x) = \frac{f(x) - T_{f, c} ^{(n)}(x)}{(x - c) ^ n}.
+    \]
+    Need to compute $\lim_{x \to c}r_n(x)$.
+    Apply L'H\^opital $n$-times get $\lim_{x \to c}\frac{f ^ {(n)}(x) - f ^ {(n)}(c)}{n!} = 0$.
+\end{proof}
+
+\begin{theorem}[Taylor's Theorem
+(Lagrange remainder)]\label{thm:taylor_lagrange}
+    Assume in addition that $f$ is $(n + 1)$ times differentiable.
+    Then there exists a $\xi$ between $x$ and $c$ such that
+    \[
+    f(x) = T_{f, c} ^ {(n)}(x) + \frac{f ^ {(n + 1)}(\xi)}{(n + 1)!}(x - c) ^ {n + 1}.
+    \]
+\end{theorem}
+\begin{proof}
+    Fix $x \in I$.
+    Define
+    \[
+    F(t) = f(x) - T_{f, t} ^ {(n)}(x)
+    \]
+    \[
+    f(x) - \left[f(t) - f'(t)(x - t) + \dotsc + \frac{f ^ {(n)}(t)}{n!}(x - t) ^ n\right].
+    \]
+    So $F(c) = r_n(x)(x - c) ^ n$.
+    Have $F'(t) = -\frac{f ^ {(n + 1)}(t)}{n!}(x - t) ^ n$.
+    Apply Cauchy's generalised mean value theorem for $F(t)$ and $G(t) = (x - t) ^ {n + 1}$.
+    Then
+    \[
+    \frac{r_n(x)}{x - c} = \frac{F(c)}{(x - c) ^ {n + 1}} = \frac{F(c)}{G(c)} = \frac{F(c) - \overbrace{F(x)}^{= 0}}{G(c) - \underbrace{G(x)}_{= 0}} = \frac{F'(\xi)}{G'(\xi)} = \frac{{-\frac{f ^ {(n + 1)}(\xi)}{n!}(x - \xi) ^ n}}{-(n + 1)(x - \xi) ^ n} = \frac{f ^ {(n + 1)}(\xi)}{(n + 1)!}
+    \]
+    with $\xi$ between $x$ and $c$.
+\end{proof}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
