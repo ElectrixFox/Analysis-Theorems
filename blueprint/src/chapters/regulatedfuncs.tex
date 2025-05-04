@@ -8,3 +8,165 @@
     \]
     of $[a, b]$ such that on each open subinterval $(x_k, x_{k + 1})$ the function $f(x)$ is constant.
 \end{definition}
+
+\begin{proposition}\label{prop:step_colt}
+    Let $f, g$ be step functions.
+    Then
+    \begin{enumerate}[label = (\roman*)]
+        \item $af(x) + bg(x)$ is a step function.
+
+        \item $f(x)g(x)$ is a step function.
+
+        \item $|f(x)|$ is a step function.
+
+        \item $\max(f, g) = \frac{1}{2}(f + g) + \frac{1}{2}|f - g|$ is a step function.
+
+        \item $\min(f, g)$ is a step function.
+    \end{enumerate}
+\end{proposition}
+\begin{proof}
+    To-Do.
+\end{proof}
+
+\begin{definition}[Regulated functions]\label{def:reg_func}
+    $f : [a, b] \to \R$ is called regulated if there exists a sequence $f_n(x) : [a, b] \to \R$ of step functions such that $f_n \to f$ uniformly.
+\end{definition}
+
+\begin{lemma}[Sequence-free characterisation]\label{lem:seq_free_char}
+    $f$ is regulated if and only if,
+    for all $\varepsilon > 0$ there exists a step function $g(x)$ such that
+    \[
+    |f(x) - g(x)| < \varepsilon
+    \]
+    for all $x \in [a, b]$.
+\end{lemma}
+\begin{proof}
+    \textit{Note:
+    by the definition of a regulated function we need uniform convergence.}
+    
+    Uniform convergence:
+    \[
+    \forall \varepsilon > 0, \exists N, \forall n \geq N, \forall x \in [a, b], |f(x) - f_N(x)| < \varepsilon.
+    \]
+    
+    "$\implies$".
+    Given $\varepsilon > 0$.
+    Take $N$.
+    Then $|f_N(x) - f(x)| < \varepsilon$ for all $x$.
+
+    "$\impliedby$".
+    Take $\varepsilon = 1 / n$.
+    Find by hypothesis a step function $f_n(x)$ with $|f(x) - f_n(x)| < \frac{1}{n}$,
+    for all $x \in [a, b]$.
+    Since $\liminfty\frac{1}{n} = 0$ hence $f_n \to f$ uniformly.
+\end{proof}
+
+\begin{theorem}\label{thm:cont_funcs_are_reg}
+    Continuous functions on $[a, b]$ are regulated.
+\end{theorem}
+\begin{proof}
+    We will use that $f(x)$ is uniformly continuous on $[a, b]$.
+    \begin{equation}\label{analy:eq:4}\tag{*}
+        \forall \varepsilon > 0, \exists \delta > 0, \forall x, y \in [a, b], |x - y| < \delta \implies |f(x) - f(y)| < \varepsilon.
+    \end{equation}
+
+    Given $\varepsilon > 0$,
+    need a step function $g(x)$ on $[a, b]$ such that $|f(x) - g(x)| < \varepsilon$ for all $x \in [a, b]$.
+    We have $\delta > 0$ such that \eqref{analy:eq:4} holds.
+    Take a partition $a = x_0, x_1, x_2, \dotsc x_{N + 1}, x_N = b$ such that
+    \[
+    |x_{k + 1} - x_k| < \delta.
+    \]
+    To define the step function $g(x)$,
+    take any point $x_k ^ {*} \in [x_k, x_{k + 1}]$,
+    then
+    \[
+    g(x) = \begin{cases}
+        f(x_k ^ {*}), &\text{if } x \in [x_k, x_{k + 1}) \\
+        f(b), &\text{if } x = b = x_N.
+    \end{cases}
+    \]
+    Then take $x \in [a, b]$,
+    so $x$ lies in one of the subintervals,
+    say $x \in [x_k, x_{k + 1})$.
+    Then
+    \begin{align*}
+        |f(x) - g(x)| &= |f(x) - f(x_k ^ {*})| &(\text{$x, x_k ^ {*} \in [x_k, x_{k + 1})$}) \\
+        &< \varepsilon &(\text{since $|x - x_k ^ {*}| < \delta$}).
+    \end{align*}
+\end{proof}
+
+\begin{lemma}\label{lem:uni_conv_imp_bound}
+    $f_n \to f$ uniformly,
+    $f_n$ step functions.
+    Then $f_n(x)$,
+    $f(x)$ are uniformly bounded.
+    I.e. $|f_n(x)|, |f(x)| < C$ for all $x \in [a, b]$.
+\end{lemma}
+\begin{proof}
+    Take $\varepsilon = 1$.
+    Exists $N$ such that $|f_n(x) - f(x)| < \varepsilon = 1$ for all $x \in [a, b]$ and for all $n \geq N$.
+    So $|f(x) - f_N(x)| < \varepsilon = 1$ for all $x$,
+    so $|f(x)| < |f_N(x)| + 1$,
+    $f_N(x)$ bounded since $f_N(x)$ takes only finitely many values.
+    Same for $f_n(x)$,
+    $n \geq N$.
+    $f_1, \dotsc, f_{N - 1}$ are universally bounded.
+\end{proof}
+
+\begin{proposition}[Regulated COLT]\label{prop:reg_COLT}
+    $f_n \to f$,
+    $g_n \to g$,
+    $f, g$ regulated.
+    Then
+    \begin{enumerate}[label = (\roman*)]
+        \item $af + bg$ regulated.
+
+        \item $fg$ regulated.
+
+        \item $|f|$ regulated.
+        
+        \item $\max\{f, g\}$ regulated.
+        
+        \item $\min\{f, g\}$ regulated.
+    \end{enumerate}
+\end{proposition}
+\begin{proof}
+    \begin{enumerate}[label = (\roman*)]
+        \item $af_n + bg_n \to af + bg$.
+
+        \item $f_ng_n \to fg$.
+
+        \item $|f_n| \to f$.
+    \end{enumerate}
+\end{proof}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

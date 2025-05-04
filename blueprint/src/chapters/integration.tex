@@ -1,0 +1,317 @@
+\chapter{Integration}\label{cha:integration}
+
+\begin{definition}[Regulated integral]\label{def:reg_int}
+    $f : [a, b] \to \R$ regulated,
+    say $f_n \to f$,
+    $f_n$ step functions.
+    Define the integral by
+    \[
+    I(f) = \liminfty I(f_n).
+    \]
+\end{definition}
+
+\begin{proposition}\label{prop:exists_reg_int}
+   \begin{enumerate}[label = (\alph*)]
+    \item The limit exists.
+
+    \item Independent of the choice of $f_n \to f$.
+    \end{enumerate}
+\end{proposition}
+\begin{proof}
+    \begin{enumerate}[label = (\alph*)]
+        \item Show that the sequence $I(f_n) \eqqcolon a_n$ forms a Cauchy sequence.
+
+        Take $\varepsilon > 0$.
+        Need to find an $N$ such that for all $n, m \geq N$,
+        \[
+        |a_n - a_m| < \varepsilon
+        \]
+        we have $|I(f_n) - I(f_m)| = |a_n - a_m|$.
+        Take $N$ as in the definition of the regulated function,
+        and let $n, m \geq N$.
+        For the step functions $f_n(x)$ and $f_m(x)$.
+        Take a common refinement of the two underlying partitions,
+        $a = x_0, x_1, \dotsc, x_N = b$.
+        Then
+        \begin{align*}
+            |I(f_n) - I(f_m)| &= \sum_{k = 0}^{N}|(x_{k + 1} - x_k)f_m(x_k ^ {*}) - (x_{k + 1} - x_k)f_n(x_k ^ {*})| \\
+            &= \sum_{k = 0}^{N}(x_{k + 1} - x_k) \cdot |f_m(x_k) - f_n(x_k ^ {*})| \\
+            &= \sum_{k}^{N}(x_{k + 1} - x_k)|f_m(x_k ^ {*}) - f(x_k ^ {*}) + f(x_k ^ {*}) - f_n(x_k ^ {*})| \\
+            &\leq \sum_{k}^{N}(x_{k + 1} - x_k)\left[|f_m(x_k ^ {*}) - f(x_k ^ {*})| + |f(x_k ^ {*}) - f_n(x_k ^ {*})|\right] \\
+            &< 2\varepsilon\sum_{k = 0}^{N}(x_{k + 1} - x_k) = 2(b - a)\varepsilon
+        \end{align*}
+    
+        \item
+        Take $f_n \to f$,
+        $g_n \to f$ uniformly
+        ($f_n, g_n$ step functions).
+        Need $\liminfty I(f_n) = \liminfty I(g_n)$.
+        Take $\varepsilon > 0$.
+        Need to find an $N$ such that
+        \[
+        |I(f_n) - I(g_n)| < \varepsilon
+        \]
+        Take $N$ as in the definition of the regulated function,
+        for both $f_n, g_n$.
+        \begin{align*}
+            |I(f_n) - I(g_n)| &= \sum_{k = 0}^{N}|(x_{k + 1} - x_k)g_n(x_k ^ {*}) - (x_{k + 1} - x_k)f_n(x_k ^ {*})| \\
+            &= \sum_{k = 0}^{N}(x_{k + 1} - x_k) \cdot |g_n(x_k) - f_n(x_k ^ {*})| \\
+            &= \sum_{k}^{N}(x_{k + 1} - x_k)|g_n(x_k ^ {*}) - f(x_k ^ {*}) + f(x_k ^ {*}) - f_n(x_k ^ {*})| \\
+            &\leq \sum_{k}^{N}(x_{k + 1} - x_k)\left[|g_n(x_k ^ {*}) - f(x_k ^ {*})| + |f(x_k ^ {*}) - f_n(x_k ^ {*})|\right] \\
+            &< 2\varepsilon\sum_{k = 0}^{N}(x_{k + 1} - x_k) = 2(b - a)\varepsilon
+        \end{align*}
+    \end{enumerate}
+\end{proof}
+
+\begin{theorem}[Properties of the integral]\phantom{}\label{thm:prop_of_int}
+    \begin{enumerate}[label = (\roman*)]
+        \item Linearity
+        \begin{align*}
+            \int_{a}^{b}f(t) + g(t)\,dt &= \int_{a}^{b}f(t)\,dt + \int_{a}^{b}g(t)\,dt. \\
+            c\int_{a}^{b}f(t)\,dt &= c\int_{a}^{b}f(t)\,dt.
+        \end{align*}
+
+        \item Monotonicity
+
+        \begin{itemize}
+            \item 
+            if $f(t) \leq g(t)$ for all $t \in [a, b]$ then
+            \[
+            \int_{a}^{b}f(t)\,dt \leq \int_{a}^{b}g(t)\,dt.
+            \]
+
+            \item
+            In particular,
+            if $m = \inf_{t \in [a, b]}{f(t)}$,
+            $M = \sup_{t \in [a, b]}{f(t)}$ then
+            \[
+            m(b - a) \leq \int_{a}^{b}f(t)\,dt \leq M(b - a).
+            \]
+
+            \item
+            \[
+            \left|\int_{a}^{b}f(t)\,dt\right| \leq \int_{a}^{b}|f(t)|\,dt.
+            \]
+        \end{itemize}
+        \item Additivity
+        \[
+        \int_{a}^{b}f(t)\,dt + \int_{b}^{c}f(t)\,dt = \int_{a}^{c}f(t)\,dt.
+        \]
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    \begin{enumerate}[label = (\roman*)]
+        \item \phantom{}
+        
+        \item
+        By linearity,
+        it is enough to consider $f(t) \geq 0$,
+        and show $\int_{a}^{b}f(t)\,dt \geq 0$.
+        (Consider $g(t) - f(t)$).
+
+        So take $f_n \to f$ uniformly.
+        Given $\varepsilon > 0$,
+        find $f_n(x)$ such that $|f(x) - f_n(x)| < \varepsilon$ for all $x \in [a, b]$.
+        By $f(t) \geq 0$,
+        we get $f_n(x) > -\varepsilon$ for all $x \in [a, b]$.
+        This implies $I(f_n) > -\varepsilon(b - a)$ this implies $\liminfty I(f_n)$ is bigger than any negative number,
+        shows that $I(f) \geq 0$.
+
+        $|f(t)| = \pm f(t)$,
+        $f(t) \leq |f(t)|$.
+    \end{enumerate}
+\end{proof}
+
+\begin{theorem}[Mean Value Theorem for Intervals]\label{thm:intv_int_mvt}
+    Let $f(x)$ be continuous on $[a, b]$.
+    Then there exists $c \in [a, b]$ such that
+    \[
+    \int_{a}^{b}f(t)\,dt = f(c)(b - a).
+    \]
+\end{theorem}
+\begin{proof}
+    $f$ continuous hence takes minimum,
+    $m$,
+    and maximum,
+    $M$,
+    on $[a, b]$.
+    By monotonicity there exists $C$ such that
+    \[
+    C = \int_{a}^{b}f(x)\,dx / (b - a)
+    \]
+    with $m \leq C \leq M$.
+    By the intermediate value theorem there exists $c \in [a, b]$ such that $f(c) = C$,
+    so
+    \[
+    f(c)(b - a) = C(b - a) = \int_{a}^{b}f(x)\,dx.
+    \]
+\end{proof}
+
+\begin{theorem}\label{thm:pos_of_int}
+    $f : [a, b]$ continuous.
+    Assume $f(x) \geq 0$ and exists a point $c \in [a, b]$ such that $f(c) > 0$.
+    Then
+    \[
+    \int_{a}^{b}f(t)\,dt > 0.
+    \]
+\end{theorem}
+\begin{proof}
+    Set $C = f(c)$.
+    By continuity there exists a $\delta > 0$ such that $f(x) \geq \frac{c}{2}$ for all $x \in (c - \delta, c + \delta)$.
+    With this
+    \begin{align*}
+        \int_{a}^{b}f(t)\,dt &= \int_{a}^{c - \delta}f(t)\,dt + \int_{c - \delta}^{c + \delta}f(t)\,dt + \int_{c + \delta}^{b}f(t)\,dt \\
+        &\geq 0 + \frac{C}{2}\cdot 2\cdot \delta + 0 \\
+        &= C\delta \\
+        &> 0.
+    \end{align*}
+\end{proof}
+
+\begin{definition}\label{def:swap_int_bounds}
+    For $a \geq b$ set
+    \[
+    \int_{a}^{b}f(x)\,dx \coloneqq -\int_{b}^{a}f(x)\,dx.
+    \]
+\end{definition}
+
+\begin{proposition}\label{prop:reg_lip_then_cont}
+    $f$ is regulated on $[a, b]$.
+    $F(x) = \int_{a}^{x}f(t)\,dt$ is Lipschitz continuous on $[a, b]$ with $M = \sup_{x \in [a, b]}|f(x)|$.
+    In particular,
+    $f$ is continuous on $[a, b]$.
+\end{proposition}
+\begin{proof}
+    \begin{align*}
+        |F(x) - F(y)| &= \left|\int_{a}^{x}f(t)\,dt - \int_{a}^{y}f(t)\,dt\right| \\
+        &= \left|\int_{y}^{x}f(t)\,dt\right| \\
+        &\leq \left|\int_{y}^{x}|f(t)|\,dt\right| \\
+        &\leq \left|\int_{y}^{x}M\,dt\right| \\
+        &= M|x - y|
+    \end{align*}
+    hence Lipschitz.
+\end{proof}
+
+\begin{theorem}[Fundamental Theorem of Calculus]\label{thm:ftoc}
+    $f$ continuous on $[a, b]$.
+    Then $F(x) = \int_{a}^{x}f(t)\,dt$ is differentiable on $[a, b]$ with
+    \[
+    F'(x) = f(x).
+    \]
+\end{theorem}
+\begin{proof}
+    Let $c \in (a, b)$.
+    Need to show
+    \[
+    \lim_{x \to c}\frac{F(x) - F(c)}{x - c}
+    \]
+    exists and is equal to $f(c)$.
+    For $x \neq c$
+    \begin{align*}
+        \frac{1}{x - c}\left(\int_{a}^{x}f(t)\,dt - \int_{a}^{c}f(t)\,dt\right) &= \frac{1}{x - c}\int_{c}^{x}f(t)\,dt \\
+        \intertext{Assume $x > c$
+        ($c > x$ goes the same).
+        By mean value theorem for integrals}
+        &= \frac{1}{x - c}\cdot (x - c)f(\xi_x) \\
+        \intertext{with $\xi_x \in (c, x)$}
+        &= f(\xi_x) \to f(c)
+    \end{align*}
+    since $x \to c$ so does $\xi_x \to c$ by continuity.
+\end{proof}
+
+\begin{theorem}\label{thm:reg_seq_conv_eq}
+    $f_n : [a, b] \to \R$ sequence of regulated functions such that $f_n \to f$ uniformly.
+    Then
+    \begin{enumerate}[label = (\roman*)]
+        \item $f$ is regulated.
+        
+        \item
+        \[
+        \int_{a}^{b}f(t)\,dt = \liminfty\int_{a}^{b}f_n(t)\,dt.
+        \]
+    \end{enumerate}
+\end{theorem}
+\begin{proof}
+    \begin{enumerate}[label = (\roman*)]
+        \item
+        $f_n \to f$ uniformly.
+        So,
+        given $\varepsilon > 0$.
+        \[
+        |f_n(x) - f(x)| < \varepsilon
+        \]
+        for all $x \in [a, b]$ and for all $n \geq N$.
+        $f_n$ regulated.
+        There exists step functions $g_n(x)$ such that
+        \[
+        |f_n(x) - g_n(x)| < \varepsilon
+        \]
+        for all $x \in [a, b]$.
+        Claim $g_n \to f$ uniformly.
+        So $f$ is regulated.
+        \begin{align*}
+            |f(x) - g_n(x)| &= |f(x) - f_n(x) + f_n(x) - g_n(x)| \\
+            &\leq |f(x) - f_n(x)| + |f_n(x) - g_n(x)| \\
+            &< \varepsilon + \varepsilon = 2\varepsilon
+        \end{align*}
+        for all $x \in [a, b]$ and for all $n \geq N$.
+
+        \item
+        \begin{align*}
+            \left|\int_{a}^{b}f(t)\,dt - \int_{a}^{b}f_n(t)\,dt\right| &= \left|\int_{a}^{b}|f(t) - f_n(t)|\,dt\right| \\
+            &\leq \int_{a}^{b}|f(t) - f_n(t)|\,dt \\
+            &\leq \int_{a}^{b}\varepsilon\,dt &(n \geq N) \\
+            &= (b - a)\varepsilon.
+        \end{align*}
+    \end{enumerate}
+\end{proof}
+
+\begin{theorem}\label{thm:deriv_lim_eq}
+    Let $f_n(x)$ sequence of functions with continuous derivatives $f_n'(x)$.
+    Assume $f_n \to f$ pointwise,
+    $f_n' \to g$ uniformly for some function $g(x)$.
+
+    Then $f(x)$ is differentiable and $f'(x) = g(x) = \liminfty f_n'(x)$.
+\end{theorem}
+\begin{proof}
+    Have
+    \[
+    f_n(x) = f_n(a) + \int_{a}^{x}f_n'(t)\,dt,
+    \]
+    by the fundamental theorem of calculus,
+    as $n \to \infty$
+    \[
+    f(x) = f(a) + \liminfty\int_{a}^{x}g(t)\,dt\footnotemark
+    \]
+    \footnotetext{By the previous theorem.}
+    by the fundamental theorem of calculus $\int_{a}^{x}g(t)\,dt$ is differentiable with derivative $g(x)$.
+\end{proof}
+
+\begin{theorem}[Integral test]\label{thm:int_test_conv}
+    $f : (N, \infty) \to (0, \infty)$ continuous and decreasing.
+    Set $a_k = f(k)$.
+    \[
+    \infsum[k = N]a_k\text{ converges} \iff \int_{N}^{\infty}f(t)\,dt\text{ converges}.
+    \]
+\end{theorem}
+\begin{proof}
+    \[
+    \sum_{k = N + 1}^{x}a_k \leq \int_{N}^{x}f(t)\,dt \leq \sum_{k = N}^{x - 1}a_k \leq \int_{N + 1}^{x + 1}f(t)\,dt
+    \]
+    converging by comparison and squeeze.
+\end{proof}
+
+\begin{corollary}\label{cor:infsum_conv_inv_iff}
+    \[
+    \infsum[n = 1]n ^ {\alpha}
+    \]
+    converges if and only if $\alpha < -1$.
+\end{corollary}
+\begin{proof}
+    To-Do.
+\end{proof}
+
+
+
+
+
+
