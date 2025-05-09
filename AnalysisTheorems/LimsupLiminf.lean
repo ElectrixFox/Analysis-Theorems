@@ -66,7 +66,7 @@ def infseq (x : ℕ → ℝ) (hb : seq_bounded x) : ℕ → ℝ := fun n =>
     rw [←hm2]
     tauto
 
-  (bound_bel S hS2).choose
+  (completeness_axiom_below S hS2).choose
 
 lemma set_inf_le_sup (X : Set ℝ) [Nonempty X] (c C : ℝ) (hs : supremum X C) (hi : infimum X c) : c ≤ C := by
   have : bounded X := by

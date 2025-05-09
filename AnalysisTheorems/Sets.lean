@@ -47,6 +47,7 @@ lemma abs_le_imp_le (a b : ℝ) : |a| ≤ b → a ≤ b := by
     exact h
 
 axiom completeness_axiom (X : Set ℝ) [Nonempty X] : bound_above X → ∃ C, supremum X C
+axiom completeness_axiom_below (X : Set ℝ) [Nonempty X] : bound_below X → ∃ C, infimum X C
 
 lemma subset_bound_bounded (X : Set ℝ) (hx : bound_above X) (Y : Set ℝ) (hy : ∀ y ∈ Y, y ∈ X) : bound_above Y := by
   obtain ⟨C, hC⟩ := hx
@@ -118,99 +119,6 @@ lemma set_bound_above_neg_bound_below (X : Set ℝ) : bound_above X ↔ bound_be
     intro x
     specialize hc (-x)  -- the x in X will be -x since x is -ve
     simp_all [neg_le, le_neg] -- cleaning up the inequalities
-
-lemma inf_of_neg_eq_neg_sup (X : Set ℝ) [Nonempty X] (hX : bound_above X) :
-  ∃ C, (supremum X (-C) ↔ infimum (-X) C) := by
-  have h := completeness_axiom X hX
-  obtain ⟨C, hC⟩ := h
-  use (-C)
-  simp [hC]
-  set T := -X
-  have h0 : ∀ x ∈ T, -C ≤ x := by
-    intro x hx
-    obtain ⟨h1, h2⟩ := hC
-    specialize h1 (-x)
-    apply h1 at hx
-    rw [neg_le]
-    exact hx
-  constructor
-  exact h0
-  intro B
-
-  by_cases h : ¬∃ ε > 0, ∀ x ∈ T, B + ε ≤ x
-  .
-    push_neg at h
-    intro h1
-    apply lt_add_imp_le
-    intro ε hε
-    specialize h ε hε
-    obtain ⟨x, hx, hx1⟩ := h
-    specialize h1 x hx
-    specialize h0 x hx
-    calc
-      -C ≤ x := h0
-      _ < B + ε := hx1
-  .
-    push_neg at h
-    obtain ⟨ε, hε, h⟩ := h
-    intro h1
-    conv at h1 =>
-      intro x hx
-      rw [←neg_le_neg_iff]
-
-
-    have h2 : ∀ x ∈ X, x ≤ -B := by
-      intro x hx
-      specialize h1 (-x)
-      simp [T, hx] at h1
-      exact h1
-
-    have h3 : C ≥ -B := by
-      sorry
-
-    have h4 : C ≤ -B := (hC.right (-B)) h2
-
-    dsimp [supremum] at hC
-    obtain ⟨h3, h4⟩ := hC
-    specialize h4 (-B)
-    apply h4 at h2
-    rw [le_neg] at h2
-    simp [T] at *
-    sorry
-
-  /-have h := completeness_axiom X hX
-  obtain ⟨C, hC⟩ := h
-  use (-C)
-  simp [hC]
-  constructor
-  .
-    rw [show (∀ x ∈ -X, -C ≤ x) ↔ bound_below (-X) by
-      unfold bound_below
-      constructor
-      intro h
-      use (-C)
-      intro h x hx
-      unfold supremum at hC
-      simp at hx
-      rw [neg_le]
-      apply hC.left (-x) hx
-      ]
-    rw [set_bound_above_neg_bound_below] at hX
-    exact hX
-  .
-    contrapose hC
-    unfold supremum
-    simp
-    intro h
-    push_neg at hC
-    obtain ⟨B, ⟨h1, h2⟩⟩ := hC
-    use B
-    constructor
-    intro x hx
-    specialize h1 (-x)
-    simp at h1
-    specialize h (-x)
-    sorry-/
 
 lemma eq_iff_le_tric (a b : ℝ) : a ≤ b ∧ b ≤ a → a = b := by
   norm_num
@@ -292,8 +200,53 @@ lemma inf_of_neg_eq_neg_sup' (X : Set ℝ) (hX : bound_above X) (C : ℝ) (h : s
       simp [le_neg] at hC
       exact hC hs
     .
+      unfold T at h2
+      obtain ⟨h3, h4⟩ := h
+      simp at h1
+      specialize h4 (-C)
+      rw [neg_le]
+      rw [neg_set_ge_bound] at hC
+      conv at hC =>
+        intro x hx
+        rw [ge_iff_le, le_neg]
+      rw [neg_set_ge_bound] at h2
+      simp at h2
+      simp_all
       sorry
 
+lemma inf_of_neg_eq_neg_sup (X : Set ℝ) [Nonempty X] (hX : bound_above X) (C : ℝ) (hS : supremum X (-C)) :
+  infimum (-X) C := by
+
+  have : Nonempty (↑(-X)) := by
+    rename_i i
+    obtain ⟨a, ha⟩ := i
+    use -a
+    simp [ha]
+
+
+  rw [set_bound_above_neg_bound_below X] at hX
+  constructor
+  .
+    obtain ⟨h1, h2⟩ := hS
+    rw [neg_set_ge_bound]
+    simp [le_neg]
+    exact h1
+  .
+    intro B hB
+    obtain ⟨c, hc⟩ := hX
+
+    obtain ⟨h1, h2⟩ := hS
+    specialize h2 (-B)
+    simp at h2
+    rw [neg_set_ge_bound] at hB
+    simp [le_neg] at hB
+    simp_all
+    obtain ⟨x, this⟩ := this
+    specialize hc x this
+    specialize h1 (-x) (by simp [this])
+    specialize hB (-x) (by simp [this])
+    simp at hB h1
+    sorry
 
 lemma completeness_bounded_below (X : Set ℝ) [Nonempty X] : bound_below X → ∃ c, infimum X c := by
   intro h
@@ -305,17 +258,7 @@ lemma completeness_bounded_below (X : Set ℝ) [Nonempty X] : bound_below X → 
 
   have hb := set_bound_above_neg_bound_below (-X)
   simp [h] at hb
-  have hsup := completeness_axiom (-X) hb
-  obtain ⟨C, hsup⟩ := hsup
-  use (C)
-  have := inf_of_neg_eq_neg_sup (-X) hb
-  simp at this
-
-  sorry
-  /-
-  rw [inf_of_neg_eq_neg_sup (-X) hb (-C), neg_neg] at hsup
-  exact hsup
-  -/
+  apply completeness_axiom_below X h
 
 def func_bound_above (X : Set ℝ) (f : ℝ → ℝ) : Prop := (∃ (c : ℝ), ∀ x ∈ X, f x ≤ c)
 
