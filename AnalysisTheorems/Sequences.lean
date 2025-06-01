@@ -94,8 +94,8 @@ lemma conv_seq_bound_above_imp_lim_bound_above (x : ℕ → ℝ) (l : ℝ) (hx :
   apply lt_add_imp_le
   exact h1
 
-lemma one_div_lt_mul (a b : ℝ) (ha : 0 < a) (hb : 0 < b) : 1 / a < b ↔ 1 < a * b := by
-  sorry
+lemma one_div_lt_mul (a b : ℝ) (ha : 0 < a) : 1 / a < b ↔ 1 < a * b := by
+  rw [one_div, inv_lt_iff_one_lt_mul₀' ha]
 
 theorem harmonic_seq_conv : seq_is_limit (fun (n : ℕ) => 1 / n) 0 := by
   intro ε hε
@@ -247,16 +247,68 @@ theorem seq_squeeze_zero (x : ℕ → ℝ) (y : ℕ → ℝ) (hy : seq_is_limit 
     _ = |y n - 0| := by simp
     _ < ε := hy
 
+lemma forall_later (x y : ℕ → ℝ) : (∀ (n : ℕ), |x n| ≤ y n) → (∀ n ≥ 1, |x n| ≤ y n) := by
+  intro h n hn
+  exact h n
+
+lemma inv_power (x : ℝ) (n : ℕ) (hn : n ≠ 0) : (x ^ (1 / n : ℝ)) ^ (n) = x := by
+  set a : ℝ := (1 / (↑n))
+  rw [←pow_mul]
+  generalize n = b
+
+
 theorem inv_seq_conv : ∀ a ≥ 1, seq_is_limit (fun (n : ℕ) => 1 / (n ^ a)) 0 := by
   intro a ha
+  intro ε hε
+  have h2 : ∃ (N : ℕ), N > (1 / ε ^ (1 / a))  := by
+    have := archimedes 1 (ε ^ (1 / a)) (by positivity)
+    conv_rhs at this => ext N; rw [gt_iff_lt, ←div_lt_iff₀ (by positivity), ←gt_iff_lt]
+    exact this
+  obtain ⟨N, hN⟩ := h2
+  use N
+  intro n hn
+  simp
+  rw [abs_of_nonneg]
+  simp [one_div_lt] at hN
+  rw [inv_pow]
+  /-
   let f : ℕ → ℝ := (fun (n : ℕ) => 1 / ((n : ℝ) ^ a))
   show seq_is_limit f 0
   apply seq_squeeze_zero f (fun (n : ℕ) => 1 / (n : ℝ)) harmonic_seq_conv
-  intro n
-  simp [f]
-  -- rw [le_inv']
-  sorry
+  suffices (∀ n ≥ 1, |f n| ≤ 1 / n) by
+    intro n
+    apply forall_later
 
+
+  unfold f
+  intro n
+
+  simp [f]
+  rw [abs_of_nonneg (by simp)]
+
+  -- apply Nat.le_induction
+  induction' a, ha using Nat.le_induction with k ha hk
+  . simp
+  . calc
+      ((n : ℝ) ^ (k + 1))⁻¹ = (↑n ^ k)⁻¹ * (↑n)⁻¹ := by
+        rw [←one_div,←one_div, ←one_div]
+        simp
+        rw [←inv_pow, pow_add]
+        norm_num
+      _ ≤ (↑n)⁻¹ * (↑n)⁻¹ := by
+        rel [hk]
+      _ ≤ (↑n)⁻¹ := by
+        ring_nf
+        cancel_denoms
+        rw [inv_le_inv₀]
+        .
+          sorry
+        . positivity
+        positivity
+    -/
+
+
+stop
 -- COLT theorem for axₙ → ax as n → ∞
 theorem seq_COLT_scalarmult (x : ℕ → ℝ) (l : ℝ) (hx : seq_is_limit x l) (a : ℝ) : seq_is_limit (fun n => a * x n) (a * l) := by
   by_cases ha : a = 0
