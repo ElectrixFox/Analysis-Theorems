@@ -220,7 +220,7 @@ lemma completeness_bounded_below (X : Set ℝ) [Nonempty X] : bound_below X → 
 
   have hb := set_bound_above_neg_bound_below (-X)
   simp [h] at hb
-  apply completeness_below X h
+  apply completeness_axiom_below X h
 
 def func_bound_above (X : Set ℝ) (f : ℝ → ℝ) : Prop := (∃ (c : ℝ), ∀ x ∈ X, f x ≤ c)
 
