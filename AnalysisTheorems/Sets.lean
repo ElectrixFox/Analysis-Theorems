@@ -16,7 +16,7 @@ def minimum (X : Set ℝ) (m : ℝ) : Prop := m ∈ X ∧ ∀ x ∈ X, m ≤ x
 
 def supremum (X : Set ℝ) (C : ℝ) := (∀ x ∈ X, x ≤ C) ∧ (∀ B, (∀ x ∈ X, x ≤ B) → C ≤ B)
 
-def infimum (X : Set ℝ) (C : ℝ) := (∀ x ∈ X, C ≤ x) ∧ (∀ B, (∀ x ∈ X, B ≤ x) → C ≤ B)
+def infimum (X : Set ℝ) (c : ℝ) := (∀ x ∈ X, c ≤ x) ∧ (∀ b, (∀ x ∈ X, b ≤ x) → b ≤ c)
 
 
 lemma lt_add_imp_le (a b : ℝ) : (∀ ε > 0, a < b + ε) → a ≤ b := by
@@ -47,7 +47,81 @@ lemma abs_le_imp_le (a b : ℝ) : |a| ≤ b → a ≤ b := by
     exact h
 
 axiom completeness_axiom (X : Set ℝ) [Nonempty X] : bound_above X → ∃ C, supremum X C
-axiom completeness_axiom_below (X : Set ℝ) [Nonempty X] : bound_below X → ∃ C, infimum X C
+
+lemma set_bound_above_neg_bound_below (X : Set ℝ) : bound_above X ↔ bound_below (-X) := by
+  constructor
+  repeat' -- repeat this as the following works in both ways
+  . intro h
+    obtain ⟨c, hc⟩ := h -- get the upper (lower) bound
+    use (-c)  -- the lower (upper) bound is -c since c is positive
+    intro x
+    specialize hc (-x)  -- the x in X will be -x since x is -ve
+    simp_all [neg_le, le_neg] -- cleaning up the inequalities
+
+
+lemma neg_set_ge_bound (X : Set ℝ) (C : ℝ) : (∀ x ∈ -X, x ≥ C) ↔ (∀ x ∈ X, -x ≥ C) := by
+  simp_all
+  constructor
+  . intro h x hx
+    specialize h (-x)
+    apply h
+    simp [hx]
+  . intro h x hx
+    specialize h (-x)
+    simp at h
+    exact h hx
+
+lemma inf_of_neg_eq_neg_sup (X : Set ℝ) [Nonempty X] (hX : bound_above X) (C : ℝ) (hS : supremum X (-C)) :
+  infimum (-X) C := by
+
+  have : Nonempty (↑(-X)) := by
+    rename_i i
+    obtain ⟨a, ha⟩ := i
+    use -a
+    simp [ha]
+
+
+  rw [set_bound_above_neg_bound_below X] at hX
+  constructor
+  .
+    obtain ⟨h1, h2⟩ := hS
+    rw [neg_set_ge_bound]
+    simp [le_neg]
+    exact h1
+  .
+    intro B hB
+    obtain ⟨c, hc⟩ := hX
+
+    obtain ⟨h1, h2⟩ := hS
+    specialize h2 (-B)
+    simp at h2
+    rw [neg_set_ge_bound] at hB
+    simp [le_neg] at hB
+    simp_all
+
+theorem completeness_axiom_below (X : Set ℝ) [Nonempty X] : bound_below X → ∃ c, infimum X c := by
+  intro h
+  have h1 : bound_below X ↔ bound_above (-X) := by
+    have := set_bound_above_neg_bound_below (-X)
+    simp at this
+    exact this.symm
+
+  set S := -X
+  have : Nonempty S := by
+    simp [S]
+    rename_i i
+    obtain ⟨x, hx⟩ := i
+    use (-x)
+    simp [hx]
+  rw [h1] at h
+  have h0 := inf_of_neg_eq_neg_sup S h
+  have := completeness_axiom S h
+  obtain ⟨C, hC⟩ := this
+  specialize h0 (-C)
+  simp [hC] at h0
+  use -C
+  simp [S] at h0
+  exact h0
 
 lemma subset_bound_bounded (X : Set ℝ) (hx : bound_above X) (Y : Set ℝ) (hy : ∀ y ∈ Y, y ∈ X) : bound_above Y := by
   obtain ⟨C, hC⟩ := hx
@@ -110,16 +184,6 @@ theorem archimedes (a b : ℝ) (hb : b > 0) : ∃ (n : ℕ), n * b > a := by
   apply hBup at hnxtinX -- apply the contradition
   linarith  -- hence contradiction
 
-lemma set_bound_above_neg_bound_below (X : Set ℝ) : bound_above X ↔ bound_below (-X) := by
-  constructor
-  repeat' -- repeat this as the following works in both ways
-  . intro h
-    obtain ⟨c, hc⟩ := h -- get the upper (lower) bound
-    use (-c)  -- the lower (upper) bound is -c since c is positive
-    intro x
-    specialize hc (-x)  -- the x in X will be -x since x is -ve
-    simp_all [neg_le, le_neg] -- cleaning up the inequalities
-
 lemma eq_iff_le_tric (a b : ℝ) : a ≤ b ∧ b ≤ a → a = b := by
   norm_num
   intro h1 h2
@@ -146,108 +210,6 @@ lemma neg_set_le_bound (X : Set ℝ) (C : ℝ) : (∀ x ∈ -X, x ≤ C) ↔ (�
     simp at h
     exact h hx
 
-lemma neg_set_ge_bound (X : Set ℝ) (C : ℝ) : (∀ x ∈ -X, x ≥ C) ↔ (∀ x ∈ X, -x ≥ C) := by
-  simp_all
-  constructor
-  . intro h x hx
-    specialize h (-x)
-    apply h
-    simp [hx]
-  . intro h x hx
-    specialize h (-x)
-    simp at h
-    exact h hx
-
-
-lemma inf_of_neg_eq_neg_sup' (X : Set ℝ) (hX : bound_above X) (C : ℝ) (h : supremum X (-C)) :
-  supremum X (-C) ↔ infimum (-X) C := by
-  simp [h]
-  rename' C => p
-  rw [←neg_neg p]
-  set B := -p
-  rename' X => S
-  let T := -S
-  have h1 : ∀ x ∈ S, -x ≥ -B := by
-    intro x hx
-    rw [ge_iff_le, neg_le_neg_iff]
-    apply h.left x hx
-  have h2 : ∀ t ∈ T, -B ≤ t := by
-    simp [T, B, h1]
-    intro t ht
-    specialize h1 (-t)
-    simp [ht, B] at h1
-    exact h1
-
-  constructor
-  . intro s hs
-    specialize h1 (-s)
-    simp at hs
-    simp at h1
-    exact h1 hs
-  .
-    intro C hC
-    rw [eq_iff_le_tric C (-B)]
-    constructor
-    .
-      unfold T at h2
-      obtain ⟨h3, h4⟩ := h
-      simp at h1
-      specialize h4 (-C)
-      rw [le_neg]
-      apply h4
-      intro s hs
-      specialize hC (-s)
-      simp [le_neg] at hC
-      exact hC hs
-    .
-      unfold T at h2
-      obtain ⟨h3, h4⟩ := h
-      simp at h1
-      specialize h4 (-C)
-      rw [neg_le]
-      rw [neg_set_ge_bound] at hC
-      conv at hC =>
-        intro x hx
-        rw [ge_iff_le, le_neg]
-      rw [neg_set_ge_bound] at h2
-      simp at h2
-      simp_all
-      sorry
-
-lemma inf_of_neg_eq_neg_sup (X : Set ℝ) [Nonempty X] (hX : bound_above X) (C : ℝ) (hS : supremum X (-C)) :
-  infimum (-X) C := by
-
-  have : Nonempty (↑(-X)) := by
-    rename_i i
-    obtain ⟨a, ha⟩ := i
-    use -a
-    simp [ha]
-
-
-  rw [set_bound_above_neg_bound_below X] at hX
-  constructor
-  .
-    obtain ⟨h1, h2⟩ := hS
-    rw [neg_set_ge_bound]
-    simp [le_neg]
-    exact h1
-  .
-    intro B hB
-    obtain ⟨c, hc⟩ := hX
-
-    obtain ⟨h1, h2⟩ := hS
-    specialize h2 (-B)
-    simp at h2
-    rw [neg_set_ge_bound] at hB
-    simp [le_neg] at hB
-    simp_all
-    obtain ⟨x, this⟩ := this
-    specialize hc x this
-    specialize h1 (-x) (by simp [this])
-    specialize hB (-x) (by simp [this])
-    simp at hB h1
-    sorry
-
 lemma completeness_bounded_below (X : Set ℝ) [Nonempty X] : bound_below X → ∃ c, infimum X c := by
   intro h
   rename_i inst
@@ -258,7 +220,7 @@ lemma completeness_bounded_below (X : Set ℝ) [Nonempty X] : bound_below X → 
 
   have hb := set_bound_above_neg_bound_below (-X)
   simp [h] at hb
-  apply completeness_axiom_below X h
+  apply completeness_below X h
 
 def func_bound_above (X : Set ℝ) (f : ℝ → ℝ) : Prop := (∃ (c : ℝ), ∀ x ∈ X, f x ≤ c)
 
