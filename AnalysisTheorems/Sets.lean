@@ -1,5 +1,7 @@
 import Mathlib
 
+axiom naturals_from_zero (n : ℕ) : n ≥ 1
+
 def bound_below (X : Set ℝ) : Prop := ∃ (c : ℝ), ∀ x, x ∈ X → c ≤ x
 def bound_below_by (X : Set ℝ) (c : ℝ) : Prop := ∀ x, x ∈ X → c ≤ x
 
@@ -46,7 +48,59 @@ lemma abs_le_imp_le (a b : ℝ) : |a| ≤ b → a ≤ b := by
     rw [abs_of_pos h1] at h
     exact h
 
+theorem bernoulli_inequality (x : ℝ) (n : ℕ) {hn₀ : n ≥ 1} (hx : x ≥ -1) : (1 + x) ^ n ≥ 1 + n * x := by
+  by_cases h : x = -1
+  .
+    rw [h]
+    norm_num
+    rw [zero_pow (by linarith[naturals_from_zero n]), zero_add]
+    norm_cast
+  .
+    push_neg at h
+    rw [ge_iff_le, le_iff_lt_or_eq] at hx
+    obtain hx | hx := hx
+    .
+      induction' n, hn₀ using Nat.le_induction with k hn hk
+      . simp
+      . rw [pow_add]
+        rw [ge_iff_le] at *
+        have h1 := calc
+          (1 + x) * (1 + k * x) ≤ (1 + x) * (1 + x) ^ k := by
+            gcongr (1 + x) * ?_
+            linarith
+          _= (1 + x) ^ (k + 1) := by ring_nf
+        nth_rw 1 [mul_add] at h1
+        rw [pow_add] at h1
+        conv_lhs at h1 => ring_nf
+        rw [←mul_comm]
+        have h2 : 1 + x * ↑(k + 1) ≤ 1 + x + x * k + x ^ 2 * k := by
+            rify
+            rw [mul_add, mul_one, add_comm (x * k), ←add_assoc]
+            simp
+            positivity
+        exact le_trans h2 h1
+    . tauto
+
+
 axiom completeness_axiom (X : Set ℝ) [Nonempty X] : bound_above X → ∃ C, supremum X C
+
+theorem exists_pth_root (p a : ℕ) {hp : p ≥ 1} (ha : a ≥ 0) : ∃! x ≥ 0, x ^ p = a := by
+  by_cases h : a = 0
+  .
+    refine ⟨0, ?_⟩
+    constructor
+    simp only [ge_iff_le, le_refl, true_and, h]
+
+    rw [zero_pow (by linarith)]
+    simp
+    intro y h0
+    rw [h] at h0
+    rw [pow_eq_zero_iff]
+
+
+
+  constructor
+  sorry
 
 lemma set_bound_above_neg_bound_below (X : Set ℝ) : bound_above X ↔ bound_below (-X) := by
   constructor

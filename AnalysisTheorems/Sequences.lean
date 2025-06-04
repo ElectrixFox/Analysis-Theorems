@@ -247,15 +247,7 @@ theorem seq_squeeze_zero (x : ℕ → ℝ) (y : ℕ → ℝ) (hy : seq_is_limit 
     _ = |y n - 0| := by simp
     _ < ε := hy
 
-lemma forall_later (x y : ℕ → ℝ) : (∀ (n : ℕ), |x n| ≤ y n) → (∀ n ≥ 1, |x n| ≤ y n) := by
-  intro h n hn
-  exact h n
-
-lemma inv_power (x : ℝ) (n : ℕ) (hn : n ≠ 0) : (x ^ (1 / n : ℝ)) ^ (n) = x := by
-  set a : ℝ := (1 / (↑n))
-  rw [←pow_mul]
-  generalize n = b
-
+lemma forall_later (x y : ℕ → ℝ) : (∀ (n : ℕ), |x n| ≤ y n) → (∀ n ≥ 1, |x n| ≤ y n) := by tauto
 
 theorem inv_seq_conv : ∀ a ≥ 1, seq_is_limit (fun (n : ℕ) => 1 / (n ^ a)) 0 := by
   intro a ha
@@ -270,7 +262,9 @@ theorem inv_seq_conv : ∀ a ≥ 1, seq_is_limit (fun (n : ℕ) => 1 / (n ^ a)) 
   simp
   rw [abs_of_nonneg]
   simp [one_div_lt] at hN
-  rw [inv_pow]
+  sorry
+  sorry
+  -- rw [inv_pow]
   /-
   let f : ℕ → ℝ := (fun (n : ℕ) => 1 / ((n : ℝ) ^ a))
   show seq_is_limit f 0
@@ -308,7 +302,7 @@ theorem inv_seq_conv : ∀ a ≥ 1, seq_is_limit (fun (n : ℕ) => 1 / (n ^ a)) 
     -/
 
 
-stop
+
 -- COLT theorem for axₙ → ax as n → ∞
 theorem seq_COLT_scalarmult (x : ℕ → ℝ) (l : ℝ) (hx : seq_is_limit x l) (a : ℝ) : seq_is_limit (fun n => a * x n) (a * l) := by
   by_cases ha : a = 0
