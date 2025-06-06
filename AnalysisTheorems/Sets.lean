@@ -1,7 +1,5 @@
 import Mathlib
 
-axiom naturals_from_zero (n : ℕ) : n ≥ 1
-
 def bound_below (X : Set ℝ) : Prop := ∃ (c : ℝ), ∀ x, x ∈ X → c ≤ x
 def bound_below_by (X : Set ℝ) (c : ℝ) : Prop := ∀ x, x ∈ X → c ≤ x
 
@@ -48,12 +46,12 @@ lemma abs_le_imp_le (a b : ℝ) : |a| ≤ b → a ≤ b := by
     rw [abs_of_pos h1] at h
     exact h
 
-theorem bernoulli_inequality (x : ℝ) (n : ℕ) {hn₀ : n ≥ 1} (hx : x ≥ -1) : (1 + x) ^ n ≥ 1 + n * x := by
+theorem bernoulli_inequality (x : ℝ) (n : ℕ) (hn₀ : n ≥ 1) (hx : x ≥ -1) : (1 + x) ^ n ≥ 1 + n * x := by
   by_cases h : x = -1
   .
     rw [h]
     norm_num
-    rw [zero_pow (by linarith[naturals_from_zero n]), zero_add]
+    rw [zero_pow (by linarith), zero_add]
     norm_cast
   .
     push_neg at h
@@ -84,7 +82,18 @@ theorem bernoulli_inequality (x : ℝ) (n : ℕ) {hn₀ : n ≥ 1} (hx : x ≥ -
 
 axiom completeness_axiom (X : Set ℝ) [Nonempty X] : bound_above X → ∃ C, supremum X C
 
-theorem exists_pth_root (p a : ℕ) {hp : p ≥ 1} (ha : a ≥ 0) : ∃! x ≥ 0, x ^ p = a := by
+lemma pow_lt_pow_iff (a b : ℝ) (p : ℕ) (hp : p ≥ 1) (hab : a ≥ 0 ∧ b ≥ 0) : a < b ↔ a ^ p < b ^ p := by
+  constructor
+  pick_goal 2
+  contrapose
+  push_neg
+  all_goals
+  .
+    intro h
+    gcongr
+    linarith
+
+theorem exists_pth_root (p a : ℕ) (hp : p ≥ 1) (ha : a ≥ 0) : ∃! x ≥ 0, x ^ p = a := by
   by_cases h : a = 0
   .
     refine ⟨0, ?_⟩
@@ -95,12 +104,39 @@ theorem exists_pth_root (p a : ℕ) {hp : p ≥ 1} (ha : a ≥ 0) : ∃! x ≥ 0
     simp
     intro y h0
     rw [h] at h0
-    rw [pow_eq_zero_iff]
+    rw [pow_eq_zero_iff (by linarith)] at h0
+    exact h0
+  .
+    push_neg at h
+    conv at ha =>
+      rw [ge_iff_le, le_iff_eq_or_lt]
+      simp [h.symm]
+    clear h
+    have pow_ineq (x y : ℝ) : 0 < x ∧ x < y → x ^ p < y ^ p := by
+      intro h
+      obtain ⟨hx, hy⟩ := h
+      rw [pow_lt_pow_iff_left₀] <;> linarith
 
+    set A := {x : ℝ | x ^ p < a}
+    have (x : ℝ) (hx : x ∈ A) := calc
+      x ^ p < a := hx
+      _ < 1 + p * a := by
+        rw [add_comm]
+        apply lt_add_of_tsub_lt_left
+        nth_rw 1 [mul_comm, ←mul_one a]
+        push_cast
+        rw [←mul_sub_left_distrib]
+        rw [←lt_add_neg_iff_lt]
+        rw [←mul_neg_one]
+        rw [show (0 < 1 + a * (1 - p) * (-1 : ℝ) ↔ 0 < 1 + a * (p - 1)) by sorry]
+        positivity
+      _ ≤ (1 + a) ^ p := by
+        apply bernoulli_inequality <;> linarith
 
-
-  constructor
-  sorry
+    conv at this =>
+      intro x hx
+      rw [←pow_lt_pow_iff x (1 + ↑a) p hp]
+    
 
 lemma set_bound_above_neg_bound_below (X : Set ℝ) : bound_above X ↔ bound_below (-X) := by
   constructor
