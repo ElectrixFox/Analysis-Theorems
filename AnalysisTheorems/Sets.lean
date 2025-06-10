@@ -82,7 +82,8 @@ theorem bernoulli_inequality (x : ℝ) (n : ℕ) (hn₀ : n ≥ 1) (hx : x ≥ -
 
 axiom completeness_axiom (X : Set ℝ) [Nonempty X] : bound_above X → ∃ C, supremum X C
 
-lemma pow_lt_pow_iff (a b : ℝ) (p : ℕ) (hp : p ≥ 1) (hab : a ≥ 0 ∧ b ≥ 0) : a < b ↔ a ^ p < b ^ p := by
+
+lemma pow_lt_pow_iff (a b : ℝ) (p : ℕ) (hp : p ≥ 1) (ha : a ≥ 0) (hb : b ≥ 0) : a < b ↔ a ^ p < b ^ p := by
   constructor
   pick_goal 2
   contrapose
@@ -91,7 +92,113 @@ lemma pow_lt_pow_iff (a b : ℝ) (p : ℕ) (hp : p ≥ 1) (hab : a ≥ 0 ∧ b �
   .
     intro h
     gcongr
-    linarith
+
+lemma pow_eq_pow_iff (a b : ℝ) (p : ℕ) (hp : p ≥ 1) (ha : a ≥ 0) (hb : b ≥ 0) : a = b ↔ a ^ p = b ^ p := by
+  constructor
+  . intro h
+    rw [h]
+  . intro h
+    by_contra h1
+    push_neg at h1
+    rw [ne_iff_lt_or_gt] at h1
+    obtain h1 | h1 := h1
+    . linarith [(pow_lt_pow_iff a b p hp ha hb).mp h1]
+    . linarith [(pow_lt_pow_iff b a p hp hb ha).mp h1]
+
+theorem exists_pth_root (p a : ℕ) (hp : p ≥ 1) (ha : a ≥ 0) : ∃! x ≥ 0, x ^ p = a := by
+  by_cases h : a = 0
+  .
+    refine ⟨0, ?_⟩
+    constructor
+    simp only [ge_iff_le, le_refl, true_and, h]
+
+    rw [zero_pow (by linarith)]
+    simp
+    intro y h0
+    rw [h] at h0
+    rw [pow_eq_zero_iff (by linarith)] at h0
+    exact h0
+  .
+    push_neg at h
+    conv at ha =>
+      rw [ge_iff_le, le_iff_eq_or_lt]
+      simp [h.symm]
+    clear h
+    have pow_ineq (x y : ℝ) : 0 < x ∧ x < y → x ^ p < y ^ p := by
+      intro h
+      obtain ⟨hx, hy⟩ := h
+      rw [pow_lt_pow_iff_left₀] <;> linarith
+    suffices (∃ x ≥ 0, x ^ p = a) by
+      obtain ⟨x, hx, hx2⟩ := this
+      use x
+      constructor
+      simp [hx2]
+      . intro y hy
+        obtain ⟨hy, hy1⟩ := hy
+        rw [←hx2] at hy1
+        have := (pow_eq_pow_iff x y p hp (by linarith) (by linarith)).mpr
+        norm_cast at this
+        tauto
+
+    set A := {x : ℝ | x ^ p < a}
+    have (x : ℝ) (hx : x ∈ A) := calc
+      x ^ p < a := hx
+      _ < 1 + p * a := by
+        rw [add_comm]
+        apply lt_add_of_tsub_lt_left
+        nth_rw 1 [mul_comm, ←mul_one a]
+        push_cast
+        rw [←mul_sub_left_distrib]
+        rw [←lt_add_neg_iff_lt]
+        rw [←mul_neg_one]
+        rw [show (0 < 1 + a * (1 - p) * (-1 : ℝ) ↔ 0 < 1 + a * (p - 1)) by sorry]
+        positivity
+      _ ≤ (1 + a) ^ p := by
+        apply bernoulli_inequality <;> linarith
+
+
+    have h : ∀ x ∈ A, x < 1 + a := by
+      intro x hx
+      specialize this x hx
+      rw [pow_lt_pow_iff]
+      exact this
+      . exact hp
+      .
+        unfold A at hx
+        simp at hx
+        simp
+
+      . linarith
+
+    have hA : 0 ∈ A := by
+      dsimp [A]
+      norm_cast
+      rw [zero_pow (by linarith)]
+      exact ha
+    have nonemptyA : Nonempty A := by use 0
+    have boundA : bound_above A := by
+      use (1 + ↑a)
+      intro x hx
+      linarith [h x hx]
+    -- Since A is nonempty and bounded above, let ξ = Sup A
+    have ⟨ξ, hξ⟩ := completeness_axiom A boundA
+    suffices (ξ ^ p = a) by
+      sorry
+
+    by_contra h
+    -- h : ξ ^ p ≠ a, so either ξ ^ p < a or ξ ^ p > a
+    . sorry
+    apply lt_or_gt_of_ne at h1
+    obtain h1 | h1 := h1
+
+
+
+    .
+      push_neg at h
+      rw [ne_iff_lt_or_gt] at h
+      obtain h | h := h
+      . admit
+      . admit
 
 theorem exists_pth_root (p a : ℕ) (hp : p ≥ 1) (ha : a ≥ 0) : ∃! x ≥ 0, x ^ p = a := by
   by_cases h : a = 0
@@ -136,7 +243,7 @@ theorem exists_pth_root (p a : ℕ) (hp : p ≥ 1) (ha : a ≥ 0) : ∃! x ≥ 0
     conv at this =>
       intro x hx
       rw [←pow_lt_pow_iff x (1 + ↑a) p hp]
-    
+
 
 lemma set_bound_above_neg_bound_below (X : Set ℝ) : bound_above X ↔ bound_below (-X) := by
   constructor
@@ -310,7 +417,7 @@ lemma completeness_bounded_below (X : Set ℝ) [Nonempty X] : bound_below X → 
 
   have hb := set_bound_above_neg_bound_below (-X)
   simp [h] at hb
-  apply completeness_axiom_below X h
+  apply completeness_below X h
 
 def func_bound_above (X : Set ℝ) (f : ℝ → ℝ) : Prop := (∃ (c : ℝ), ∀ x ∈ X, f x ≤ c)
 
