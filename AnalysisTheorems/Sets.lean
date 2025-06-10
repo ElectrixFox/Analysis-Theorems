@@ -1,5 +1,8 @@
 import Mathlib
 
+open Set
+open BigOperators
+
 def bound_below (X : Set ℝ) : Prop := ∃ (c : ℝ), ∀ x, x ∈ X → c ≤ x
 def bound_below_by (X : Set ℝ) (c : ℝ) : Prop := ∀ x, x ∈ X → c ≤ x
 
@@ -46,6 +49,10 @@ lemma abs_le_imp_le (a b : ℝ) : |a| ≤ b → a ≤ b := by
     rw [abs_of_pos h1] at h
     exact h
 
+lemma choose_eq_rel (n k : ℕ) : n.choose k + n.choose (k - 1) = (n + 1).choose k := by
+
+  sorry
+
 theorem binomial_theorem (a b : ℝ) (n : ℕ) :
   (a + b) ^ n = ∑ k ∈ Set.Icc 0 n, (Nat.choose n k) * a ^ (n - k) * b ^ k := by
   induction' n with n hn
@@ -54,8 +61,8 @@ theorem binomial_theorem (a b : ℝ) (n : ℕ) :
     rw [Set.toFinset_Icc] at *
     calc
       (a + b) ^ (n + 1) = (a + b) * (a + b) ^ n := by ring_nf
-      _= (a + b) * ∑ k ∈ Finset.Icc 0 n, (Nat.choose n k) * a ^ (n - k) * b ^ k := by rw [hn]
-      _= ∑ k ∈ Finset.Icc 0 n, (Nat.choose n k) * a ^ (n - k + 1) * b ^ k + ∑ k ∈ Finset.Icc 0 n, (Nat.choose n k) * a ^ (n - k) * b ^ (k + 1) := by
+      _ = (a + b) * ∑ k ∈ Finset.Icc 0 n, (Nat.choose n k) * a ^ (n - k) * b ^ k := by rw [hn]
+      _ = ∑ k ∈ Finset.Icc 0 n, (Nat.choose n k) * a ^ (n - k + 1) * b ^ k + ∑ k ∈ Finset.Icc 0 n, (Nat.choose n k) * a ^ (n - k) * b ^ (k + 1) := by
         rw [add_mul]
         rw [Finset.mul_sum, Finset.mul_sum]
         ring_nf
@@ -66,11 +73,30 @@ theorem binomial_theorem (a b : ℝ) (n : ℕ) :
           rw [pow_one]
         . ext k
           ring_nf
-      _= ∑ k ∈ Finset.Icc 0 n, (Nat.choose n k) * a ^ (n - k + 1) * b ^ k + ∑ k ∈ Finset.Icc 1 (n + 1), (Nat.choose n (k - 1)) * a ^ (n + 1 - k) * b ^ k := by
+      _ = ∑ k ∈ Finset.Icc 0 n, (Nat.choose n k) * a ^ (n - k + 1) * b ^ k + ∑ k ∈ Finset.Icc 1 (n + 1), (Nat.choose n (k - 1)) * a ^ (n + 1 - k) * b ^ k := by
         congr 1
-      _= a ^ (n + 1) + ∑ k ∈ Finset.Icc 1 n, ((Nat.choose n k) + (Nat.choose n (k - 1))) * a ^ (n + 1 - k) * b ^ k + b ^ (n + 1) := by sorry
-      _= a ^ (n + 1) + ∑ k ∈ Finset.Icc 0 n, (Nat.choose (n + 1) k) * a ^ (n + 1 - k) * b ^ k + b ^ (n + 1) := by sorry
-      _= ∑ k ∈ Finset.Icc 0 (n + 1), ↑((n + 1).choose k) * a ^ (n + 1 - k) * b ^ k := by sorry
+        . sorry
+      _ = a ^ (n + 1) + ∑ k ∈ Finset.Icc 1 n, ((Nat.choose n k) + (Nat.choose n (k - 1))) * a ^ (n + 1 - k) * b ^ k + b ^ (n + 1) := by sorry
+      _ = a ^ (n + 1) + ∑ k ∈ Finset.Icc 0 n, (Nat.choose (n + 1) k) * a ^ (n + 1 - k) * b ^ k + b ^ (n + 1) := by sorry
+      _ = ∑ k ∈ Finset.Icc 0 (n + 1), ↑((n + 1).choose k) * a ^ (n + 1 - k) * b ^ k := by sorry
+
+lemma binomial_corollary (a b : ℝ) (p : ℕ) : (a + b) ^ p ≤ a ^ p + b ^ p + p * a ^ (p - 1) * b := by
+  have h := binomial_theorem a b p
+  rw [Set.toFinset_Icc] at h
+  calc
+    (a + b) ^ p = ∑ k ∈ Finset.Icc 0 p, (Nat.choose p k) * a ^ (p - k) * b ^ k := by rw [h]
+    _ ≤ a ^ p + b ^ p + ∑ k ∈ Finset.Icc 1 (p - 1), (Nat.choose p k) * a ^ (p - k) * b ^ k := by
+      apply Finset.sum_le_sum_of_subset
+      intro k hk
+      simp_all [Nat.choose, Nat.zero_choose, Nat.succ_choose]
+      linarith
+    _ = a ^ p + b ^ p + p * a ^ (p - 1) * b := by sorry
+    _ = a ^ p + b ^ p + p * a ^ (p - 1) * b := by
+      rw [Finset.sum_Icc_succ]
+      rw [Finset.sum_Icc_zero]
+      rw [Finset.sum_Icc_one]
+      rw [Nat.choose_zero_right, Nat.choose_one_right]
+      ring_nf
 
 theorem bernoulli_inequality (x : ℝ) (n : ℕ) (hn₀ : n ≥ 1) (hx : x ≥ -1) : (1 + x) ^ n ≥ 1 + n * x := by
   by_cases h : x = -1
@@ -221,16 +247,15 @@ theorem exists_pth_root (p a : ℕ) (hp : p ≥ 1) (ha : a ≥ 0) : ∃! (x : �
     push_neg at h1
     apply lt_or_gt_of_ne at h1
     obtain h1 | h1 := h1
+    have binthm (α : ℝ) (hα : α = ∑ k ∈ Finset.Icc 1 (p - 1), (p.choose k) * ξ ^ (p - k)) :
+      ∀ n ≥ 1, (ξ + 1 / n) ^ p ≤ ξ ^ p + α / n := by
+      intro n hn
+      have bin := binomial_theorem (ξ) (1 / n : ℝ) p
+      simp
+      rw [Finset.] at bin
 
 
-
-
-    .
-      push_neg at h
-      rw [ne_iff_lt_or_gt] at h
-      obtain h | h := h
-      . admit
-      . admit
+      sorry
 
 theorem exists_pth_root (p a : ℕ) (hp : p ≥ 1) (ha : a ≥ 0) : ∃! x ≥ 0, x ^ p = a := by
   by_cases h : a = 0
