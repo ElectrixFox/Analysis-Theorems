@@ -46,6 +46,32 @@ lemma abs_le_imp_le (a b : ℝ) : |a| ≤ b → a ≤ b := by
     rw [abs_of_pos h1] at h
     exact h
 
+theorem binomial_theorem (a b : ℝ) (n : ℕ) :
+  (a + b) ^ n = ∑ k ∈ Set.Icc 0 n, (Nat.choose n k) * a ^ (n - k) * b ^ k := by
+  induction' n with n hn
+  . simp
+  .
+    rw [Set.toFinset_Icc] at *
+    calc
+      (a + b) ^ (n + 1) = (a + b) * (a + b) ^ n := by ring_nf
+      _= (a + b) * ∑ k ∈ Finset.Icc 0 n, (Nat.choose n k) * a ^ (n - k) * b ^ k := by rw [hn]
+      _= ∑ k ∈ Finset.Icc 0 n, (Nat.choose n k) * a ^ (n - k + 1) * b ^ k + ∑ k ∈ Finset.Icc 0 n, (Nat.choose n k) * a ^ (n - k) * b ^ (k + 1) := by
+        rw [add_mul]
+        rw [Finset.mul_sum, Finset.mul_sum]
+        ring_nf
+        rw [add_comm]
+        nth_rw 1 [←pow_one b]
+        congr
+        . ext k
+          rw [pow_one]
+        . ext k
+          ring_nf
+      _= ∑ k ∈ Finset.Icc 0 n, (Nat.choose n k) * a ^ (n - k + 1) * b ^ k + ∑ k ∈ Finset.Icc 1 (n + 1), (Nat.choose n (k - 1)) * a ^ (n + 1 - k) * b ^ k := by
+        congr 1
+      _= a ^ (n + 1) + ∑ k ∈ Finset.Icc 1 n, ((Nat.choose n k) + (Nat.choose n (k - 1))) * a ^ (n + 1 - k) * b ^ k + b ^ (n + 1) := by sorry
+      _= a ^ (n + 1) + ∑ k ∈ Finset.Icc 0 n, (Nat.choose (n + 1) k) * a ^ (n + 1 - k) * b ^ k + b ^ (n + 1) := by sorry
+      _= ∑ k ∈ Finset.Icc 0 (n + 1), ↑((n + 1).choose k) * a ^ (n + 1 - k) * b ^ k := by sorry
+
 theorem bernoulli_inequality (x : ℝ) (n : ℕ) (hn₀ : n ≥ 1) (hx : x ≥ -1) : (1 + x) ^ n ≥ 1 + n * x := by
   by_cases h : x = -1
   .
@@ -105,7 +131,7 @@ lemma pow_eq_pow_iff (a b : ℝ) (p : ℕ) (hp : p ≥ 1) (ha : a ≥ 0) (hb : b
     . linarith [(pow_lt_pow_iff a b p hp ha hb).mp h1]
     . linarith [(pow_lt_pow_iff b a p hp hb ha).mp h1]
 
-theorem exists_pth_root (p a : ℕ) (hp : p ≥ 1) (ha : a ≥ 0) : ∃! x ≥ 0, x ^ p = a := by
+theorem exists_pth_root (p a : ℕ) (hp : p ≥ 1) (ha : a ≥ 0) : ∃! (x : ℝ), x ≥ 0 ∧ x ^ p = a := by
   by_cases h : a = 0
   .
     refine ⟨0, ?_⟩
@@ -116,8 +142,9 @@ theorem exists_pth_root (p a : ℕ) (hp : p ≥ 1) (ha : a ≥ 0) : ∃! x ≥ 0
     simp
     intro y h0
     rw [h] at h0
+    norm_cast at h0
     rw [pow_eq_zero_iff (by linarith)] at h0
-    exact h0
+    exact h0.right
   .
     push_neg at h
     conv at ha =>
@@ -128,21 +155,23 @@ theorem exists_pth_root (p a : ℕ) (hp : p ≥ 1) (ha : a ≥ 0) : ∃! x ≥ 0
       intro h
       obtain ⟨hx, hy⟩ := h
       rw [pow_lt_pow_iff_left₀] <;> linarith
-    suffices (∃ x ≥ 0, x ^ p = a) by
+    suffices (∃ (x : ℝ), x ≥ 0 ∧ x ^ p = a) by
       obtain ⟨x, hx, hx2⟩ := this
       use x
       constructor
       simp [hx2]
-      . intro y hy
+      . exact hx
+      .
+        intro y hy
         obtain ⟨hy, hy1⟩ := hy
         rw [←hx2] at hy1
         have := (pow_eq_pow_iff x y p hp (by linarith) (by linarith)).mpr
         norm_cast at this
         tauto
 
-    set A := {x : ℝ | x ^ p < a}
+    set A := {x : ℝ | x ^ p < a ∧ x ≥ 0}
     have (x : ℝ) (hx : x ∈ A) := calc
-      x ^ p < a := hx
+      x ^ p < a := by simp [A] at hx; exact hx.left
       _ < 1 + p * a := by
         rw [add_comm]
         apply lt_add_of_tsub_lt_left
@@ -164,17 +193,17 @@ theorem exists_pth_root (p a : ℕ) (hp : p ≥ 1) (ha : a ≥ 0) : ∃! x ≥ 0
       exact this
       . exact hp
       .
-        unfold A at hx
-        simp at hx
-        simp
-
+        dsimp [A] at hx
+        exact hx.right
       . linarith
 
     have hA : 0 ∈ A := by
       dsimp [A]
+      simp
       norm_cast
       rw [zero_pow (by linarith)]
       exact ha
+
     have nonemptyA : Nonempty A := by use 0
     have boundA : bound_above A := by
       use (1 + ↑a)
@@ -182,14 +211,17 @@ theorem exists_pth_root (p a : ℕ) (hp : p ≥ 1) (ha : a ≥ 0) : ∃! x ≥ 0
       linarith [h x hx]
     -- Since A is nonempty and bounded above, let ξ = Sup A
     have ⟨ξ, hξ⟩ := completeness_axiom A boundA
-    suffices (ξ ^ p = a) by
-      sorry
-
-    by_contra h
-    -- h : ξ ^ p ≠ a, so either ξ ^ p < a or ξ ^ p > a
-    . sorry
+    use ξ
+    constructor
+    .
+      obtain ⟨hξ, _⟩ := hξ
+      specialize hξ 0 hA
+      positivity
+    by_contra h1
+    push_neg at h1
     apply lt_or_gt_of_ne at h1
     obtain h1 | h1 := h1
+
 
 
 
