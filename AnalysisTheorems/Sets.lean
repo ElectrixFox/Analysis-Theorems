@@ -49,8 +49,19 @@ lemma abs_le_imp_le (a b : ℝ) : |a| ≤ b → a ≤ b := by
     rw [abs_of_pos h1] at h
     exact h
 
-lemma choose_eq_rel (n k : ℕ) : n.choose k + n.choose (k - 1) = (n + 1).choose k := by
+lemma mem_of_neg_set_is_neg (X : Set ℝ) (p : ℝ → Prop) : (∀ x ∈ X, p x) ↔ (∀ x ∈ (-X), p (-x)) := by
+  constructor
+  .
+    intro h x hx
+    simp at hx
+    exact h (-x) hx
+  .
+    intro h x hx
+    specialize h (-x)
+    simp [hx] at h
+    exact h
 
+lemma choose_eq_rel (n k : ℕ) : n.choose k + n.choose (k - 1) = (n + 1).choose k := by
   sorry
 
 theorem binomial_theorem (a b : ℝ) (n : ℕ) :
@@ -79,24 +90,6 @@ theorem binomial_theorem (a b : ℝ) (n : ℕ) :
       _ = a ^ (n + 1) + ∑ k ∈ Finset.Icc 1 n, ((Nat.choose n k) + (Nat.choose n (k - 1))) * a ^ (n + 1 - k) * b ^ k + b ^ (n + 1) := by sorry
       _ = a ^ (n + 1) + ∑ k ∈ Finset.Icc 0 n, (Nat.choose (n + 1) k) * a ^ (n + 1 - k) * b ^ k + b ^ (n + 1) := by sorry
       _ = ∑ k ∈ Finset.Icc 0 (n + 1), ↑((n + 1).choose k) * a ^ (n + 1 - k) * b ^ k := by sorry
-
-lemma binomial_corollary (a b : ℝ) (p : ℕ) : (a + b) ^ p ≤ a ^ p + b ^ p + p * a ^ (p - 1) * b := by
-  have h := binomial_theorem a b p
-  rw [Set.toFinset_Icc] at h
-  calc
-    (a + b) ^ p = ∑ k ∈ Finset.Icc 0 p, (Nat.choose p k) * a ^ (p - k) * b ^ k := by rw [h]
-    _ ≤ a ^ p + b ^ p + ∑ k ∈ Finset.Icc 1 (p - 1), (Nat.choose p k) * a ^ (p - k) * b ^ k := by
-      apply Finset.sum_le_sum_of_subset
-      intro k hk
-      simp_all [Nat.choose, Nat.zero_choose, Nat.succ_choose]
-      linarith
-    _ = a ^ p + b ^ p + p * a ^ (p - 1) * b := by sorry
-    _ = a ^ p + b ^ p + p * a ^ (p - 1) * b := by
-      rw [Finset.sum_Icc_succ]
-      rw [Finset.sum_Icc_zero]
-      rw [Finset.sum_Icc_one]
-      rw [Nat.choose_zero_right, Nat.choose_one_right]
-      ring_nf
 
 theorem bernoulli_inequality (x : ℝ) (n : ℕ) (hn₀ : n ≥ 1) (hx : x ≥ -1) : (1 + x) ^ n ≥ 1 + n * x := by
   by_cases h : x = -1
@@ -251,56 +244,9 @@ theorem exists_pth_root (p a : ℕ) (hp : p ≥ 1) (ha : a ≥ 0) : ∃! (x : �
       ∀ n ≥ 1, (ξ + 1 / n) ^ p ≤ ξ ^ p + α / n := by
       intro n hn
       have bin := binomial_theorem (ξ) (1 / n : ℝ) p
-      simp
-      rw [Finset.] at bin
-
-
       sorry
-
-theorem exists_pth_root (p a : ℕ) (hp : p ≥ 1) (ha : a ≥ 0) : ∃! x ≥ 0, x ^ p = a := by
-  by_cases h : a = 0
-  .
-    refine ⟨0, ?_⟩
-    constructor
-    simp only [ge_iff_le, le_refl, true_and, h]
-
-    rw [zero_pow (by linarith)]
-    simp
-    intro y h0
-    rw [h] at h0
-    rw [pow_eq_zero_iff (by linarith)] at h0
-    exact h0
-  .
-    push_neg at h
-    conv at ha =>
-      rw [ge_iff_le, le_iff_eq_or_lt]
-      simp [h.symm]
-    clear h
-    have pow_ineq (x y : ℝ) : 0 < x ∧ x < y → x ^ p < y ^ p := by
-      intro h
-      obtain ⟨hx, hy⟩ := h
-      rw [pow_lt_pow_iff_left₀] <;> linarith
-
-    set A := {x : ℝ | x ^ p < a}
-    have (x : ℝ) (hx : x ∈ A) := calc
-      x ^ p < a := hx
-      _ < 1 + p * a := by
-        rw [add_comm]
-        apply lt_add_of_tsub_lt_left
-        nth_rw 1 [mul_comm, ←mul_one a]
-        push_cast
-        rw [←mul_sub_left_distrib]
-        rw [←lt_add_neg_iff_lt]
-        rw [←mul_neg_one]
-        rw [show (0 < 1 + a * (1 - p) * (-1 : ℝ) ↔ 0 < 1 + a * (p - 1)) by sorry]
-        positivity
-      _ ≤ (1 + a) ^ p := by
-        apply bernoulli_inequality <;> linarith
-
-    conv at this =>
-      intro x hx
-      rw [←pow_lt_pow_iff x (1 + ↑a) p hp]
-
+    . sorry
+    . sorry
 
 lemma set_bound_above_neg_bound_below (X : Set ℝ) : bound_above X ↔ bound_below (-X) := by
   constructor
@@ -313,17 +259,8 @@ lemma set_bound_above_neg_bound_below (X : Set ℝ) : bound_above X ↔ bound_be
     simp_all [neg_le, le_neg] -- cleaning up the inequalities
 
 
-lemma neg_set_ge_bound (X : Set ℝ) (C : ℝ) : (∀ x ∈ -X, x ≥ C) ↔ (∀ x ∈ X, -x ≥ C) := by
-  simp_all
-  constructor
-  . intro h x hx
-    specialize h (-x)
-    apply h
-    simp [hx]
-  . intro h x hx
-    specialize h (-x)
-    simp at h
-    exact h hx
+lemma neg_set_le_bound (X : Set ℝ) (C : ℝ) : (∀ x ∈ -X, x ≤ C) ↔ (∀ x ∈ X, -x ≤ C) := by simp [mem_of_neg_set_is_neg]
+lemma neg_set_ge_bound (X : Set ℝ) (C : ℝ) : (∀ x ∈ -X, x ≥ C) ↔ (∀ x ∈ X, -x ≥ C) := by simp [mem_of_neg_set_is_neg]
 
 lemma inf_of_neg_eq_neg_sup (X : Set ℝ) [Nonempty X] (hX : bound_above X) (C : ℝ) (hS : supremum X (-C)) :
   infimum (-X) C := by
@@ -451,30 +388,6 @@ lemma eq_iff_le_tric (a b : ℝ) : a ≤ b ∧ b ≤ a → a = b := by
   . linarith
 
 lemma eq_iff_le_tric' (a b : ℝ) : a = b → a ≤ b → b ≤ a := by simp_all
-
-lemma neg_set_le_bound (X : Set ℝ) (C : ℝ) : (∀ x ∈ -X, x ≤ C) ↔ (∀ x ∈ X, -x ≤ C) := by
-  simp_all
-  constructor
-  . intro h x hx
-    specialize h (-x)
-    apply h
-    simp [hx]
-  . intro h x hx
-    specialize h (-x)
-    simp at h
-    exact h hx
-
-lemma completeness_bounded_below (X : Set ℝ) [Nonempty X] : bound_below X → ∃ c, infimum X c := by
-  intro h
-  rename_i inst
-  have hnempty : Nonempty (↑(-X)) := by
-    obtain ⟨a, ha⟩ := inst
-    use (-a)
-    simp [ha]
-
-  have hb := set_bound_above_neg_bound_below (-X)
-  simp [h] at hb
-  apply completeness_below X h
 
 def func_bound_above (X : Set ℝ) (f : ℝ → ℝ) : Prop := (∃ (c : ℝ), ∀ x ∈ X, f x ≤ c)
 
