@@ -3,6 +3,9 @@ import Mathlib
 open Set
 open BigOperators
 
+instance [Semigroup ℝ] : HPow ℝ ℕ+ ℝ where
+  hPow a b := a ^ (b : ℕ)
+
 def bound_below (X : Set ℝ) : Prop := ∃ (c : ℝ), ∀ x, x ∈ X → c ≤ x
 def bound_below_by (X : Set ℝ) (c : ℝ) : Prop := ∀ x, x ∈ X → c ≤ x
 
