@@ -3,6 +3,7 @@ import AnalysisTheorems.Sets
 def seq_is_limit (x : ℕ → ℝ) (l : ℝ) : Prop :=
   ∀ ε > 0, ∃ N, ∀ n ≥ N, |x n - l| < ε
 
+
 theorem seq_uniquelim (x : ℕ → ℝ) (l m : ℝ) (h1 : seq_is_limit x l) (h2 : seq_is_limit x m) : l = m := by
   by_contra h3
   have : |l - m| > 0 := by
